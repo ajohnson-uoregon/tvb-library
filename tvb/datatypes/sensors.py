@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -29,7 +29,7 @@
 #
 
 """
-The Sensors dataType. This brings together the scientific and framework 
+The Sensors dataType. This brings together the scientific and framework
 methods that are associated with the sensor dataTypes.
 
 .. moduleauthor:: Stuart A. Knock <stuart.knock@gmail.com>
@@ -69,7 +69,7 @@ class Sensors(MappedType):
 
     locations = arrays.PositionArray(label="Sensor locations")
 
-    has_orientation = types_basic.Bool(default=False)
+    has_orientation = False
 
     orientations = arrays.OrientationArray(required=False)
 
@@ -215,7 +215,7 @@ class SensorsEEG(Sensors):
 
     sensors_type = types_basic.String(default=EEG_POLYMORPHIC_IDENTITY)
 
-    has_orientation = types_basic.Bool(default=False, order=-1)
+    has_orientation = False
 
 
 class SensorsMEG(Sensors):
@@ -242,7 +242,7 @@ class SensorsMEG(Sensors):
     orientations = arrays.OrientationArray(label="Sensor orientations",
                                            doc="An array representing the orientation of the MEG SQUIDs")
 
-    has_orientation = types_basic.Bool(default=True, order=-1)
+    has_orientation = True 
 
 
     @classmethod

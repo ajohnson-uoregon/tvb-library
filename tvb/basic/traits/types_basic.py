@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -62,14 +62,6 @@ class String(core.Type):
     """
     wraps = (str, unicode)
 
-
-
-class Bool(core.Type):
-    """
-    Traits type wrapping Python boolean primitive. 
-    The only instances of Python bool are True and False.
-    """
-    wraps = bool
 
 
 class Integer(core.Type):
@@ -161,7 +153,7 @@ class MapAsJson():
 
 class Sequence(MapAsJson, String):
     """
-    Traits type base class that wraps python sequence 
+    Traits type base class that wraps python sequence
     python types (containers)
     """
     wraps = (dict, list, tuple, set, slice, numpy.ndarray)

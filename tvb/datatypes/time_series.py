@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -29,7 +29,7 @@
 #
 
 """
-The TimeSeries datatypes. This brings together the scientific and framework 
+The TimeSeries datatypes. This brings together the scientific and framework
 methods that are associated with the time-series data.
 
 .. moduleauthor:: Stuart A. Knock <Stuart@tvb.invalid>
@@ -112,8 +112,8 @@ class TimeSeries(types_mapped.MappedType):
         label="Sample rate",
         doc="""The sample rate of the timeseries""")
 
-    has_surface_mapping = basic.Bool(default=True)
-    has_volume_mapping = basic.Bool(default=False)
+    has_surface_mapping = True
+    has_volume_mapping = False
 
     def configure(self):
         """

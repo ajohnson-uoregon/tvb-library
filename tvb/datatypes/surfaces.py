@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -29,7 +29,7 @@
 #
 
 """
-Surface relates DataTypes. This brings together the scientific and framework 
+Surface relates DataTypes. This brings together the scientific and framework
 methods that are associated with the surfaces data.
 
 .. moduleauthor:: Ionel Ortelecan <ionel.ortelecan@codemart.ro>
@@ -195,7 +195,7 @@ class Surface(MappedType):
         required=False,
         order=-1)
 
-    zero_based_triangles = basic.Bool(order=-1)
+    zero_based_triangles = False
 
     split_triangles = arrays.IndexArray(order=-1, required=False)
 
@@ -203,11 +203,11 @@ class Surface(MappedType):
 
     split_slices = basic.Dict(order=-1)
 
-    bi_hemispheric = basic.Bool(order=-1)
+    bi_hemispheric = False
 
     surface_type = basic.String
 
-    valid_for_simulations = basic.Bool(order=-1)
+    valid_for_simulations = False
 
     __mapper_args__ = {'polymorphic_on': 'surface_type'}
 

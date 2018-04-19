@@ -45,12 +45,12 @@ More formally:
          \\dot{\\Psi}_{k} = - \\Lambda\\left(\\Psi_{k}\\right) + Z \\left(\\Xi_{k} + \\sum_{j=1}^{l} u_{kj} \\Gamma_{v=2}[\\left(\\Psi_{k}(t),  \\Psi_{j}(t-\\tau_{kj}\\right)]\\right).
 
 
-Here we compute the term Coupling(time delays) or 
-:math:`\\sum_{j=1}^{l} u_{kj} \\Gamma_{v=2}[\\left(\\Psi_{k}(t),  \\Psi_{j}(t-\\tau_{kj}\\right)]`, 
+Here we compute the term Coupling(time delays) or
+:math:`\\sum_{j=1}^{l} u_{kj} \\Gamma_{v=2}[\\left(\\Psi_{k}(t),  \\Psi_{j}(t-\\tau_{kj}\\right)]`,
 where :math:`u_{kj}` are the elements of the weights matrix from a Connectivity datatype.
 
 This term is equivalent to the dot product between the weights matrix (on the
-left) and the delayed state vector. This order is important in the case 
+left) and the delayed state vector. This order is important in the case
 case of an asymmetric connectivity matrix, where the
 convention to distinguish target ($k$) and source ($j$) nodes is the
 following:
@@ -114,9 +114,9 @@ class Coupling(core.Type):
     pre-"synaptic" or pre-summation function, the summation over weighted
     afferents and the post-"synaptic" or post-summation function. Therefore,
     a Coupling subclass should not define the `__call__` method directly but
-    rather appropriate `pre` and `post` methods, which are used by 
+    rather appropriate `pre` and `post` methods, which are used by
     `Coupling.__call__` to compute the coupling correctly.
-    
+
     Default implementations of `pre` and `post` are provided, which simply
     apply the connectivity to afferent activity, without scaling or other changes.
 
@@ -283,7 +283,7 @@ class Sigmoidal(Coupling):
     .. math::
         c_{min} + (c_{max} - c_{min}) / (1.0 + \exp(-a(x-midpoint)/\sigma))
 
-    NB: using a = numpy.pi / numpy.sqrt(3.0) and the default parameter 
+    NB: using a = numpy.pi / numpy.sqrt(3.0) and the default parameter
         produces something close to the current default for
         Linear (a=0.00390625, b=0) over the linear portion of the sigmoid,
         with saturation at -1 and 1.
@@ -334,7 +334,7 @@ class Sigmoidal(Coupling):
 
 class SigmoidalJansenRit(Coupling):
     r"""
-    Provides a sigmoidal coupling function as described in the 
+    Provides a sigmoidal coupling function as described in the
     Jansen and Rit model, of the following form
 
     .. math::
@@ -438,17 +438,9 @@ class PreSigmoidal(Coupling):
         doc="Threshold.",
         order=5)
 
-    dynamic = basic.Bool(
-        label="Dynamic",
-        default=True,
-        doc="Use dynamic threshold (otherwise static).",
-        order=6)
+    dynamic = True
 
-    globalT = basic.Bool(
-        label=":math:`global_{\\theta}`",
-        default=False,
-        doc="Use global threshold (otherwise local).",
-        order=7)
+    globalT = False
 
     def __str__(self):
         return simple_gen_astr(self, 'H Q G P theta dynamic globalT')
@@ -509,12 +501,12 @@ class Difference(SparseCoupling):
 class Kuramoto(SparseCoupling):
     r"""
     Provides a Kuramoto-style coupling, a periodic difference of the form
-    
+
     .. math::
         a / N G_ij sin(x_j - x_i)
-    
+
     """
-   
+
 
     a = arrays.FloatArray(
         label=":math:`a`",
