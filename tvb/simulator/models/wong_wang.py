@@ -79,63 +79,63 @@ class ReducedWongWang(ModelNumbaDfun):
     a = arrays.FloatArray(
         label=":math:`a`",
         default=numpy.array([0.270, ]),
-        range=basic.Range(lo=0.0, hi=0.270, step=0.01),
+        range=numpy.arange(0.0,0.270,0.01),
         doc="[n/C]. Input gain parameter, chosen to fit numerical solutions.",
         order=1)
 
     b = arrays.FloatArray(
         label=":math:`b`",
         default=numpy.array([0.108, ]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0.0,1.0,0.01),
         doc="[kHz]. Input shift parameter chosen to fit numerical solutions.",
         order=2)
 
     d = arrays.FloatArray(
         label=":math:`d`",
         default=numpy.array([154., ]),
-        range=basic.Range(lo=0.0, hi=200.0, step=0.01),
+        range=numpy.arange(0.0,200.0,0.01),
         doc="""[ms]. Parameter chosen to fit numerical solutions.""",
         order=3)
 
     gamma = arrays.FloatArray(
         label=r":math:`\gamma`",
         default=numpy.array([0.641, ]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0.0,1.0,0.01),
         doc="""Kinetic parameter""",
         order=4)
 
     tau_s = arrays.FloatArray(
         label=r":math:`\tau_S`",
         default=numpy.array([100., ]),
-        range=basic.Range(lo=50.0, hi=150.0, step=1.0),
+        range=numpy.arange(50.0,150.0,1.0),
         doc="""Kinetic parameter. NMDA decay time constant.""",
         order=5)
 
     w = arrays.FloatArray(
         label=r":math:`w`",
         default=numpy.array([0.6, ]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0.0,1.0,0.01),
         doc="""Excitatory recurrence""",
         order=6)
 
     J_N = arrays.FloatArray(
         label=r":math:`J_{N}`",
         default=numpy.array([0.2609, ]),
-        range=basic.Range(lo=0.2609, hi=0.5, step=0.001),
+        range=numpy.arange(0.2609,0.5,0.001),
         doc="""Excitatory recurrence""",
         order=7)
 
     I_o = arrays.FloatArray(
         label=":math:`I_{o}`",
         default=numpy.array([0.33, ]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0.0,1.0,0.01),
         doc="""[nA] Effective external input""",
         order=8)
 
     sigma_noise = arrays.FloatArray(
         label=r":math:`\sigma_{noise}`",
         default=numpy.array([0.000000001, ]),
-        range=basic.Range(lo=0.0, hi=0.005),
+        range=numpy.arange(0.0,0.005),
         doc="""[nA] Noise amplitude. Take this value into account for stochatic
         integration schemes.""",
         order=-1)

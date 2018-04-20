@@ -98,21 +98,21 @@ class Hopfield(Model):
     taux = arrays.FloatArray(
         label=":math:`\\tau_{x}`",
         default=numpy.array([1.]),
-        range=basic.Range(lo=0.01, hi=100., step=0.01),
+        range=numpy.arange(0.01,100.,0.01),
         doc="""The fast time-scale for potential calculus :math:`x`, state-variable of the model.""",
         order=1)
 
     tauT = arrays.FloatArray(
         label=":math:`\\tau_{\\theta}`",
         default=numpy.array([5.]),
-        range=basic.Range(lo = 0.01, hi = 100., step = 0.01),
+        range=numpy.arange(0.01,100.,0.01),
         doc="""The slow time-scale for threshold calculus :math:`\theta`, state-variable of the model.""",
         order=2)
 
     dynamic = arrays.IntegerArray(
         label="Dynamic",
         default=numpy.array([0, ]),
-        range=basic.Range(lo=0, hi=1., step=1),
+        range=numpy.arange(0,1.,1),
         doc="""Boolean value for static/dynamic threshold theta for (0/1).""",
         order=3)
 

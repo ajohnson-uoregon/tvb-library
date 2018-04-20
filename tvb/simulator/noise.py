@@ -60,11 +60,8 @@ class RandomStream(core.Type):
     wraps = numpy.random.RandomState
     defaults = ((42,), {})  # for init wrapped value: wraps(*def[0], **def[1])
 
-    init_seed = basic.Integer(
-        label="A random seed",
-        default=42,
-        doc="""A random seed used to initialise the state of an instance of
-        numpy's RandomState.""")
+    init_seed = 42 # A random seed used to initialise the state of an instance of numpy's RandomState.
+    #TODO: call into the random library???
 
     def configure(self):
         """
@@ -137,7 +134,8 @@ class Noise(core.Type):
     ntau = basic.Float(
         label=r":math:`\tau`",
         required=True,
-        default=0.0, range=basic.Range(lo=0.0, hi=20.0, step=1.0),
+        default=0.0,
+        range=numpy.arange(0,20,1), #basic.Range(lo=0.0, hi=20.0, step=1.0),
         doc="""The noise correlation time""")
 
     random_stream = RandomStream(
@@ -244,7 +242,8 @@ class Additive(Noise):
         configurable_noise=True,
         label=":math:`D`",
         required=True,
-        default=numpy.array([1.0]), range=basic.Range(lo=0.0, hi=10.0, step=0.1),
+        default=numpy.array([1.0]),
+        range= numpy.arange(0,10,0.1), #basic.Range(lo=0.0, hi=10.0, step=0.1),
         order=1,
         doc="""The noise dispersion, it is the standard deviation of the
         distribution from which the Gaussian random variates are drawn. NOTE:
@@ -283,7 +282,8 @@ class Multiplicative(Noise):
         configurable_noise=True,
         label=":math:`D`",
         required=True,
-        default=numpy.array([1.0, ]), range=basic.Range(lo=0.0, hi=10.0, step=0.1),
+        default=numpy.array([1.0, ]),
+        range=numpy.arange(0,10,0.1), #basic.Range(lo=0.0, hi=10.0, step=0.1),
         order=1,
         doc="""The noise dispersion, it is the standard deviation of the
         distribution from which the Gaussian random variates are drawn. NOTE:

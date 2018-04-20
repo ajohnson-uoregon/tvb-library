@@ -73,8 +73,7 @@ class Sensors(MappedType):
 
     orientations = arrays.OrientationArray(required=False)
 
-    number_of_sensors = types_basic.Integer(label="Number of sensors",
-                                            doc="""The number of sensors described by these Sensors.""")
+    number_of_sensors = 0 # The number of sensors described by these Sensors.
 
     # introduced to accommodate real sensors sets which have sensors
     # that should be zero during simulation i.e. ECG (heart), EOG,
@@ -242,7 +241,7 @@ class SensorsMEG(Sensors):
     orientations = arrays.OrientationArray(label="Sensor orientations",
                                            doc="An array representing the orientation of the MEG SQUIDs")
 
-    has_orientation = True 
+    has_orientation = True
 
 
     @classmethod

@@ -76,11 +76,9 @@ class TimeSeries(types_mapped.MappedType):
         file_storage=core.FILE_STORAGE_EXPAND,
         doc="""An array of time-series data, with a shape of [tpts, :], where ':' represents 1 or more dimensions""")
 
-    nr_dimensions = basic.Integer(
-        label="Number of dimension in timeseries",
-        default=4)
+    nr_dimensions = 4 # Number of dimension in timeseries; default is 4
 
-    length_1d, length_2d, length_3d, length_4d = [basic.Integer] * 4
+    length_1d, length_2d, length_3d, length_4d = [0] * 4
 
     labels_ordering = basic.List(
         default=["Time", "State Variable", "Space", "Mode"],

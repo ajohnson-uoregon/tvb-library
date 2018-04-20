@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -30,7 +30,7 @@
 
 """
 
-The Connectivity datatype. This brings together the scientific and framework 
+The Connectivity datatype. This brings together the scientific and framework
 methods that are associated with the connectivity data.
 
 .. moduleauthor:: Stuart A. Knock <stuart.knock@gmail.com>
@@ -62,9 +62,7 @@ class Connectivity(MappedType):
         stored_metadata=[key for key in MappedType.DEFAULT_WITH_ZERO_METADATA],
         doc="""Matrix of values representing the strength of connections between regions, arbitrary units.""")
 
-    undirected = basic.Integer(
-        default=0, required=False,
-        doc="1, when the weights matrix is square and symmetric over the main diagonal, 0 when directed graph.")
+    undirected = 0 # 1, when the weights matrix is square and symmetric over the main diagonal, 0 when directed graph.
 
     tract_lengths = arrays.FloatArray(
         label="Tract lengths",
@@ -114,13 +112,9 @@ class Connectivity(MappedType):
         doc="""Matrix of time delays between regions in physical units, setting conduction speed automatically
         combines with tract lengths to update this matrix, i.e. don't try and change it manually.""")
 
-    number_of_regions = basic.Integer(
-        label="Number of regions",
-        doc="""The number of regions represented in this Connectivity """)
+    number_of_regions = 0 #The number of regions represented in this Connectivity
 
-    number_of_connections = basic.Integer(
-        label="Number of connections",
-        doc="""The number of non-zero entries represented in this Connectivity """)
+    number_of_connections = 0 # The number of non-zero entries represented in this Connectivity
 
     # Original Connectivity, from which current connectivity was edited.
     parent_connectivity = basic.String(required=False)
@@ -947,5 +941,3 @@ class Connectivity(MappedType):
             result.tract_lengths = reader.read_array_from_file("tract_lengths")
 
         return result
-
-

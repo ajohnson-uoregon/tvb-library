@@ -155,84 +155,84 @@ class WilsonCowan(Model):
     c_ee = arrays.FloatArray(
         label=":math:`c_{ee}`",
         default=numpy.array([12.0]),
-        range=basic.Range(lo=11.0, hi=16.0, step=0.01),
+        range=numpy.arange(11,16,0.01),
         doc="""Excitatory to excitatory  coupling coefficient""",
         order=1)
 
     c_ie = arrays.FloatArray(
         label=":math:`c_{ei}`",
         default=numpy.array([4.0]),
-        range=basic.Range(lo=2.0, hi=15.0, step=0.01),
+        range=numpy.arange(2,15,0.01),
         doc="""Inhibitory to excitatory coupling coefficient""",
         order=2)
 
     c_ei = arrays.FloatArray(
         label=":math:`c_{ie}`",
         default=numpy.array([13.0]),
-        range=basic.Range(lo=2.0, hi=22.0, step=0.01),
+        range=numpy.arange(2,22,0.01),
         doc="""Excitatory to inhibitory coupling coefficient.""",
         order=3)
 
     c_ii = arrays.FloatArray(
         label=":math:`c_{ii}`",
         default=numpy.array([11.0]),
-        range=basic.Range(lo=2.0, hi=15.0, step=0.01),
+        range=numpy.arange(2,15,0.01),
         doc="""Inhibitory to inhibitory coupling coefficient.""",
         order=4)
 
     tau_e = arrays.FloatArray(
         label=r":math:`\tau_e`",
         default=numpy.array([10.0]),
-        range=basic.Range(lo=0.0, hi=150.0, step=0.01),
+        range=numpy.arange(0,150,0.01),
         doc="""Excitatory population, membrane time-constant [ms]""",
         order=5)
 
     tau_i = arrays.FloatArray(
         label=r":math:`\tau_i`",
         default=numpy.array([10.0]),
-        range=basic.Range(lo=0.0, hi=150.0, step=0.01),
+        range=numpy.arange(0,150,0.01),
         doc="""Inhibitory population, membrane time-constant [ms]""",
         order=6)
 
     a_e = arrays.FloatArray(
         label=":math:`a_e`",
         default=numpy.array([1.2]),
-        range=basic.Range(lo=0.0, hi=1.4, step=0.01),
+        range=numpy.arange(0,1.4, 0.01),
         doc="""The slope parameter for the excitatory response function""",
         order=7)
 
     b_e = arrays.FloatArray(
         label=":math:`b_e`",
         default=numpy.array([2.8]),
-        range=basic.Range(lo=1.4, hi=6.0, step=0.01),
+        range=numpy.arange(1.4,6,0.01),
         doc="""Position of the maximum slope of the excitatory sigmoid function""",
         order=8)
 
     c_e = arrays.FloatArray(
         label=":math:`c_e`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=1.0, hi=20.0, step=1.0),
+        range=numpy.arange(1,20,1),
         doc="""The amplitude parameter for the excitatory response function""",
         order=9)
 
     theta_e = arrays.FloatArray(
         label=r":math:`\theta_e`",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=60., step=0.01),
+        range=numpy.arange(0,60,0.01),
         doc="""Excitatory threshold""",
         order=10)
 
     a_i = arrays.FloatArray(
         label=":math:`a_i`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.0, hi=2.0, step=0.01),
+        range=numpy.arange(0,2,0.01),
         doc="""The slope parameter for the inhibitory response function""",
         order=11)
 
     b_i = arrays.FloatArray(
         label=r":math:`b_i`",
         default=numpy.array([4.0]),
-        range=basic.Range(lo=2.0, hi=6.0, step=0.01),
+        range=numpy.arange(2,6,0.01),
         doc="""Position of the maximum slope of a sigmoid function [in
         threshold units]""",
         order=12)
@@ -240,49 +240,49 @@ class WilsonCowan(Model):
     theta_i = arrays.FloatArray(
         label=r":math:`\theta_i`",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=60.0, step=0.01),
+        range=numpy.arange(0,60,0.01),
         doc="""Inhibitory threshold""",
         order=13)
 
     c_i = arrays.FloatArray(
         label=":math:`c_i`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=1.0, hi=20.0, step=1.0),
+        range=numpy.arange(1,20,1),
         doc="""The amplitude parameter for the inhibitory response function""",
         order=14)
 
     r_e = arrays.FloatArray(
         label=":math:`r_e`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.5, hi=2.0, step=0.01),
+        range=numpy.arange(.5,2,0.01),
         doc="""Excitatory refractory period""",
         order=15)
 
     r_i = arrays.FloatArray(
         label=":math:`r_i`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.5, hi=2.0, step=0.01),
+        range=numpy.arange(0.5,2,0.01),
         doc="""Inhibitory refractory period""",
         order=16)
 
     k_e = arrays.FloatArray(
         label=":math:`k_e`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.5, hi=2.0, step=0.01),
+        range=numpy.arange(.5,2,0.01),
         doc="""Maximum value of the excitatory response function""",
         order=17)
 
     k_i = arrays.FloatArray(
         label=":math:`k_i`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.0, hi=2.0, step=0.01),
+        range=numpy.arange(0,2,0.01),
         doc="""Maximum value of the inhibitory response function""",
         order=18)
 
     P = arrays.FloatArray(
         label=":math:`P`",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=20.0, step=0.01),
+        range=numpy.arange(0,20,0.01),
         doc="""External stimulus to the excitatory population.
         Constant intensity.Entry point for coupling.""",
         order=19)
@@ -290,7 +290,7 @@ class WilsonCowan(Model):
     Q = arrays.FloatArray(
         label=":math:`Q`",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=20.0, step=0.01),
+        range=numpy.arange(0,20,0.01),
         doc="""External stimulus to the inhibitory population.
         Constant intensity.Entry point for coupling.""",
         order=20)
@@ -298,7 +298,7 @@ class WilsonCowan(Model):
     alpha_e = arrays.FloatArray(
         label=r":math:`\alpha_e`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.0, hi=20.0, step=0.01),
+        range=numpy.arange(0,20,0.01),
         doc="""External stimulus to the excitatory population.
         Constant intensity.Entry point for coupling.""",
         order=21)
@@ -306,7 +306,7 @@ class WilsonCowan(Model):
     alpha_i = arrays.FloatArray(
         label=r":math:`\alpha_i`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.0, hi=20.0, step=0.01),
+        range=numpy.arange(0,20,0.01),
         doc="""External stimulus to the inhibitory population.
         Constant intensity.Entry point for coupling.""",
         order=22)

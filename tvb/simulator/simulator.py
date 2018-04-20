@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -87,7 +87,7 @@ class Simulator(core.Type):
         doc="""A tvb.datatypes.Connectivity object which contains the
         structural long-range connectivity data (i.e., white-matter tracts). In
         combination with the ``Long-range coupling function`` it defines the inter-regional
-        connections. These couplings undergo a time delay via signal propagation 
+        connections. These couplings undergo a time delay via signal propagation
         with a propagation speed of ``Conduction Speed``""")
 
     conduction_speed = basic.Float(
@@ -95,7 +95,7 @@ class Simulator(core.Type):
         default=3.0,
         order=2,
         required=False,
-        range=basic.Range(lo=0.01, hi=100.0, step=1.0),
+        range=numpy.arange(0.01,100.0,1.0),
         doc="""Conduction speed for ``Long-range connectivity`` (mm/ms)""")
 
     coupling = coupling.Coupling(
@@ -124,9 +124,9 @@ class Simulator(core.Type):
                              linked_elem_parent_name="surface",
                              linked_elem_parent_option=None)],
         doc="""By default, a Cortex object which represents the
-        cortical surface defined by points in the 3D physical space and their 
-        neighborhood relationship. In the current TVB version, when setting up a 
-        surface-based simulation, the option to configure the spatial spread of 
+        cortical surface defined by points in the 3D physical space and their
+        neighborhood relationship. In the current TVB version, when setting up a
+        surface-based simulation, the option to configure the spatial spread of
         the ``Local Connectivity`` is available.""")
 
     stimulus = patterns.SpatioTemporalPattern(
@@ -138,9 +138,9 @@ class Simulator(core.Type):
         It's composed of spatial and temporal components. For region defined stimuli
         the spatial component is just the strength with which the temporal
         component is applied to each region. For surface defined stimuli,  a
-        (spatial) function, with finite-support, is used to define the strength 
-        of the stimuli on the surface centred around one or more focal points. 
-        In the current version of TVB, stimuli are applied to the first state 
+        (spatial) function, with finite-support, is used to define the strength
+        of the stimuli on the surface centred around one or more focal points.
+        In the current version of TVB, stimuli are applied to the first state
         variable of the ``Local dynamic model``.""")
 
     model = models.Model(
@@ -151,7 +151,7 @@ class Simulator(core.Type):
         doc="""A tvb.simulator.Model object which describe the local dynamic
         equations, their parameters, and, to some extent, where connectivity
         (local and long-range) enters and which state-variables the Monitors
-        monitor. By default the 'Generic2dOscillator' model is used. Read the 
+        monitor. By default the 'Generic2dOscillator' model is used. Read the
         Scientific documentation to learn more about this model.""")
 
     integrator = integrators.Integrator(
@@ -160,9 +160,9 @@ class Simulator(core.Type):
         required=True,
         order=6,
         doc="""A tvb.simulator.Integrator object which is
-            an integration scheme with supporting attributes such as 
-            integration step size and noise specification for stochastic 
-            methods. It is used to compute the time courses of the model state 
+            an integration scheme with supporting attributes such as
+            integration step size and noise specification for stochastic
+            methods. It is used to compute the time courses of the model state
             variables.""")
 
     initial_conditions = arrays.FloatArray(
@@ -172,9 +172,9 @@ class Simulator(core.Type):
         required=False,
         doc="""Initial conditions from which the simulation will begin. By
         default, random initial conditions are provided. Needs to be the same shape
-        as simulator 'history', ie, initial history function which defines the 
-        minimal initial state of the network with time delays before time t=0. 
-        If the number of time points in the provided array is insufficient the 
+        as simulator 'history', ie, initial history function which defines the
+        minimal initial state of the network with time delays before time t=0.
+        If the number of time points in the provided array is insufficient the
         array will be padded with random values based on the 'state_variables_range'
         attribute.""")
 
@@ -488,21 +488,21 @@ class Simulator(core.Type):
 
     def _configure_integrator_noise(self):
         """
-        This enables having noise to be state variable specific and/or to enter 
-        only via specific brain structures, for example it we only want to 
+        This enables having noise to be state variable specific and/or to enter
+        only via specific brain structures, for example it we only want to
         consider noise as an external input entering the brain via appropriate
         thalamic nuclei.
 
         Support 3 possible shapes:
             1) number_of_nodes;
 
-            2) number_of_state_variables; and 
+            2) number_of_state_variables; and
 
             3) (number_of_state_variables, number_of_nodes).
 
         """
 
-        noise = self.integrator.noise        
+        noise = self.integrator.noise
 
         if self.integrator.noise.ntau > 0.0:
             self.integrator.noise.configure_coloured(self.integrator.dt,
@@ -565,7 +565,7 @@ class Simulator(core.Type):
     # appears to be unused
     def runtime(self, simulation_length):
         """
-        Return an estimated run time (seconds) for the simulator's current 
+        Return an estimated run time (seconds) for the simulator's current
         configuration and a specified simulation length.
 
         """
@@ -588,12 +588,12 @@ class Simulator(core.Type):
         """
         guesstimate the memory required for this simulator.
 
-        Guesstimate is based on the shape of the dominant arrays, and as such 
+        Guesstimate is based on the shape of the dominant arrays, and as such
         can operate before configuration.
 
         NOTE: Assumes returned/yeilded data is in some sense "taken care of" in
             the world outside the simulator, and so doesn't consider it, making
-            the simulator's history, and surface if present, the dominant 
+            the simulator's history, and surface if present, the dominant
             memory pigs...
 
         """
@@ -612,7 +612,7 @@ class Simulator(core.Type):
         #     connectivity, there remains the less common issue if no tract_lengths...
         hist_shape = (self.connectivity.tract_lengths.max() / (self.conduction_speed or
                                                                self.connectivity.speed or 3.0) / self.integrator.dt,
-                      self.model.nvar, number_of_nodes, 
+                      self.model.nvar, number_of_nodes,
                       self.model.number_of_modes)
         LOG.debug("Estimated history shape is %r", hist_shape)
 
@@ -628,8 +628,8 @@ class Simulator(core.Type):
 
         for monitor in self.monitors:
             if not isinstance(monitor, monitors.Bold):
-                stock_shape = (monitor.period / self.integrator.dt, 
-                               self.model.variables_of_interest.shape[0], 
+                stock_shape = (monitor.period / self.integrator.dt,
+                               self.model.variables_of_interest.shape[0],
                                number_of_nodes,
                                self.model.number_of_modes)
                 memreq += numpy.prod(stock_shape) * bits_64
@@ -661,14 +661,14 @@ class Simulator(core.Type):
 
     def _census_memory_requirement(self):
         """
-        Guesstimate the memory required for this simulator. 
+        Guesstimate the memory required for this simulator.
 
         Guesstimate is based on a census of the dominant arrays after the
         simulator has been configured.
 
         NOTE: Assumes returned/yeilded data is in some sense "taken care of" in
             the world outside the simulator, and so doesn't consider it, making
-            the simulator's history, and surface if present, the dominant 
+            the simulator's history, and surface if present, the dominant
             memory pigs...
 
         """
@@ -715,7 +715,7 @@ class Simulator(core.Type):
     def _calculate_storage_requirement(self):
         """
         Calculate the storage requirement for the simulator, configured with
-        models, monitors, etc being run for a particular simulation length. 
+        models, monitors, etc being run for a particular simulation length.
         While this is only approximate, it is far more reliable/accurate than
         the memory and runtime guesstimates.
         """

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -61,7 +61,7 @@ class TestTraits(BaseTestCase):
         assert isinstance(model_wc._tau_e, str)
 
     def test_modifying_attributes(self):
-        """ 
+        """
         Test that when modifying an instance attributes, they are only visible on that instance.
         """
         eqn_t = equations.Gaussian()
@@ -111,7 +111,7 @@ class TestTraits(BaseTestCase):
         class Internal_Class(MappedType):
             """ Dummy persisted class"""
             x = 5
-            z = basic.Integer()
+            z = 0
             j = basic.JSONType()
 
             class In_Internal_Class(object):
@@ -131,7 +131,7 @@ class TestTraits(BaseTestCase):
 
     def test_none_complex_attribute(self):
         """
-        Test that traited attributes are returned None, 
+        Test that traited attributes are returned None,
         when no value is assigned as default to them.
         """
         serie = time_series.TimeSeriesRegion()

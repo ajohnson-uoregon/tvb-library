@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -351,14 +351,12 @@ class CoherenceSpectrum(arrays.MappedArray):
         doc="""Links to the time-series on which the node_coherence is
             applied.""")
 
-    nfft = basic.Integer(
-        label="Data-points per block",
-        default=256,
-        doc="""NOTE: must be a power of 2""")
-
     frequency = arrays.FloatArray(label="Frequency")
 
     __generate_table__ = True
+
+    def __init__(self, nfft=256):
+        self.nfft = nfft # Data-points per block; NOTE: must be a power of 2
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

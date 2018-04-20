@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -41,7 +41,7 @@ Traits classes are separated into two modules:
 core:
     TraitsInfo          meta-data container for traits system
     MetaType            base class for traited class creation
-    Type                base traited class 
+    Type                base traited class
 
 mapped:
     MappedType             basic class for traited class mapped to db
@@ -214,11 +214,11 @@ class MetaType(abc.ABCMeta):
     types in the Traits system. See the doc-strings of the methods for more
     details:
 
-        __new__  - creates a class 
+        __new__  - creates a class
         __call__ - create a class instance
 
     While the basic Traits mechanisms are described and implemented in this
-    class, see DeclarativeMetaType for implementation and description of 
+    class, see DeclarativeMetaType for implementation and description of
     database mapping of Traits classes.
 
     """
@@ -241,10 +241,10 @@ class MetaType(abc.ABCMeta):
 
         To setup a trait attribute, we :
             - check if it's a type, if so, instantiate
-            - tell the attr it's name on owner class 
-            - setup private attr with attr.value 
-            - augment owner class doc-string with trait description 
-            - add trait to information on class 
+            - tell the attr it's name on owner class
+            - setup private attr with attr.value
+            - augment owner class doc-string with trait description
+            - add trait to information on class
         """
 
         # if we're wrapping a class, pop that out
@@ -281,9 +281,9 @@ class MetaType(abc.ABCMeta):
                 doc += "\t\t| %s\n" % str(attr.trait.inits.kwd.get('doc', "")).replace("\n", " ")
                 doc += "\t\t| ``default``:  %s \n" % str(attr.trait.inits.kwd.get('default', None)).replace("\n", " ")
                 specified_range = attr.trait.inits.kwd.get('range', None)
-                if specified_range:
-                    doc += "\t\t| ``range``: low = %s ; high = %s \n\t\t\n" % (str(specified_range.lo),
-                                                                               str(specified_range.hi))
+                if specified_range is not None:
+                    doc += "\t\t| ``range``: low = %s ; high = %s \n\t\t\n" % (str(specified_range[0]),
+                                                                               str(specified_range[-1]))
                 trait[key] = attr
 
         # add info to new class
@@ -311,10 +311,10 @@ class MetaType(abc.ABCMeta):
 
         When creating instances of Traits classes, we
 
-            - if wrapping, try to instantiation wrapped class 
+            - if wrapping, try to instantiation wrapped class
             - check keyword arguments, use to initialize trait attributes
-            - record all other keyword args for later use 
-            - create class instance 
+            - record all other keyword args for later use
+            - create class instance
             - return instance updated with information
         """
 
@@ -451,7 +451,7 @@ class Type(object):
     def _put_value_on_instance(self, inst, value):
         """
         Is the ultimate method called by __set__ implementations.
-        We write it separately here, because subclasses might need to call this separately, 
+        We write it separately here, because subclasses might need to call this separately,
         without the __set__ default value validation.
         """
         setattr(inst, '_' + self.trait.name, value)
@@ -460,7 +460,7 @@ class Type(object):
 
     def __repr__(self):
         """
-        Type.repr builds a useful representation of itself, which can be 
+        Type.repr builds a useful representation of itself, which can be
         configured with values in config:
         """
         trait = self.trait
@@ -490,7 +490,7 @@ class Type(object):
     @property
     def summary_info(self):
         """
-        For a particular DataType, return a dictionary of label: value, 
+        For a particular DataType, return a dictionary of label: value,
         to describe the entity from scientific point of view.
         """
         if self._summary_info is None and hasattr(self, "_find_summary_info"):
@@ -515,7 +515,7 @@ class Type(object):
             # ..if param description present (list len==2), use it
             if type(value) == list:
               paramval, paramdescr = value
-            else:  
+            else:
               paramval = value
             html.append(row_fmt % (paramname, paramval, paramdescr))
         return ''.join(html)

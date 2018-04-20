@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -29,7 +29,7 @@
 #
 
 """
-The Mode Decomposition datatypes. This brings together the scientific and 
+The Mode Decomposition datatypes. This brings together the scientific and
 framework methods that are associated with the Mode Decomposition datatypes.
 
 .. moduleauthor:: Stuart A. Knock <Stuart@tvb.invalid>
@@ -218,11 +218,6 @@ class IndependentComponents(MappedType):
         label="Pre-whitening matrix",
         doc=""" """)
 
-    n_components = basic.Integer(
-        label="Number of independent components",
-        doc=""" Observed data matrix is considered to be a linear combination
-        of :math:`n` non-Gaussian independent components""")
-
     norm_source = arrays.FloatArray(
         label="Normalised source time series. Zero centered and whitened.",
         file_storage=core.FILE_STORAGE_EXPAND)
@@ -235,6 +230,10 @@ class IndependentComponents(MappedType):
         label="Normalised component time series",
         file_storage=core.FILE_STORAGE_EXPAND)
 
+    def __init__(self, n_components=0):
+        self.n_components = n_components # Number of independent components
+        # Observed data matrix is considered to be a linear combination
+        # of n non-Gaussian independent components
 
     def write_data_slice(self, partial_result):
         """

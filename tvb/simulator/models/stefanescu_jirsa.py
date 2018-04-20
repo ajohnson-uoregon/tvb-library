@@ -111,56 +111,56 @@ class ReducedSetFitzHughNagumo(ReducedSetBase):
     tau = arrays.FloatArray(
         label=r":math:`\tau`",
         default=numpy.array([3.0]),
-        range=basic.Range(lo=1.5, hi=4.5, step=0.01),
+        range=numpy.arange(1.5,4.5,0.01),
         doc="""doc...(prob something about timescale seperation)""",
         order=1)
 
     a = arrays.FloatArray(
         label=":math:`a`",
         default=numpy.array([0.45]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""doc...""",
         order=2)
 
     b = arrays.FloatArray(
         label=":math:`b`",
         default=numpy.array([0.9]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""doc...""",
         order=3)
 
     K11 = arrays.FloatArray(
         label=":math:`K_{11}`",
         default=numpy.array([0.5]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Internal coupling, excitatory to excitatory""",
         order=4)
 
     K12 = arrays.FloatArray(
         label=":math:`K_{12}`",
         default=numpy.array([0.15]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Internal coupling, inhibitory to excitatory""",
         order=5)
 
     K21 = arrays.FloatArray(
         label=":math:`K_{21}`",
         default=numpy.array([0.15]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Internal coupling, excitatory to inhibitory""",
         order=6)
 
     sigma = arrays.FloatArray(
         label=r":math:`\sigma`",
         default=numpy.array([0.35]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Standard deviation of Gaussian distribution""",
         order=7)
 
     mu = arrays.FloatArray(
         label=r":math:`\mu`",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Mean of Gaussian distribution""",
         order=8)
 
@@ -397,84 +397,84 @@ class ReducedSetHindmarshRose(ReducedSetBase):
     r = arrays.FloatArray(
         label=":math:`r`",
         default=numpy.array([0.006]),
-        range=basic.Range(lo=0.0, hi=0.1, step=0.0005),
+        range=numpy.arange(0,0.1,0.0005),
         doc="""Adaptation parameter""",
         order=1)
 
     a = arrays.FloatArray(
         label=":math:`a`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
         order=2)
 
     b = arrays.FloatArray(
         label=":math:`b`",
         default=numpy.array([3.0]),
-        range=basic.Range(lo=0.0, hi=3.0, step=0.01),
+        range=numpy.arange(0,3,0.01),
         doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
         order=3)
 
     c = arrays.FloatArray(
         label=":math:`c`",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
         order=4)
 
     d = arrays.FloatArray(
         label=":math:`d`",
         default=numpy.array([5.0]),
-        range=basic.Range(lo=2.5, hi=7.5, step=0.01),
+        range=numpy.arange(2.5,7.5,0.01),
         doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
         order=5)
 
     s = arrays.FloatArray(
         label=":math:`s`",
         default=numpy.array([4.0]),
-        range=basic.Range(lo=2.0, hi=6.0, step=0.01),
+        range=numpy.arange(2,6,0.01),
         doc="""Adaptation paramters, governs feedback""",
         order=6)
 
     xo = arrays.FloatArray(
         label=":math:`x_{o}`",
         default=numpy.array([-1.6]),
-        range=basic.Range(lo=-2.4, hi=-0.8, step=0.01),
+        range=numpy.arange(-2.4,-0.8,0.01),
         doc="""Leftmost equilibrium point of x""",
         order=7)
 
     K11 = arrays.FloatArray(
         label=":math:`K_{11}`",
         default=numpy.array([0.5]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Internal coupling, excitatory to excitatory""",
         order=8)
 
     K12 = arrays.FloatArray(
         label=":math:`K_{12}`",
         default=numpy.array([0.1]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Internal coupling, inhibitory to excitatory""",
         order=9)
 
     K21 = arrays.FloatArray(
         label=":math:`K_{21}`",
         default=numpy.array([0.15]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Internal coupling, excitatory to inhibitory""",
         order=10)
 
     sigma = arrays.FloatArray(
         label=r":math:`\sigma`",
         default=numpy.array([0.3]),
-        range=basic.Range(lo=0.0, hi=1.0, step=0.01),
+        range=numpy.arange(0,1,0.01),
         doc="""Standard deviation of Gaussian distribution""",
         order=11)
 
     mu = arrays.FloatArray(
         label=r":math:`\mu`",
         default=numpy.array([3.3]),
-        range=basic.Range(lo=1.1, hi=3.3, step=0.01),
+        range=numpy.arange(1.1,3.3,0.01),
         doc="""Mean of Gaussian distribution""",
         order=12)
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-# TheVirtualBrain-Framework Package. This package holds all Data Management, and 
+# TheVirtualBrain-Framework Package. This package holds all Data Management, and
 # Web-UI helpful to run brain-simulations. To use it, you also need do download
 # TheVirtualBrain-Scientific Package (for simulators). See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -69,7 +69,7 @@ class Cortex(surfaces.CorticalSurface):
 
     coupling_strength = arrays.FloatArray(
         label="Local coupling strength",
-        range=basic.Range(lo=0.0, hi=20.0, step=1.0),
+        range= range(0,20,1), #basic.Range(lo=0.0, hi=20.0, step=1.0),
         default=numpy.array([1.0]),
         file_storage=core.FILE_STORAGE_NONE,
         doc="""A factor that rescales local connectivity strengths.""")

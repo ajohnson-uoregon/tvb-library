@@ -171,15 +171,9 @@ class Surface(MappedType):
         file_storage=FILE_STORAGE_NONE,
         doc="""A sparse matrix of truncated geodesic distances""")  # 'CS'
 
-    number_of_vertices = basic.Integer(
-        label="Number of vertices",
-        order=-1,
-        doc="""The number of vertices making up this surface.""")
+    number_of_vertices = 0 #The number of vertices making up this surface.
 
-    number_of_triangles = basic.Integer(
-        label="Number of triangles",
-        order=-1,
-        doc="""The number of triangles making up this surface.""")
+    number_of_triangles = 0 #The number of triangles making up this surface.
 
     edge_mean_length = basic.Float(order=-1)
 
@@ -199,7 +193,7 @@ class Surface(MappedType):
 
     split_triangles = arrays.IndexArray(order=-1, required=False)
 
-    number_of_split_slices = basic.Integer(order=-1)
+    number_of_split_slices = 0
 
     split_slices = basic.Dict(order=-1)
 

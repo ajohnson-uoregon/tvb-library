@@ -148,10 +148,10 @@ class Epileptor(ModelNumbaDfun):
             0 & \text{if } x_{2} <-0.25\\
             a_{2}(x_{2} + 0.25) & \text{if } x_{2} \geq -0.25
             \end{cases}
-            
+
     Note Feb. 2017: the slow permittivity variable can be modify to account for the time
     difference between interictal and ictal states (see [Proixetal_2014]).
-    
+
     .. [Proixetal_2014] Proix, T.; Bartolomei, F; Chauvel, P; Bernard, C; Jirsa, V.K. *
         Permittivity coupling across brain regions determines seizure recruitment in
         partial epilepsy.* J Neurosci 2014, 34:15009-21.
@@ -188,7 +188,7 @@ class Epileptor(ModelNumbaDfun):
 
     r = arrays.FloatArray(
         label="r",
-        range=basic.Range(lo=0.0, hi=0.001, step=0.00005),
+        range=numpy.arange(0.0,0.001,0.00005),
         default=numpy.array([0.00035]),
         doc="Temporal scaling in the third state variable, \
         called :math:`1/\\tau_{0}` in Jirsa paper",
@@ -202,28 +202,28 @@ class Epileptor(ModelNumbaDfun):
 
     x0 = arrays.FloatArray(
         label="x0",
-        range=basic.Range(lo=-3.0, hi=-1.0, step=0.1),
+        range=numpy.arange(-3.0,-1.0,0.1),
         default=numpy.array([-1.6]),
         doc="Epileptogenicity parameter",
         order=3)
 
     Iext = arrays.FloatArray(
         label="Iext",
-        range=basic.Range(lo=1.5, hi=5.0, step=0.1),
+        range=numpy.arange(1.5,5.0,0.1),
         default=numpy.array([3.1]),
         doc="External input current to the first population",
         order=1)
 
     slope = arrays.FloatArray(
         label="slope",
-        range=basic.Range(lo=-16.0, hi=6.0, step=0.1),
+        range=numpy.arange(-16.0,6.0,0.1),
         default=numpy.array([0.]),
         doc="Linear coefficient in the first state variable",
         order=5)
 
     Iext2 = arrays.FloatArray(
         label="Iext2",
-        range=basic.Range(lo=0.0, hi=1.0, step=0.05),
+        range=numpy.arange(0.0,1.0,0.05),
         default=numpy.array([0.45]),
         doc="External input current to the second population",
         order=2)
@@ -239,7 +239,7 @@ class Epileptor(ModelNumbaDfun):
         default=numpy.array([6]),
         doc="Linear coefficient in fifth state variable",
         order=-1)
-        
+
     bb = arrays.FloatArray(
         label="bb",
         default=numpy.array([2]),
@@ -249,31 +249,31 @@ class Epileptor(ModelNumbaDfun):
     Kvf = arrays.FloatArray(
         label="K_vf",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=4.0, step=0.5),
+        range=numpy.arange(0.0,4.0,0.5),
         doc="Coupling scaling on a very fast time scale.",
         order=6)
 
     Kf = arrays.FloatArray(
         label="K_f",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=4.0, step=0.5),
+        range=numpy.arange(0.0,4.0,0.5),
         doc="Correspond to the coupling scaling on a fast time scale.",
         order=7)
 
     Ks = arrays.FloatArray(
         label="K_s",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=-4.0, hi=4.0, step=0.1),
+        range=numpy.arange(-4.0,4.0,0.1),
         doc="Permittivity coupling, that is from the fast time scale toward the slow time scale",
         order=8)
 
     tt = arrays.FloatArray(
         label="tt",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.001, hi=10.0, step=0.001),
+        range=numpy.arange(0.001,10.0,0.001),
         doc="Time scaling of the whole system",
         order=9)
-        
+
     modification = arrays.BoolArray(
         label="modification",
         default=numpy.array([0]),
@@ -397,39 +397,39 @@ class Epileptor(ModelNumbaDfun):
 class Epileptor2D(ModelNumbaDfun):
     r"""
         Two-dimensional reduction of the Epileptor.
-        
+
         .. moduleauthor:: courtiol.julie@gmail.com
-        
-        Taking advantage of time scale separation and focusing on the slower time scale, 
-        the five-dimensional Epileptor reduces to a two-dimensional system (see [Proixetal_2014, 
+
+        Taking advantage of time scale separation and focusing on the slower time scale,
+        the five-dimensional Epileptor reduces to a two-dimensional system (see [Proixetal_2014,
         Proixetal_2017]).
-        
+
         Note: the slow permittivity variable can be modify to account for the time
         difference between interictal and ictal states (see [Proixetal_2014]).
-        
+
         Equations and default parameters are taken from [Proixetal_2014]:
-        
+
         .. math::
             \dot{x_{1,i}} &=& - x_{1,i}^{3} - 2x_{1,i}^{2}  + 1 - z_{i} + I_{ext1,i} \\
             \dot{z_{i}} &=& r(h - z_{i})
-        
-        with 
+
+        with
             h = x_{0} + 3 / (exp((x_{1} + 0.5)/0.1)) if modification
             h = 4 (x_{1,i} - x_{0})
-            
+
         References:
             [Proixetal_2014] Proix, T.; Bartolomei, F; Chauvel, P; Bernard, C; Jirsa, V.K. *
-            Permittivity coupling across brain regions determines seizure recruitment in 
+            Permittivity coupling across brain regions determines seizure recruitment in
             partial epilepsy.* J Neurosci 2014, 34:15009-21.
-            
-            [Proixetal_2017] Proix, T.; Bartolomei, F; Guye, M.; Jirsa, V.K. *Individual brain 
+
+            [Proixetal_2017] Proix, T.; Bartolomei, F; Guye, M.; Jirsa, V.K. *Individual brain
             structure and modelling predict seizure propagation.* Brain 2017, 140; 641–654.
     """
 
 
     _ui_name = "Epileptor2D"
     ui_configurable_parameters = ["r", "Iext", "x0"]
-    
+
     a = arrays.FloatArray(
         label="a",
         default=numpy.array([1]),
@@ -441,7 +441,7 @@ class Epileptor2D(ModelNumbaDfun):
         default=numpy.array([3]),
         doc="Coefficient of the squared term in the first state-variable.",
         order=2)
-    
+
     c = arrays.FloatArray(
         label="c",
         default=numpy.array([1]),
@@ -457,7 +457,7 @@ class Epileptor2D(ModelNumbaDfun):
 
     r = arrays.FloatArray(
         label="r",
-        range=basic.Range(lo=0.0, hi=0.001, step=0.00005),
+        range=numpy.arange(0.0,0.001,0.00005),
         default=numpy.array([0.00035]),
         doc="Temporal scaling in the slow state-variable, \
         called :math:`1\\tau_{0}` in Jirsa paper (see class Epileptor).",
@@ -465,43 +465,43 @@ class Epileptor2D(ModelNumbaDfun):
 
     x0 = arrays.FloatArray(
         label="x0",
-        range=basic.Range(lo=-3.0, hi=-1.0, step=0.1),
+        range=numpy.arange(-3.0,-1.0,0.1),
         default=numpy.array([-1.6]),
         doc="Epileptogenicity parameter.",
         order=6)
 
     Iext = arrays.FloatArray(
         label="Iext",
-        range=basic.Range(lo=1.5, hi=5.0, step=0.1),
+        range=numpy.arange(1.5,5.0,0.1),
         default=numpy.array([3.1]),
         doc="External input current to the first state-variable.",
         order=7)
 
     slope = arrays.FloatArray(
         label="slope",
-        range=basic.Range(lo=-16.0, hi=6.0, step=0.1),
+        range=numpy.arange(-16.0,6.0,0.1),
         default=numpy.array([0.]),
         doc="Linear coefficient in the first state-variable.",
         order=8)
-        
+
     Kvf = arrays.FloatArray(
         label="K_vf",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=0.0, hi=4.0, step=0.5),
+        range=numpy.arange(0.0,4.0,0.5),
         doc="Coupling scaling on a very fast time scale.",
         order=9)
 
     Ks = arrays.FloatArray(
         label="K_s",
         default=numpy.array([0.0]),
-        range=basic.Range(lo=-4.0, hi=4.0, step=0.1),
+        range=numpy.arange(-4.0,4.0,0.1),
         doc="Permittivity coupling, that is from the fast time scale toward the slow time scale.",
         order=10)
-        
+
     tt = arrays.FloatArray(
         label="tt",
         default=numpy.array([1.0]),
-        range=basic.Range(lo=0.001, hi=1.0, step=0.001),
+        range=numpy.arange(0.001,1.0,0.001),
         doc="Time scaling of the whole system to the system in real time.",
         order=11)
 
@@ -518,7 +518,7 @@ class Epileptor2D(ModelNumbaDfun):
         "z": numpy.array([2.0, 5.0])},
         doc="Typical bounds on state-variables in the Epileptor 2D model.",
         order=99)
-    
+
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",
         options=['x1', 'z'],
@@ -526,7 +526,7 @@ class Epileptor2D(ModelNumbaDfun):
         select_multiple=True,
         doc="Quantities of the Epileptor 2D available to monitor.",
         order=100)
-    
+
     state_variables = ['x1', 'z']
 
     _nvar = 2
@@ -542,7 +542,7 @@ class Epileptor2D(ModelNumbaDfun):
 
         y = state_variables
         ydot = numpy.empty_like(state_variables)
-        
+
         Iext = self.Iext + local_coupling * y[0]
         c_pop = coupling[0, :]
 
@@ -551,23 +551,23 @@ class Epileptor2D(ModelNumbaDfun):
         else_ydot0 = - self.slope - 0.6 * (y[1] - 4.0) ** 2 + self.d * y[0]
 
         ydot[0] = self.tt * (self.c - y[1] + Iext + self.Kvf * c_pop - (where(y[0] < 0., if_ydot0, else_ydot0)) * y[0])
-        
+
         # energy
         if_ydot1 = - 0.1 * y[1] ** 7
         else_ydot1 = 0
-        
+
         if self.modification:
             h = self.x0 + 3. / (1. + numpy.exp(- (y[0] + 0.5) / 0.1))
         else:
             h = 4 * (y[0] - self.x0) + where(y[1] < 0., if_ydot1, else_ydot1)
-        
+
         ydot[1] = self.tt * (self.r * (h - y[1] + self.Ks * c_pop))
 
         return ydot
 
     def dfun(self, x, c, local_coupling=0.0):
         """"The dfun using numba for speed."""
-        
+
         x_ = x.reshape(x.shape[:-1]).T
         c_ = c.reshape(c.shape[:-1]).T
         Iext = self.Iext + local_coupling * x[0, :, 0]

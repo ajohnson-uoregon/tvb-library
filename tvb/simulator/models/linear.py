@@ -41,7 +41,7 @@ class Linear(Model):
     gamma = arrays.FloatArray(
         label=r":math:`\gamma`",
         default=numpy.array([-10.0]),
-        range=basic.Range(lo=-100.0, hi=0.0, step=1.0),
+        range=numpy.arange(-100.0,0.0,1.0),
         doc="The damping coefficient specifies how quickly the node's activity relaxes, must be larger"
             " than the node's in-degree in order to remain stable.",
         order=1)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -30,7 +30,7 @@
 
 """
 
-The Array datatypes. This brings together the scientific and framework 
+The Array datatypes. This brings together the scientific and framework
 methods that are associated with the Array datatypes.
 
 .. moduleauthor:: Stuart A. Knock <Stuart@tvb.invalid>
@@ -135,7 +135,7 @@ class MappedArray(MappedType):
     label_x, label_y = basic.String, basic.String
     aggregation_functions = basic.JSONType(required=False)
     dimensions_labels = basic.JSONType(required=False)
-    nr_dimensions, length_1d, length_2d, length_3d, length_4d = [basic.Integer] * 5
+    nr_dimensions, length_1d, length_2d, length_3d, length_4d = [0] * 5
     array_data = Array()
 
     __generate_table__ = True
