@@ -215,12 +215,8 @@ class Scaling(SparseCoupling):
 
     """
 
-    a = basic.Float(
-        label="Scaling factor",
-        default=0.00390625,
-        range=numpy.arange(0.0,1.0,0.01),
-        doc="Rescales the connection strength while maintaining "
-            "the ratio between different values.")
+    a = 0.00390625 # Rescales the connection strength while maintaining the ratio between different values
+    # numpy.arange(0.0,1.0,0.01)
 
     def post(self, gx):
         return self.a * gx

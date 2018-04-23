@@ -175,11 +175,11 @@ class Surface(MappedType):
 
     number_of_triangles = 0 #The number of triangles making up this surface.
 
-    edge_mean_length = basic.Float(order=-1)
+    edge_mean_length = 0.0
 
-    edge_min_length = basic.Float(order=-1)
+    edge_min_length = 0.0
 
-    edge_max_length = basic.Float(order=-1)
+    edge_max_length = 0.0
 
     ##--------------------- FRAMEWORK ATTRIBUTES -----------------------------##
 

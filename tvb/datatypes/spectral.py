@@ -56,13 +56,6 @@ class FourierSpectrum(arrays.MappedArray):
         label="Source time-series",
         doc="Links to the time-series on which the FFT is applied.")
 
-    segment_length = basic.Float(
-        label="Segment length",
-        doc="""The timeseries was segmented into equally sized blocks
-            (overlapping if necessary), prior to the application of the FFT.
-            The segement length determines the frequency resolution of the
-            resulting spectra.""")
-
     windowing_function = basic.String(
         label="Windowing function",
         doc="""The windowing function applied to each time segment prior to
@@ -93,6 +86,13 @@ class FourierSpectrum(arrays.MappedArray):
     _max_freq = None
 
     __generate_table__ = True
+
+    def __init__(self, segment_length=0.0):
+        self.segment_length = segment_length
+        #The timeseries was segmented into equally sized blocks
+        #(overlapping if necessary), prior to the application of the FFT.
+        #The segement length determines the frequency resolution of the
+        #resulting spectra
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -242,17 +242,12 @@ class WaveletCoefficients(arrays.MappedArray):
         doc="""A string specifying the type of mother wavelet to use,
             default is 'morlet'.""")  # default to 'morlet'
 
-    sample_period = basic.Float(label="Sample period")
-    # sample_rate = basic.Integer(label = "")  inversely related
-
     frequencies = arrays.FloatArray(
         label="Frequencies",
         doc="A vector that maps scales to frequencies.")
 
     normalisation = basic.String(label="Normalisation type")
     # 'unit energy' | 'gabor'
-
-    q_ratio = basic.Float(label="Q-ratio", default=5.0)
 
     amplitude = arrays.FloatArray(
         label="Amplitude",
@@ -270,6 +265,10 @@ class WaveletCoefficients(arrays.MappedArray):
     _time = None
 
     __generate_table__ = True
+
+    def __init__(self, sample_period=0.0, q_ratio=5.0):
+        self.sample_period = sample_period
+        self.q_ratio = q_ratio
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -405,20 +404,6 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
         doc="""Links to the time-series on which the node_coherence is
                 applied.""")
 
-    epoch_length = basic.Float(
-        label="Epoch length",
-        doc="""The timeseries was segmented into equally sized blocks
-                (overlapping if necessary), prior to the application of the FFT.
-                The segement length determines the frequency resolution of the
-                resulting spectra.""")
-
-    segment_length = basic.Float(
-        label="Segment length",
-        doc="""The timeseries was segmented into equally sized blocks
-                (overlapping if necessary), prior to the application of the FFT.
-                The segement length determines the frequency resolution of the
-                resulting spectra.""")
-
     windowing_function = basic.String(
         label="Windowing function",
         doc="""The windowing function applied to each time segment prior to
@@ -430,6 +415,14 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
     _freq_step = None
     _max_freq = None
     spectrum_types = ["Imaginary", "Real", "Absolute"]
+
+    def __init__(self, epoch_length=0.0, segment_length = 0.0):
+        self.epoch_length = epoch_length
+        #The timeseries was segmented into equally sized blocks
+        #(overlapping if necessary), prior to the application of the FFT.
+        #The segement length determines the frequency resolution of the
+        #resulting spectra.
+        self.segment_length = segment_length
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

@@ -90,14 +90,6 @@ class Simulator(core.Type):
         connections. These couplings undergo a time delay via signal propagation
         with a propagation speed of ``Conduction Speed``""")
 
-    conduction_speed = basic.Float(
-        label="Conduction Speed",
-        default=3.0,
-        order=2,
-        required=False,
-        range=numpy.arange(0.01,100.0,1.0),
-        doc="""Conduction speed for ``Long-range connectivity`` (mm/ms)""")
-
     coupling = coupling.Coupling(
         label="Long-range coupling function",
         default=coupling.Linear(),
@@ -192,14 +184,14 @@ class Simulator(core.Type):
         temporally downsampled from the raw integration rate to a sample rate of
         1024Hz.""")
 
-    simulation_length = basic.Float(
-        label="Simulation Length (ms, s, m, h)",
-        default=1000.0,  # ie 1 second
-        required=True,
-        order=9,
-        doc="""The length of a simulation (default in milliseconds).""")
-
     history = None # type: SparseHistory
+
+    def __init__(self, conduction_speed=3.0, simulation_length=1000.0):
+        self.conduction_speed = conduction_speed
+        # Conduction speed for ``Long-range connectivity`` (mm/ms)
+        # numpy.arange(0.01,100.0,1.0)
+        self.simulation_length = simulation_length
+        # The length of a simulation (default in milliseconds)
 
     @property
     def good_history_shape(self):

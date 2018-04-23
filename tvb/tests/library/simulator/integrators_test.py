@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -44,7 +44,7 @@ from tvb.simulator import integrators
 from tvb.simulator import noise
 
 # For the moment all integrators inherit dt from the base class
-dt = integrators.Integrator.dt.interface['default']
+dt = integrators.Integrator().dt
 
 
 class TestIntegrators(BaseTestCase):
@@ -52,8 +52,8 @@ class TestIntegrators(BaseTestCase):
     Define test cases for coupling:
         - initialise each class
         - check default parameters
-        - change parameters 
-        
+        - change parameters
+
     """
 
     def _dummy_dfun(self, X, coupling, local_coupling):

@@ -63,13 +63,6 @@ class String(core.Type):
     wraps = (str, unicode)
 
 
-class Float(core.Type):
-    """
-    Traits type that wraps Numpy's float64.
-    """
-    wraps = (float, numpy.float32, int)
-
-
 class Complex(core.Type):
     """
     Traits type that wraps Numpy's complex64.
@@ -220,12 +213,6 @@ class Slice(Sequence):
     """
     wraps = slice
 
-
-
-class ValidationRange(core.Type):
-    """
-    ValidationRange represents a Range used only for validating a number.
-    """
 
 
 class JSONType(String):

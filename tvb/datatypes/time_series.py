@@ -97,18 +97,16 @@ class TimeSeries(types_mapped.MappedType):
         doc="""An array of time values for the time-series, with a shape of [tpts,].
         This is 'time' as returned by the simulator's monitors.""")
 
-    start_time = basic.Float(label="Start Time:")
+    start_time = 0.0
 
-    sample_period = basic.Float(label="Sample period", default=1.0)
+    sample_period = 1.0
 
     # Specify the measure unit for sample period (e.g sec, msec, usec, ...)
     sample_period_unit = basic.String(
         label="Sample Period Measure Unit",
         default="ms")
 
-    sample_rate = basic.Float(
-        label="Sample rate",
-        doc="""The sample rate of the timeseries""")
+    sample_rate = 0.0
 
     has_surface_mapping = True
     has_volume_mapping = False

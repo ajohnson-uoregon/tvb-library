@@ -131,12 +131,7 @@ class Noise(core.Type):
     #      inital conditions noise source, and in that use the job of nsig is
     #      filled by the state_variable_range attribute of the Model.
 
-    ntau = basic.Float(
-        label=r":math:`\tau`",
-        required=True,
-        default=0.0,
-        range=numpy.arange(0,20,1), #basic.Range(lo=0.0, hi=20.0, step=1.0),
-        doc="""The noise correlation time""")
+    ntau = 0.0 # The noise correlation time - numpy.arange(0,20,1)
 
     random_stream = RandomStream(
         label="Random Stream",

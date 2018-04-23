@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-# TheVirtualBrain-Framework Package. This package holds all Data Management, and 
+# TheVirtualBrain-Framework Package. This package holds all Data Management, and
 # Web-UI helpful to run brain-simulations. To use it, you also need do download
 # TheVirtualBrain-Scientific Package (for simulators). See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -56,11 +56,8 @@ class LocalConnectivity(types_mapped.MappedType):
         default=equations.Gaussian,
         order=2)
 
-    cutoff = basic.Float(
-        label="Cutoff distance (mm)",
-        default=40.0,
-        doc="Distance at which to truncate the evaluation in mm.",
-        order=3)
+    def __init__(self, cutoff=40.0):
+        self.cutoff = cutoff # Distance at which to truncate the evaluation in mm.
 
     def compute(self):
         """

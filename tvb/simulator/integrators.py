@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -67,26 +67,12 @@ class Integrator(core.Type):
     .. [2] Riccardo Mannella, *Integration of Stochastic Differential Equations
         on a Computer*, Int J. of Modern Physics C 13(9): 1177--1194, 2002.
 
-    .. [3] R. Mannella and V. Palleschi, *Fast and precise algorithm for 
+    .. [3] R. Mannella and V. Palleschi, *Fast and precise algorithm for
         computer simulation of stochastic differential equations*, Phys. Rev. A
         40: 3381, 1989.
 
     """
     _base_classes = ['Integrator', 'IntegratorStochastic', 'RungeKutta4thOrderDeterministic']
-
-    dt = basic.Float(
-        label = "Integration-step size (ms)", 
-        default =  0.01220703125, #0.015625,
-        #range = basic.Range(lo= 0.0048828125, hi=0.244140625, step= 0.1, base=2.)
-        required = True,
-        doc = """The step size used by the integration routine in ms. This
-        should be chosen to be small enough for the integration to be
-        numerically stable. It is also necessary to consider the desired sample
-        period of the Monitors, as they are restricted to being integral
-        multiples of this value. The default value is set such that all built-in
-        models are numerically stable with there default parameters and because
-        it is consitent with Monitors using sample periods corresponding to
-        powers of 2 from 128 to 4096Hz.""")
 
     clamped_state_variable_indices = arrays.IntegerArray(
         label = "indices of the state variables to be clamped by the integrators to the values in the clamped_values array",
@@ -98,6 +84,16 @@ class Integrator(core.Type):
         default = None,
         order=-1)
 
+    def __init__(self, dt=0.01220703125):
+        self.dt = dt
+        # The step size used by the integration routine in ms. This
+        # should be chosen to be small enough for the integration to be
+        # numerically stable. It is also necessary to consider the desired sample
+        # period of the Monitors, as they are restricted to being integral
+        # multiples of this value. The default value is set such that all built-in
+        # models are numerically stable with there default parameters and because
+        # it is consitent with Monitors using sample periods corresponding to
+        # powers of 2 from 128 to 4096Hz
 
     def scheme(self, X, dfun, coupling, local_coupling, stimulus):
         """
@@ -168,7 +164,7 @@ class HeunDeterministic(Integrator):
         From [1]_:
 
         .. math::
-            X_{n+1} &= X_n + dt (dX(t_n, X_n) + 
+            X_{n+1} &= X_n + dt (dX(t_n, X_n) +
                                  dX(t_{n+1}, \tilde{X}_{n+1})) / 2 \\
             \tilde{X}_{n+1} &= X_n + dt dX(t_n, X_n)
 
@@ -251,7 +247,7 @@ class EulerDeterministic(Integrator):
 
         """
 
-        self.dX = dfun(X, coupling, local_coupling) 
+        self.dX = dfun(X, coupling, local_coupling)
 
         X_next = X + self.dt * (self.dX + stimulus)
         self.clamp_state(X_next)
@@ -285,7 +281,7 @@ class EulerStochastic(IntegratorStochastic):
         """
 
         noise = self.noise.generate(X.shape)
-        dX = dfun(X, coupling, local_coupling) * self.dt 
+        dX = dfun(X, coupling, local_coupling) * self.dt
         noise_gfun = self.noise.gfun(X)
         X_next = X + dX + noise_gfun * noise + self.dt * stimulus
         self.clamp_state(X_next)

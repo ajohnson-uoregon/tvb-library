@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -85,13 +85,6 @@ class Monitor(core.Type):
     # list of class names not shown in UI
     _base_classes = ['Monitor', 'Projection', 'ProgressLogger']
 
-    period = basic.Float(
-        label = "Sampling period (ms)", order=10,
-        default = 0.9765625, #ms. 0.9765625 => 1024Hz #ms, 0.5 => 2000Hz
-        doc = """Sampling period in milliseconds, must be an integral multiple
-        of integration-step size. As a guide: 2048 Hz => 0.48828125 ms ;  
-        1024 Hz => 0.9765625 ms ; 512 Hz => 1.953125 ms.""")
-
     variables_of_interest = arrays.IntegerArray(
         label = "Model variables to watch", order=11,
         doc = ("Indices of model's variables of interest (VOI) that this monitor should record. "
@@ -105,6 +98,13 @@ class Monitor(core.Type):
     voi = None
     _stock = numpy.empty([])
 
+    def __init__(self, period=0.9765625):
+        self.period = period
+        # Sampling period in milliseconds, must be an integral multiple
+        # of integration-step size. As a guide: 2048 Hz => 0.48828125 ms ;
+        # 1024 Hz => 0.9765625 ms ; 512 Hz => 1.953125 ms.
+
+
     def __str__(self):
         clsname = self.__class__.__name__
         return '%s(period=%f, voi=%s)' % (clsname, self.period, self.variables_of_interest.tolist())
@@ -114,7 +114,7 @@ class Monitor(core.Type):
 
         Grab the Simulator's integration step size. Set the monitor's variables
         of interest based on the Monitor's 'variables_of_interest' attribute, if
-        it was specified, otherwise use the 'variables_of_interest' specified 
+        it was specified, otherwise use the 'variables_of_interest' specified
         for the Model. Calculate the number of integration steps (isteps)
         between returns by the record method. This method is called from within
         the the Simulator's configure() method.
@@ -185,19 +185,18 @@ class Raw(Monitor):
     It collects:
 
         - all state variables and modes from class :Model:
-        - all nodes of a region or surface based 
+        - all nodes of a region or surface based
         - all the integration time steps
 
     """
     _ui_name = "Raw recording"
 
-    period = basic.Float(
-        label = "Sampling period is ignored for Raw Monitor",
-        order = -1)
-
     variables_of_interest = arrays.IntegerArray(
         label = "Raw Monitor sees all!!! Resistance is futile...",
         order = -1)
+
+    def __init__(self):
+        super(Raw, self).__init__()
 
     def config_for_sim(self, simulator):
         if self.period != simulator.integrator.dt:
@@ -236,7 +235,7 @@ class SpatialAverage(Monitor):
     integers, from a set contiguous from zero, specifying the new grouping to
     which each node belongs should work.
 
-    Additionally, this monitor temporally sub-samples the simulation every `istep` 
+    Additionally, this monitor temporally sub-samples the simulation every `istep`
     integration steps.
 
     """
@@ -246,14 +245,14 @@ class SpatialAverage(Monitor):
         label = "An index mask of nodes into areas",
         doc = """A vector of length==nodes that assigns an index to each node
             specifying the "region" to which it belongs. The default usage is
-            for mapping a surface based simulation back to the regions used in 
+            for mapping a surface based simulation back to the regions used in
             its `Long-range Connectivity.`""")
-    
+
     default_mask = basic.Enumerate(
                               label = "Default Mask",
                               options = ["cortical", "hemispheres"],
                               default = ["hemispheres"],
-                              doc = r"""Fallback in case spatial mask is none and no surface provided 
+                              doc = r"""Fallback in case spatial mask is none and no surface provided
                               to use either connectivity hemispheres or cortical attributes.""",
                               order = -1)
 
@@ -374,7 +373,7 @@ class TemporalAverage(Monitor):
         """
         Records if integration step corresponds to sampling period, Otherwise
         just update the monitor's stock. When the step corresponds to the sample
-        period, the ``_stock`` is averaged over time for return. 
+        period, the ``_stock`` is averaged over time for return.
 
         """
         self._stock[((step % self.istep) - 1), :] = state[self.voi]
@@ -574,10 +573,12 @@ class EEG(Projection):
     sensors = SensorsEEG(required=True, label="EEG Sensors", order=1,
                          doc='Sensors to use for this EEG monitor')
 
-    sigma = basic.Float(label="Conductivity (w/o projection)", default=1.0, order=4,
-                        doc='When a projection matrix is not used, this provides '
-                            'the value of conductivity in the formula for the single '
-                            'sphere approximation of the head (Sarvas 1987).')
+    def __init__(self, sigma=1.0, *args, **kwargs):
+        self.sigma = sigma # Conductivity (w/o projection)
+        # When a projection matrix is not used, this provides
+        # the value of conductivity in the formula for the single
+        # sphere approximation of the head (Sarvas 1987).
+        super(EEG, self).__init__(*args, **kwargs)
 
 
     @classmethod
@@ -704,12 +705,13 @@ class iEEG(Projection):
         default=None, label='Projection matrix', order=2,
         doc='Projection matrix to apply to sources.')
 
-    sigma = basic.Float(label="conductivity", default=1.0, order=4)
-
     sensors = sensors_module.SensorsInternal(
         label="Internal brain sensors", default=None, required=True, order=1,
         doc="The set of SEEG sensors for which the forward solution will be calculated.")
 
+    def __init__(self, sigma=1.0, *args, **kwargs):
+        self.sigma = sigma
+        super(iEEG, self).__init__(*args, **kwargs)
 
     @classmethod
     def from_file(cls, sensors_fname='seeg_588.txt',
@@ -781,13 +783,6 @@ class Bold(Monitor):
     """
     _ui_name = "BOLD"
 
-    period = basic.Float(
-        label = "Sampling period (ms)",
-        default = 2000.0,
-        doc = """For the BOLD monitor, sampling period in milliseconds must be
-        an integral multiple of 500. Typical measurment interval (repetition
-        time TR) is between 1-3 s. If TR is 2s, then Bold period is 2000ms.""")
-
     hrf_kernel = equations.HRFKernelEquation(
         label = "Haemodynamic Response Function",
         default = equations.FirstOrderVolterra,
@@ -795,11 +790,7 @@ class Bold(Monitor):
         doc = """A tvb.datatypes.equation object which describe the haemodynamic
         response function used to compute the BOLD signal.""")
 
-    hrf_length = basic.Float(
-        label = "Duration (ms)",
-        default = 20000.,
-        doc= """Duration of the hrf kernel""",
-        order=-1)
+    hrf_length = 20000.0 # Duration of the hrf kernel
 
     _interim_period = None
     _interim_istep = None
@@ -808,6 +799,12 @@ class Bold(Monitor):
     _stock_time = None
     _stock_sample_rate = 2 ** -2
     hemodynamic_response_function = None
+
+    def __init__(self, period=2000.0, *args, **kwargs):
+        super(Bold, self).__init__(period, *args, **kwargs)
+        # For the BOLD monitor, sampling period in milliseconds must be
+        # an integral multiple of 500. Typical measurment interval (repetition
+        # time TR) is between 1-3 s. If TR is 2s, then Bold period is 2000ms.
 
     def compute_hrf(self):
         """
