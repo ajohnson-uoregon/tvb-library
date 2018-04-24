@@ -165,18 +165,15 @@ class ReducedSetFitzHughNagumo(ReducedSetBase):
         order=8)
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"xi": numpy.array([-4.0, 4.0]),
-                 "eta": numpy.array([-3.0, 3.0]),
-                 "alpha": numpy.array([-4.0, 4.0]),
-                 "beta": numpy.array([-3.0, 3.0])},
-        doc="""The values for each state-variable should be set to encompass
-        the expected dynamic range of that state-variable for the current
-        parameters, it is used as a mechanism for bounding random inital
-        conditions when the simulation isn't started from an explicit history,
-        it is also provides the default range of phase-plane plots.""",
-        order=9)
+    state_variable_range = {"xi": numpy.array([-4.0, 4.0]),
+                            "eta": numpy.array([-3.0, 3.0]),
+                            "alpha": numpy.array([-4.0, 4.0]),
+                            "beta": numpy.array([-3.0, 3.0])}
+    # The values for each state-variable should be set to encompass
+    # the expected dynamic range of that state-variable for the current
+    # parameters, it is used as a mechanism for bounding random inital
+    # conditions when the simulation isn't started from an explicit history,
+    # it is also provides the default range of phase-plane plots
 
     #    variables_of_interest = arrays.IntegerArray(
     #        label = "Variables watched by Monitors",
@@ -479,20 +476,17 @@ class ReducedSetHindmarshRose(ReducedSetBase):
         order=12)
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"xi": numpy.array([-4.0, 4.0]),
-                 "eta": numpy.array([-25.0, 20.0]),
-                 "tau": numpy.array([2.0, 10.0]),
-                 "alpha": numpy.array([-4.0, 4.0]),
-                 "beta": numpy.array([-20.0, 20.0]),
-                 "gamma": numpy.array([2.0, 10.0])},
-        doc="""The values for each state-variable should be set to encompass
-        the expected dynamic range of that state-variable for the current
-        parameters, it is used as a mechanism for bounding random inital
-        conditions when the simulation isn't started from an explicit history,
-        it is also provides the default range of phase-plane plots.""",
-        order=13)
+    state_variable_range = {"xi": numpy.array([-4.0, 4.0]),
+                            "eta": numpy.array([-25.0, 20.0]),
+                            "tau": numpy.array([2.0, 10.0]),
+                            "alpha": numpy.array([-4.0, 4.0]),
+                            "beta": numpy.array([-20.0, 20.0]),
+                            "gamma": numpy.array([2.0, 10.0])}
+    # The values for each state-variable should be set to encompass
+    # the expected dynamic range of that state-variable for the current
+    # parameters, it is used as a mechanism for bounding random inital
+    # conditions when the simulation isn't started from an explicit history,
+    # it is also provides the default range of phase-plane plots.
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

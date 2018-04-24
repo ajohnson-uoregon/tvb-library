@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -33,7 +33,7 @@
 """
 
 from tvb.basic.traits.types_mapped import MappedType
-from tvb.basic.traits.types_basic import JSONType, String, Dict
+from tvb.basic.traits.types_basic import JSONType, String
 from tvb.datatypes.time_series import TimeSeries
 
 
@@ -45,32 +45,36 @@ class ValueWrapper(MappedType):
     """
     Class to wrap a singular value storage in DB.
     """
-    
+
     data_value = JSONType()
-    data_type = String(default='unknown')  
-    data_name = String() 
-    
+    data_type = String(default='unknown')
+    data_name = String()
+
     @property
     def display_name(self):
         """ Simple String to be used for display in UI."""
         return "Value Wrapper - " + self.data_name +" : "+ str(self.data_value) + " ("+ str(self.data_type)+ ")"
-            
-    
+
+
 class DatatypeMeasure(MappedType):
     """
     Class to hold the metric for a previous stored DataType.
     E.g. Measure (single value) for any TimeSeries resulted in a group of Simulations
     """
     ### Actual measure (dictionary Algorithm: single Value)
-    metrics = Dict
     ### DataType for which the measure was computed.
     analyzed_datatype = TimeSeries
-    
-    
+
+    def __init__(self, metrics=None, *args, **kwargs):
+        if metrics is None:
+            self.metrics = {}
+        else:
+            self.metrics = metrics
+        super(DatatypeMeasure, self).__init__(*args, **kwargs)
     @property
     def display_name(self):
         """
-        To be implemented in each sub-class which is about to be displayed in UI, 
+        To be implemented in each sub-class which is about to be displayed in UI,
         and return the text to appear.
         """
         name = "-"
@@ -80,6 +84,3 @@ class DatatypeMeasure(MappedType):
                 value = value + entry + ' : ' + str(self.metrics[entry]) + '\n'
             name = value
         return name
-    
-    
-    

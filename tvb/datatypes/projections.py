@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -28,7 +28,7 @@
 #
 #
 """
-The ProjectionMatrices DataTypes. This brings together the scientific and framework 
+The ProjectionMatrices DataTypes. This brings together the scientific and framework
 methods that are associated with the surfaces data.
 
 .. moduleauthor:: Lia Domide <lia.domide@codemart.ro>
@@ -65,9 +65,7 @@ class ProjectionMatrix(MappedType):
     skin_air = surfaces.SkinAir(label="Skin Air", default=None, required=False,
                                 doc="""Boundary between skin and air domains.""")
 
-    conductances = basic.Dict(label="Domain conductances", required=False,
-                              default={'air': 0.0, 'skin': 1.0, 'skull': 0.01, 'brain': 1.0},
-                              doc=""" A dictionary representing the conductances of ... """)
+    conductances = {'air': 0.0, 'skin': 1.0, 'skull': 0.01, 'brain': 1.0} 
 
     sources = surfaces.CorticalSurface(label="surface or region", default=None, required=True)
 

@@ -160,14 +160,9 @@ class EpileptorCodim3(ModelNumbaDfun):
             "dstar. If modification is False, then don't use the modification. The default value is True ",
         order=13)
 
-    state_variable_range = basic.Dict(
-        label="State variable ranges [lo, hi]",
-        default={"x": numpy.array([0.4, 0.6]),
-                 "y": numpy.array([-0.1, 0.1]),
-                 "z": numpy.array([0.0, 0.15])},
-        doc="Typical bounds on state variables.",
-        order=99
-    )
+    state_variable_range = {"x": numpy.array([0.4, 0.6]),
+                            "y": numpy.array([-0.1, 0.1]),
+                            "z": numpy.array([0.0, 0.15])}
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",
@@ -517,16 +512,11 @@ class EpileptorCodim3SlowMod(ModelNumbaDfun):
         order=21
     )
 
-    state_variable_range = basic.Dict(
-        label="State variable ranges [lo, hi]",
-        default={"x": numpy.array([0.4, 0.6]),
-                 "y": numpy.array([-0.1, 0.1]),
-                 "z": numpy.array([0.0, 0.1]),
-                 "uA": numpy.array([0.0, 0.0]),
-                 "uB": numpy.array([0.0, 0.0])},
-        doc="Typical bounds on state variables.",
-        order=99
-    )
+    state_variable_range = {"x": numpy.array([0.4, 0.6]),
+                            "y": numpy.array([-0.1, 0.1]),
+                            "z": numpy.array([0.0, 0.1]),
+                            "uA": numpy.array([0.0, 0.0]),
+                            "uB": numpy.array([0.0, 0.0])}
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

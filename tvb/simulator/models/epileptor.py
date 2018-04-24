@@ -281,17 +281,13 @@ class Epileptor(ModelNumbaDfun):
         The default value is False, i.e., linear influence.",
         order=10)
 
-    state_variable_range = basic.Dict(
-        label="State variable ranges [lo, hi]",
-        default={"x1": numpy.array([-2., 1.]),
-                 "y1": numpy.array([-20., 2.]),
-                 "z": numpy.array([2.0, 5.0]),
-                 "x2": numpy.array([-2., 0.]),
-                 "y2": numpy.array([0., 2.]),
-                 "g": numpy.array([-1., 1.])},
-        doc="Typical bounds on state variables in the Epileptor model.",
-        order=16
-        )
+    # Typical bounds on state variables in the Epileptor model.
+    state_variable_range = {"x1": numpy.array([-2., 1.]),
+                            "y1": numpy.array([-20., 2.]),
+                            "z": numpy.array([2.0, 5.0]),
+                            "x2": numpy.array([-2., 0.]),
+                            "y2": numpy.array([0., 2.]),
+                            "g": numpy.array([-1., 1.])}
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",
@@ -512,12 +508,9 @@ class Epileptor2D(ModelNumbaDfun):
         The default value is False, i.e., linear influence.",
         order=12)
 
-    state_variable_range = basic.Dict(
-        label="State variable ranges [lo, hi]",
-        default={"x1": numpy.array([-2., 1.]),
-        "z": numpy.array([2.0, 5.0])},
-        doc="Typical bounds on state-variables in the Epileptor 2D model.",
-        order=99)
+    # Typical bounds on state-variables in the Epileptor 2D model
+    state_variable_range = {"x1": numpy.array([-2., 1.]),
+                            "z": numpy.array([2.0, 5.0])} 
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

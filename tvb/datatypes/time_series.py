@@ -85,10 +85,8 @@ class TimeSeries(types_mapped.MappedType):
         label="Dimension Names",
         doc="""List of strings representing names of each data dimension""")
 
-    labels_dimensions = basic.Dict(
-        default={},
-        label="Specific labels for each dimension for the data stored in this timeseries.",
-        doc=""" A dictionary containing mappings of the form {'dimension_name' : [labels for this dimension] }""")
+    # A dictionary containing mappings of the form {'dimension_name' : [labels for this dimension] }
+    labels_dimensions = {}
 
     time = arrays.FloatArray(
         file_storage=core.FILE_STORAGE_EXPAND,

@@ -195,20 +195,17 @@ class JansenRit(ModelNumbaDfun):
         order=15)
 
     #Used for phase-plane axis ranges and to bound random initial() conditions.
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"y0": numpy.array([-1.0, 1.0]),
-                 "y1": numpy.array([-500.0, 500.0]),
-                 "y2": numpy.array([-50.0, 50.0]),
-                 "y3": numpy.array([-6.0, 6.0]),
-                 "y4": numpy.array([-20.0, 20.0]),
-                 "y5": numpy.array([-500.0, 500.0])},
-        doc="""The values for each state-variable should be set to encompass
-        the expected dynamic range of that state-variable for the current
-        parameters, it is used as a mechanism for bounding random inital
-        conditions when the simulation isn't started from an explicit history,
-        it is also provides the default range of phase-plane plots.""",
-        order=16)
+    state_variable_range = {"y0": numpy.array([-1.0, 1.0]),
+                            "y1": numpy.array([-500.0, 500.0]),
+                            "y2": numpy.array([-50.0, 50.0]),
+                            "y3": numpy.array([-6.0, 6.0]),
+                            "y4": numpy.array([-20.0, 20.0]),
+                            "y5": numpy.array([-500.0, 500.0])}
+    # The values for each state-variable should be set to encompass
+    # the expected dynamic range of that state-variable for the current
+    # parameters, it is used as a mechanism for bounding random inital
+    # conditions when the simulation isn't started from an explicit history,
+    # it is also provides the default range of phase-plane plots
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",
@@ -496,26 +493,23 @@ class ZetterbergJansen(Model):
         order=15)
 
     #Used for phase-plane axis ranges and to bound random initial() conditions.
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"v1": numpy.array([-100.0, 100.0]),
-                 "y1": numpy.array([-500.0, 500.0]),
-                 "v2": numpy.array([-100.0, 50.0]),
-                 "y2": numpy.array([-100.0, 6.0]),
-                 "v3": numpy.array([-100.0, 6.0]),
-                 "y3": numpy.array([-100.0, 6.0]),
-                 "v4": numpy.array([-100.0, 20.0]),
-                 "y4": numpy.array([-100.0, 20.0]),
-                 "v5": numpy.array([-100.0, 20.0]),
-                 "y5": numpy.array([-500.0, 500.0]),
-                 "v6": numpy.array([-100.0, 20.0]),
-                 "v7": numpy.array([-100.0, 20.0]),},
-        doc="""The values for each state-variable should be set to encompass
-        the expected dynamic range of that state-variable for the current
-        parameters, it is used as a mechanism for bounding random inital
-        conditions when the simulation isn't started from an explicit history,
-        it is also provides the default range of phase-plane plots.""",
-        order=16)
+    state_variable_range = {"v1": numpy.array([-100.0, 100.0]),
+             "y1": numpy.array([-500.0, 500.0]),
+             "v2": numpy.array([-100.0, 50.0]),
+             "y2": numpy.array([-100.0, 6.0]),
+             "v3": numpy.array([-100.0, 6.0]),
+             "y3": numpy.array([-100.0, 6.0]),
+             "v4": numpy.array([-100.0, 20.0]),
+             "y4": numpy.array([-100.0, 20.0]),
+             "v5": numpy.array([-100.0, 20.0]),
+             "y5": numpy.array([-500.0, 500.0]),
+             "v6": numpy.array([-100.0, 20.0]),
+             "v7": numpy.array([-100.0, 20.0]),}
+    # The values for each state-variable should be set to encompass
+    # the expected dynamic range of that state-variable for the current
+    # parameters, it is used as a mechanism for bounding random inital
+    # conditions when the simulation isn't started from an explicit history,
+    # it is also provides the default range of phase-plane plots.
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

@@ -117,16 +117,13 @@ class Hopfield(Model):
         order=3)
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"x": numpy.array([-1., 2.]),
-                   "theta": numpy.array([0., 1.])},
-        doc="""The values for each state-variable should be set to encompass
-            the expected dynamic range of that state-variable for the current
-            parameters, it is used as a mechanism for bounding random inital
-            conditions when the simulation isn't started from an explicit
-            history, it is also provides the default range of phase-plane plots.""",
-        order = 4)
+    state_variable_range = {"x": numpy.array([-1., 2.]),
+                            "theta": numpy.array([0., 1.])}
+    # The values for each state-variable should be set to encompass
+    #     the expected dynamic range of that state-variable for the current
+    #     parameters, it is used as a mechanism for bounding random inital
+    #     conditions when the simulation isn't started from an explicit
+    #     history, it is also provides the default range of phase-plane plots.
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

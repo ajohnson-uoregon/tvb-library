@@ -312,16 +312,13 @@ class WilsonCowan(Model):
         order=22)
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"E": numpy.array([0.0, 1.0]),
-                 "I": numpy.array([0.0, 1.0])},
-        doc="""The values for each state-variable should be set to encompass
-        the expected dynamic range of that state-variable for the current
-        parameters, it is used as a mechanism for bounding random inital
-        conditions when the simulation isn't started from an explicit history,
-        it is also provides the default range of phase-plane plots.""",
-        order=23)
+    state_variable_range = {"E": numpy.array([0.0, 1.0]),
+                            "I": numpy.array([0.0, 1.0])}
+    # The values for each state-variable should be set to encompass
+    # the expected dynamic range of that state-variable for the current
+    # parameters, it is used as a mechanism for bounding random inital
+    # conditions when the simulation isn't started from an explicit history,
+    # it is also provides the default range of phase-plane plots
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

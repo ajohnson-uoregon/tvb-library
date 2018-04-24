@@ -46,11 +46,7 @@ class Linear(Model):
             " than the node's in-degree in order to remain stable.",
         order=1)
 
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"x": numpy.array([-1, 1])},
-        doc="Range used for state variable initialization and visualization.",
-        order=2)
+    state_variable_range = {"x": numpy.array([-1, 1])} # Range used for state variable initialization and visualization
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

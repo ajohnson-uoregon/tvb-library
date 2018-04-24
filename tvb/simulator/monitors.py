@@ -98,7 +98,8 @@ class Monitor(core.Type):
     voi = None
     _stock = numpy.empty([])
 
-    def __init__(self, period=0.9765625):
+    def __init__(self, period=0.9765625, *args, **kwargs):
+        print(kwargs)
         self.period = period
         # Sampling period in milliseconds, must be an integral multiple
         # of integration-step size. As a guide: 2048 Hz => 0.48828125 ms ;
@@ -801,7 +802,7 @@ class Bold(Monitor):
     hemodynamic_response_function = None
 
     def __init__(self, period=2000.0, *args, **kwargs):
-        super(Bold, self).__init__(period, *args, **kwargs)
+        super(Bold, self).__init__(period=period, *args, **kwargs)
         # For the BOLD monitor, sampling period in milliseconds must be
         # an integral multiple of 500. Typical measurment interval (repetition
         # time TR) is between 1-3 s. If TR is 2s, then Bold period is 2000ms.

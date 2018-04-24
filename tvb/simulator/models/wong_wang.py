@@ -140,12 +140,7 @@ class ReducedWongWang(ModelNumbaDfun):
         integration schemes.""",
         order=-1)
 
-    state_variable_range = basic.Dict(
-        label="State variable ranges [lo, hi]",
-        default={"S": numpy.array([0.0, 1.0])},
-        doc="Population firing rate",
-        order=9
-    )
+    state_variable_range = {"S": numpy.array([0.0, 1.0])} # Population firing rate
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

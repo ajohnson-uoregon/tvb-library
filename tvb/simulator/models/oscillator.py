@@ -326,16 +326,13 @@ class Generic2dOscillator(ModelNumbaDfun):
         order=13)
 
     #Informational attribute, used for phase-plane and initial()
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"V": numpy.array([-2.0, 4.0]),
-                 "W": numpy.array([-6.0, 6.0])},
-        doc="""The values for each state-variable should be set to encompass
-            the expected dynamic range of that state-variable for the current
-            parameters, it is used as a mechanism for bounding random initial
-            conditions when the simulation isn't started from an explicit
-            history, it is also provides the default range of phase-plane plots.""",
-        order=11)
+    state_variable_range = {"V": numpy.array([-2.0, 4.0]),
+                            "W": numpy.array([-6.0, 6.0])}
+    # The values for each state-variable should be set to encompass
+    #     the expected dynamic range of that state-variable for the current
+    #     parameters, it is used as a mechanism for bounding random initial
+    #     conditions when the simulation isn't started from an explicit
+    #     history, it is also provides the default range of phase-plane plots
 
     #    variables_of_interest = arrays.IntegerArray(
     #        label = "Variables watched by Monitors.",
@@ -470,16 +467,12 @@ class Kuramoto(Model):
         order=1)
 
     #Informational attribute, used for phase-plane and initial()
-    state_variable_range = basic.Dict(
-        label="State Variable ranges [lo, hi]",
-        default={"theta": numpy.array([0.0, numpy.pi * 2.0]),
-        },
-        doc="""The values for each state-variable should be set to encompass
-            the expected dynamic range of that state-variable for the current
-            parameters, it is used as a mechanism for bounding random initial
-            conditions when the simulation isn't started from an explicit
-            history, it is also provides the default range of phase-plane plots.""",
-        order=6)
+    state_variable_range = {"theta": numpy.array([0.0, numpy.pi * 2.0])}
+    # The values for each state-variable should be set to encompass
+    #     the expected dynamic range of that state-variable for the current
+    #     parameters, it is used as a mechanism for bounding random initial
+    #     conditions when the simulation isn't started from an explicit
+    #     history, it is also provides the default range of phase-plane plots.
 
     variables_of_interest = basic.Enumerate(
         label="Variables watched by Monitors",

@@ -195,7 +195,7 @@ class Surface(MappedType):
 
     number_of_split_slices = 0
 
-    split_slices = basic.Dict(order=-1)
+    split_slices = {}
 
     bi_hemispheric = False
 

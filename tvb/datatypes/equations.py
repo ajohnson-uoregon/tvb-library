@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -30,7 +30,7 @@
 
 """
 
-The Equation datatypes. This brings together the scientific and framework 
+The Equation datatypes. This brings together the scientific and framework
 methods that are associated with the Equation datatypes.
 
 .. moduleauthor:: Stuart A. Knock <Stuart@tvb.invalid>
@@ -67,14 +67,17 @@ class Equation(basic.MapAsJson, core.Type):
         doc="""A latex representation of the equation, with the extra
                 escaping needed for interpretation via sphinx.""")
 
-    parameters = basic.Dict(
-        label="Parameters in a dictionary.",
-        default={},
-        doc="""Should be a list of the parameters and their meaning, Traits
-                should be able to take defaults and sensible ranges from any
-                traited information that was provided.""")
-
     # sci
+
+    def __init__(self, parameters=None):
+        # hackery because if parameters is a dict python points everything to the same dict
+        if parameters is None:
+            self.parameters = {}
+        else:
+            self.parameters = parameters
+        # Should be a list of the parameters and their meaning, Traits
+        # should be able to take defaults and sensible ranges from any
+        # traited information that was provided.
 
     def _find_summary_info(self):
         """
@@ -197,7 +200,8 @@ class TemporalApplicableEquation(Equation):
     Abstract class introduced just for filtering what equations to be displayed in UI,
     for setting the temporal component in Stimulus on region and surface.
     """
-    pass
+    def __init__(self, *args, **kwargs):
+        super(TemporalApplicableEquation, self).__init__(*args, **kwargs)
 
 
 class FiniteSupportEquation(TemporalApplicableEquation):
@@ -207,7 +211,8 @@ class FiniteSupportEquation(TemporalApplicableEquation):
     class, are . The main purpose of this class is to facilitate filtering in the UI,
     for patters on surface (stimuli surface and localConnectivity).
     """
-    pass
+    def __init__(self, *args, **kwargs):
+        super(FiniteSupportEquation, self).__init__(*args, **kwargs)
 
 
 class SpatialApplicableEquation(Equation):
@@ -215,7 +220,8 @@ class SpatialApplicableEquation(Equation):
     Abstract class introduced just for filtering what equations to be displayed in UI,
     for setting model parameters on the Surface level.
     """
-    pass
+    def __init__(self, *args, **kwargs):
+        super(SpatialApplicableEquation, self).__init__(*args, **kwargs)
 
 
 class DiscreteEquation(FiniteSupportEquation):
@@ -242,10 +248,12 @@ class Linear(TemporalApplicableEquation):
         locked=True,
         doc=""":math:`result = a * x + b`""")
 
-    parameters = basic.Dict(
-        label="Linear Parameters",
-        default={"a": 1.0,
-                 "b": 0.0})
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"a": 1.0,"b": 0.0}
+        else:
+            params = parameters
+        super(Linear,self).__init__(parameters=params,*args, **kwargs)
 
 
 class Gaussian(SpatialApplicableEquation, FiniteSupportEquation):
@@ -263,9 +271,12 @@ class Gaussian(SpatialApplicableEquation, FiniteSupportEquation):
         doc=""":math:`(amp \\exp\\left(-\\left(\\left(x-midpoint\\right)^2 /
         \\left(2.0 \\sigma^2\\right)\\right)\\right)) + offset`""")
 
-    parameters = basic.Dict(
-        label="Gaussian Parameters",
-        default={"amp": 1.0, "sigma": 1.0, "midpoint": 0.0, "offset": 0.0})
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"amp": 1.0, "sigma": 1.0, "midpoint": 0.0, "offset": 0.0}
+        else:
+            params = parameters
+        super(Gaussian, self).__init__(parameters=params,*args, **kwargs)
 
 
 class DoubleGaussian(FiniteSupportEquation):
@@ -284,10 +295,13 @@ class DoubleGaussian(FiniteSupportEquation):
         amp_2 \\exp\\left(-\\left((x-midpoint_2)^2 / \\left(2.0
         \\sigma_2^2\\right)\\right)\\right)`""")
 
-    parameters = basic.Dict(
-        label="Double Gaussian Parameters",
-        default={"amp_1": 0.5, "sigma_1": 20.0, "midpoint_1": 0.0,
-                 "amp_2": 1.0, "sigma_2": 10.0, "midpoint_2": 0.0})
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"amp_1": 0.5, "sigma_1": 20.0, "midpoint_1": 0.0,
+                      "amp_2": 1.0, "sigma_2": 10.0, "midpoint_2": 0.0}
+        else:
+            params = parameters
+        super(DoubleGaussian, self).__init__(parameters=params, *args, **kwargs)
 
 
 class Sigmoid(SpatialApplicableEquation, FiniteSupportEquation):
@@ -304,9 +318,12 @@ class Sigmoid(SpatialApplicableEquation, FiniteSupportEquation):
         doc=""":math:`(amp / (1.0 + \\exp(-\\pi/\\sqrt(3.0)
             (radius-x)/\\sigma))) + offset`""")
 
-    parameters = basic.Dict(
-        label="Sigmoid Parameters",
-        default={"amp": 1.0, "radius": 5.0, "sigma": 1.0, "offset": 0.0}) #"pi": numpy.pi,
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"amp": 1.0, "radius": 5.0, "sigma": 1.0, "offset": 0.0}
+        else:
+            params = parameters
+        super(Sigmoid, self).__init__(parameters=params, *args, **kwargs)
 
 
 class GeneralizedSigmoid(TemporalApplicableEquation):
@@ -321,10 +338,12 @@ class GeneralizedSigmoid(TemporalApplicableEquation):
         doc=""":math:`low + (high - low) / (1.0 + \\exp(-\\pi/\\sqrt(3.0)
             (x-midpoint)/\\sigma))`""")
 
-    parameters = basic.Dict(
-        label="Sigmoid Parameters",
-        default={"low": 0.0, "high": 1.0, "midpoint": 1.0, "sigma": 0.3}) #,
-    #"pi": numpy.pi})
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"low": 0.0, "high": 1.0, "midpoint": 1.0, "sigma": 0.3}
+        else:
+            params = parameters
+        super(GeneralizedSigmoid, self).__init__(parameters=params, *args, **kwargs)
 
 
 class Sinusoid(TemporalApplicableEquation):
@@ -338,9 +357,12 @@ class Sinusoid(TemporalApplicableEquation):
         locked=True,
         doc=""":math:`amp \\sin(2.0 \\pi frequency x)` """)
 
-    parameters = basic.Dict(
-        label="Sinusoid Parameters",
-        default={"amp": 1.0, "frequency": 0.01}) #kHz #"pi": numpy.pi,
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"amp": 1.0, "frequency": 0.01}
+        else:
+            params = parameters
+        super(Sinusoid, self).__init__(parameters=params, *args, **kwargs)
 
 
 class Cosine(TemporalApplicableEquation):
@@ -354,9 +376,13 @@ class Cosine(TemporalApplicableEquation):
         locked=True,
         doc=""":math:`amp \\cos(2.0 \\pi frequency x)` """)
 
-    parameters = basic.Dict(
-        label="Cosine Parameters",
-        default={"amp": 1.0, "frequency": 0.01}) #kHz #"pi": numpy.pi,
+
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"amp": 1.0, "frequency": 0.01}
+        else:
+            params = parameters
+        super(Cosine, self).__init__(parameters=params, *args,**kwargs)
 
 
 class Alpha(TemporalApplicableEquation):
@@ -371,9 +397,14 @@ class Alpha(TemporalApplicableEquation):
         doc=""":math:`(\\alpha * \\beta) / (\\beta - \\alpha) *
             (\\exp(-\\alpha * (x-onset)) - \\exp(-\\beta * (x-onset)))` for :math:`(x-onset) > 0`""")
 
-    parameters = basic.Dict(
-        label="Alpha Parameters",
-        default={"onset": 0.5, "alpha": 13.0, "beta": 42.0})
+
+
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"onset": 0.5, "alpha": 13.0, "beta": 42.0}
+        else:
+            params = parameters
+        super(Alpha, self).__init__(parameters=params, *args, **kwargs)
 
 
 class PulseTrain(TemporalApplicableEquation):
@@ -403,9 +434,14 @@ class PulseTrain(TemporalApplicableEquation):
     # onset is in milliseconds
     # T and tau are in milliseconds as well
 
-    parameters = basic.Dict(
-        default={"T": 42.0, "tau": 13.0, "amp": 1.0, "onset": 30.0},
-        label="Pulse Train Parameters")
+
+
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"T": 42.0, "tau": 13.0, "amp": 1.0, "onset": 30.0}
+        else:
+            params = parameters
+        super(PulseTrain, self).__init__(parameters=params, *args, **kwargs)
 
     def _get_pattern(self):
         """
@@ -479,9 +515,12 @@ class Gamma(HRFKernelEquation):
         locked=True,
         doc=""":math:`h(var) = \\frac{(\\frac{var}{\\tau})^{(n-1)}\\exp{-(\\frac{var}{\\tau})}}{\\tau(n-1)!}`.""")
 
-    parameters = basic.Dict(
-        label="Gamma Parameters",
-        default={"tau": 1.08, "n": 3.0, "factorial": 2.0, "a": 0.1})
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"tau": 1.08, "n": 3.0, "factorial": 2.0, "a": 0.1}
+        else:
+            params = parameters
+        super(Gamma, self).__init__(parameters=params, *args, **kwargs)
 
     def _get_pattern(self):
         """
@@ -546,11 +585,15 @@ class DoubleExponential(HRFKernelEquation):
         \\sin(2\\cdot\\pi f_1 \\cdot var) - amp_2\\cdot \\exp(-\\frac{var}
         {\\tau_2})*\\sin(2\\pi f_2 var)`.""")
 
-    parameters = basic.Dict(
-        label="Double Exponential Parameters",
-        default={"tau_1": 7.22, "f_1": 0.03, "amp_1": 0.1,
-                 "tau_2": 7.4, "f_2": 0.12, "amp_2": 0.1,
-                 "a": 0.1, "pi": numpy.pi})
+
+
+    def __init__(self, parameters = None, *args, **kwargs):
+        if parameters is None:
+            params = {"tau_1": 7.22, "f_1": 0.03, "amp_1": 0.1, "tau_2": 7.4,
+                      "f_2": 0.12, "amp_2": 0.1, "a": 0.1, "pi": numpy.pi}
+        else:
+            params = parameters
+        super(DoubleExponential, self).__init__(parameters=params, *args, **kwargs)
 
     def _get_pattern(self):
         """
@@ -609,9 +652,14 @@ class FirstOrderVolterra(HRFKernelEquation):
              \\; \\; \\; \\; \\; \\;  for \\; \\; \\; t \\geq t^{\\prime}
              = 0 \\; \\; \\; \\; \\; \\;  for \\; \\; \\;  t < t^{\\prime}`.""")
 
-    parameters = basic.Dict(
-        label="Mixture of Gammas Parameters",
-        default={"tau_s": 0.8, "tau_f": 0.4, "k_1": 5.6, "V_0": 0.02})
+
+
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"tau_s": 0.8, "tau_f": 0.4, "k_1": 5.6, "V_0": 0.02}
+        else:
+            params = parameters
+        super(FirstOrderVolterra, self).__init__(parameters=params, *args, **kwargs)
 
 
 class MixtureOfGammas(HRFKernelEquation):
@@ -670,9 +718,15 @@ class MixtureOfGammas(HRFKernelEquation):
         doc=""":math:`\\frac{\\lambda \\,t^{a_{1} - 1} \\,\\, \\exp^{-\\lambda \\,t}}{\\Gamma(a_{1})}
         - 0.5 \\frac{\\lambda \\,t^{a_{2} - 1} \\,\\, \\exp^{-\\lambda \\,t}}{\\Gamma(a_{2})}`.""")
 
-    parameters = basic.Dict(
-        label="Double Exponential Parameters",
-        default={"a_1": 6.0, "a_2": 13.0, "l": 1.0, "c": 0.4, "gamma_a_1": 1.0, "gamma_a_2": 1.0})
+
+
+    def __init__(self, parameters=None, *args, **kwargs):
+        if parameters is None:
+            params = {"a_1": 6.0, "a_2": 13.0, "l": 1.0, "c": 0.4,
+                      "gamma_a_1": 1.0, "gamma_a_2": 1.0}
+        else:
+            params = parameters
+        super(MixtureOfGammas, self).__init__(parameters=params*args, **kwargs)
 
     def _get_pattern(self):
         """

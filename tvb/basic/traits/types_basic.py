@@ -63,13 +63,6 @@ class String(core.Type):
     wraps = (str, unicode)
 
 
-class Complex(core.Type):
-    """
-    Traits type that wraps Numpy's complex64.
-    """
-    wraps = numpy.complex64
-
-
 class MapAsJson():
     """Add functionality of converting from/to JSON"""
 
@@ -168,13 +161,6 @@ class Enumerate(Sequence):
             # Bypass default since that only accepts arrays for multiple selects
             setattr(inst, '_' + self.trait.name, self.to_json(value))
             self.trait.value = value
-
-
-class Dict(Sequence):
-    """
-    Traits type that wraps a python dict.
-    """
-    wraps = dict
 
 
 class Set(Sequence):
