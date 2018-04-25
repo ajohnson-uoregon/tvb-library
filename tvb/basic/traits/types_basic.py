@@ -170,22 +170,6 @@ class Set(Sequence):
     wraps = set
 
 
-class Tuple(Sequence):
-    """
-    Traits type that wraps a python tuple.
-    """
-    wraps = tuple
-
-
-    def __get__(self, inst, cls):
-        list_value = super(Tuple, self).__get__(inst, cls)
-
-        if isinstance(list_value, list):
-            return list_value[0], list_value[1]
-
-        return list_value
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.
