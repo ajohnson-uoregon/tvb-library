@@ -193,14 +193,6 @@ class List(Sequence):
     wraps = (list, numpy.ndarray)
 
 
-class Slice(Sequence):
-    """
-    Useful of for specifying views or slices of containers.
-    """
-    wraps = slice
-
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.

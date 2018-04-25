@@ -99,7 +99,6 @@ class Monitor(core.Type):
     _stock = numpy.empty([])
 
     def __init__(self, period=0.9765625, *args, **kwargs):
-        print(kwargs)
         self.period = period
         # Sampling period in milliseconds, must be an integral multiple
         # of integration-step size. As a guide: 2048 Hz => 0.48828125 ms ;
