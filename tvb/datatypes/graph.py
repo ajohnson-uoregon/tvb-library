@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -90,10 +90,8 @@ class CorrelationCoefficients(arrays.MappedArray):
         label="Source time-series",
         doc="Links to the time-series on which Correlation (coefficients) is applied.")
 
-    labels_ordering = basic.List(
-        label="Dimension Names",
-        default=["Node", "Node", "State Variable", "Mode"],
-        doc="""List of strings representing names of each data dimension""")
+    # list of strings representing names of each data dimension
+    labels_ordering = ["Node", "Node", "State Variable", "Mode"] 
 
     __generate_table__ = True
 

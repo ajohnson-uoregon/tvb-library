@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -187,7 +187,7 @@ class StimuliRegion(SpatioTemporalPattern):
     spatial = equations.DiscreteEquation(label="Spatial Equation", default=equations.DiscreteEquation,
                                          fixed_type=True, order=-1)
 
-    weight = basic.List(label="scaling", locked=True, order=4)
+    weight = []
 
     @staticmethod
     def get_default_weights(number_of_regions):
@@ -226,9 +226,9 @@ class StimuliSurface(SpatioTemporalPattern):
 
     surface = surfaces.CorticalSurface(label="Surface", order=1)
 
-    focal_points_surface = basic.List(label="Focal points", locked=True, order=4)
+    focal_points_surface = []
 
-    focal_points_triangles = basic.List(label="Focal points triangles", locked=True, order=4)
+    focal_points_triangles = [] 
 
     def configure_space(self, region_mapping=None):
         """

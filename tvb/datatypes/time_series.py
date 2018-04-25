@@ -80,10 +80,8 @@ class TimeSeries(types_mapped.MappedType):
 
     length_1d, length_2d, length_3d, length_4d = [0] * 4
 
-    labels_ordering = basic.List(
-        default=["Time", "State Variable", "Space", "Mode"],
-        label="Dimension Names",
-        doc="""List of strings representing names of each data dimension""")
+    # list of strings representing names of each data dimension
+    labels_ordering = ["Time", "State Variable", "Space", "Mode"]
 
     # A dictionary containing mappings of the form {'dimension_name' : [labels for this dimension] }
     labels_dimensions = {}
@@ -353,7 +351,7 @@ class TimeSeriesEEG(SensorsTSBase):
     __generate_table__ = True
 
     sensors = sensors.SensorsEEG
-    labels_ordering = basic.List(default=["Time", "1", "EEG Sensor", "1"])
+    labels_ordering = ["Time", "1", "EEG Sensor", "1"]
 
 
 class TimeSeriesMEG(SensorsTSBase):
@@ -362,7 +360,7 @@ class TimeSeriesMEG(SensorsTSBase):
     __generate_table__ = True
 
     sensors = sensors.SensorsMEG
-    labels_ordering = basic.List(default=["Time", "1", "MEG Sensor", "1"])
+    labels_ordering = ["Time", "1", "MEG Sensor", "1"]
 
 
 class TimeSeriesSEEG(SensorsTSBase):
@@ -371,7 +369,7 @@ class TimeSeriesSEEG(SensorsTSBase):
     __generate_table__ = True
 
     sensors = sensors.SensorsInternal
-    labels_ordering = basic.List(default=["Time", "1", "sEEG Sensor", "1"])
+    labels_ordering = ["Time", "1", "sEEG Sensor", "1"]
 
 
 class TimeSeriesRegion(TimeSeries):
@@ -380,7 +378,7 @@ class TimeSeriesRegion(TimeSeries):
     connectivity = connectivity.Connectivity
     region_mapping_volume = region_mapping.RegionVolumeMapping(required=False)
     region_mapping = region_mapping.RegionMapping(required=False)
-    labels_ordering = basic.List(default=["Time", "State Variable", "Region", "Mode"])
+    labels_ordering = ["Time", "State Variable", "Region", "Mode"]
 
     def configure(self):
         """
@@ -524,7 +522,7 @@ class TimeSeriesSurface(TimeSeries):
     """ A time-series associated with a Surface. """
     _ui_name = "Surface time-series"
     surface = surfaces.CorticalSurface
-    labels_ordering = basic.List(default=["Time", "State Variable", "Vertex", "Mode"])
+    labels_ordering = ["Time", "State Variable", "Vertex", "Mode"]
     SELECTION_LIMIT = 100
 
     def get_space_labels(self):
@@ -559,7 +557,7 @@ class TimeSeriesVolume(TimeSeries):
     """ A time-series associated with a Volume. """
     _ui_name = "Volume time-series"
     volume = volumes.Volume
-    labels_ordering = basic.List(default=["Time", "X", "Y", "Z"])
+    labels_ordering = ["Time", "X", "Y", "Z"]
 
     def _find_summary_info(self):
         """

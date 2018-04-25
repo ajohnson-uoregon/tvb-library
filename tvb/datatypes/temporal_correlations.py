@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -59,10 +59,8 @@ class CrossCorrelation(MappedType):
 
     time = arrays.FloatArray(label="Temporal Offsets")
 
-    labels_ordering = basic.List(
-        label="Dimension Names",
-        default=["Offsets", "Node", "Node", "State Variable", "Mode"],
-        doc="""List of strings representing names of each data dimension""")
+    # list of strings representing names of each data dimension
+    labels_ordering = ["Offsets", "Node", "Node", "State Variable", "Mode"] 
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

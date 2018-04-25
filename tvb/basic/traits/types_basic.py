@@ -186,13 +186,6 @@ class Tuple(Sequence):
         return list_value
 
 
-class List(Sequence):
-    """
-    Traits type that wraps a Python list.
-    """
-    wraps = (list, numpy.ndarray)
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.
