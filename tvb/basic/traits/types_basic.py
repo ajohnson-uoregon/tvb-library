@@ -163,13 +163,6 @@ class Enumerate(Sequence):
             self.trait.value = value
 
 
-class Set(Sequence):
-    """
-    Traits type that wraps a python set.
-    """
-    wraps = set
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.
