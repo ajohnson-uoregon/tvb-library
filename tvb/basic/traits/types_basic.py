@@ -128,14 +128,6 @@ class MapAsJson():
                 return json.JSONEncoder.default(self, obj)
 
 
-class Sequence(MapAsJson, String):
-    """
-    Traits type base class that wraps python sequence
-    python types (containers)
-    """
-    wraps = (dict, list, tuple, set, slice, numpy.ndarray)
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.
