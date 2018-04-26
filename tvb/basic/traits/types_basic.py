@@ -63,79 +63,6 @@ class String(core.Type):
     wraps = (str, unicode)
 
 
-class MapAsJson():
-    """Add functionality of converting from/to JSON"""
-
-
-    def __get__(self, inst, cls):
-        if inst is not None and self.trait.bound and hasattr(inst, '_' + self.trait.name):
-
-            if hasattr(inst, '__' + self.trait.name):
-                return getattr(inst, '__' + self.trait.name)
-
-            string = getattr(inst, '_' + self.trait.name)
-            if string is None or (not isinstance(string, (str, unicode))):
-                return string
-            if len(string) < 1:
-                return None
-            json_value = self.from_json(string)
-
-            # Cache for future usages (e.g. Stimulus.spatial should be the same instance on multiple accesses)
-            setattr(inst, '__' + self.trait.name, json_value)
-            return json_value
-        return self
-
-
-    @staticmethod
-    def to_json(entity):
-        return json.dumps(entity)
-
-
-    @staticmethod
-    def from_json(string):
-        return json.loads(string)
-
-
-    @staticmethod
-    def decode_map_as_json(dct):
-        """
-        Used in the __convert_to_array to get an equation from the UI corresponding string.
-        """
-        for key, value in dct.items():
-            if isinstance(value, unicode) and '__mapped_module' in value:
-                dict_value = json.loads(value)
-                if '__mapped_module' not in dict_value:
-                    dct[key] = MapAsJson.decode_map_as_json(dict_value)
-                else:
-                    modulename = dict_value['__mapped_module']
-                    classname = dict_value['__mapped_class']
-                    module_entity = __import__(modulename, globals(), locals(), [classname])
-                    class_entity = eval('module_entity.' + classname)
-                    loaded_entity = class_entity.from_json(value)
-                    dct[key] = loaded_entity
-        return dct
-
-    class MapAsJsonEncoder(json.JSONEncoder):
-        """
-        Used before any save to the database to encode Equation type objects.
-        """
-
-
-        def default(self, obj):
-            if isinstance(obj, MapAsJson):
-                return obj.to_json(obj)
-            else:
-                return json.JSONEncoder.default(self, obj)
-
-
-class Sequence(MapAsJson, String):
-    """
-    Traits type base class that wraps python sequence
-    python types (containers)
-    """
-    wraps = (dict, list, tuple, set, slice, numpy.ndarray)
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.
@@ -158,23 +85,3 @@ class JSONType(String):
         if not isinstance(value, (str, unicode)):
             value = json.dumps(value)
         super(JSONType, self).__set__(inst, value)
-
-
-class DType(String):
-    """
-    Traits type that wraps a Numpy dType specification.
-    """
-
-    wraps = (numpy.dtype, str)
-    defaults = ((numpy.float64,), {})
-
-
-    def __get__(self, inst, cls):
-        if inst:
-            type_ = super(DType, self).__get__(inst, cls)
-            return str(type_).replace("<type '", '').replace("'>", '')
-        return super(DType, self).__get__(inst, cls)
-
-
-    def __set__(self, inst, value):
-        super(DType, self).__set__(inst, str(value))

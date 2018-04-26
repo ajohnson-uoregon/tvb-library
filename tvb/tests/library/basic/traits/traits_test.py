@@ -38,7 +38,6 @@ from tvb.tests.library.base_testcase import BaseTestCase
 import tvb.datatypes.equations as equations
 import tvb.datatypes.arrays as arrays
 import tvb.datatypes.time_series as time_series
-from tvb.basic.traits.types_basic import MapAsJson
 from tvb.basic.traits.types_mapped import MappedType
 from tvb.basic.traits import types_basic as basic
 from tvb.simulator.models import WilsonCowan, ReducedSetHindmarshRose
@@ -136,14 +135,3 @@ class TestTraits(BaseTestCase):
         """
         serie = time_series.TimeSeriesRegion()
         assert serie.connectivity is None
-
-    def test_json_dumps_loads(self):
-        """
-        Tests class `MapAsJson.MapAsJsonEncoder` loads parameters correctly from JSON.
-        """
-        input_parameters = {'a': 1, 'b': 1.0, 'c': 'd'}
-        test_dict = {'1': 1, 'a': {'1': 'b'}, '2': {'a': equations.Equation(parameters=input_parameters)}}
-        json_string = json.dumps(test_dict, cls=MapAsJson.MapAsJsonEncoder)
-        loaded_dict = json.loads(json_string, object_hook=MapAsJson.decode_map_as_json)
-        eq_parameters = loaded_dict['2']['a']
-        assert input_parameters == eq_parameters.parameters, "parameters not loaded properly from json"
