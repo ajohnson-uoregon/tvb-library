@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -50,7 +50,6 @@ from scipy import sparse
 from tvb.basic.logger.builder import get_logger
 from tvb.basic.traits.util import get
 from tvb.basic.traits.core import Type
-from tvb.basic.traits.types_basic import DType
 
 
 class MappedTypeLight(Type):
@@ -126,7 +125,7 @@ class MappedTypeLight(Type):
         """
         included_info = included_info or {}
         summary = self._get_summary_info(array_name, included_info, mask_array_name, key_suffix)
-        ### Before return, prepare names for UI display.                
+        ### Before return, prepare names for UI display.
         result = dict()
         for key, value in six.iteritems(summary):
             result[array_name.capitalize().replace("_", " ") + " - " + key] = value
@@ -185,7 +184,7 @@ class Array(Type):
     """
 
     wraps = numpy.ndarray
-    dtype = DType()
+    dtype = None
     defaults = ((0,), {})
     data = None
     stored_metadata = [key for key in MappedTypeLight.DEFAULT_STORED_ARRAY_METADATA]
@@ -194,7 +193,7 @@ class Array(Type):
 
     @property
     def shape(self):
-        """  
+        """
         Property SHAPE for the wrapped array.
         """
         return self.data.shape
@@ -202,7 +201,7 @@ class Array(Type):
 
     @property
     def array_path(self):
-        """  
+        """
         Property PATH relative.
         """
         return self.trait.name
@@ -253,7 +252,7 @@ class Array(Type):
         """
         Simple access to debugging info on a traited array, usage ::
             obj.trait["array_name"].log_debug(owner="obj")
-            
+
         or ::
             self.trait["array_name"].log_debug(owner=self.__class__.__name__)
         """
@@ -290,7 +289,7 @@ class SparseMatrix(Array):
         """
         Simple access to debugging info on a traited sparse matrix, usage ::
             obj.trait["sparse_matrix_name"].log_debug(owner="obj")
-            
+
         or ::
             self.trait["sparse_matrix_name"].log_debug(owner=self.__class__.__name__)
         """

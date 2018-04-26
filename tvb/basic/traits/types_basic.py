@@ -150,23 +150,3 @@ class JSONType(String):
         if not isinstance(value, (str, unicode)):
             value = json.dumps(value)
         super(JSONType, self).__set__(inst, value)
-
-
-class DType(String):
-    """
-    Traits type that wraps a Numpy dType specification.
-    """
-
-    wraps = (numpy.dtype, str)
-    defaults = ((numpy.float64,), {})
-
-
-    def __get__(self, inst, cls):
-        if inst:
-            type_ = super(DType, self).__get__(inst, cls)
-            return str(type_).replace("<type '", '').replace("'>", '')
-        return super(DType, self).__get__(inst, cls)
-
-
-    def __set__(self, inst, value):
-        super(DType, self).__set__(inst, str(value))
