@@ -48,8 +48,8 @@ class LocalConnectivity(types_mapped.MappedType):
 
     surface = surfaces.CorticalSurface(label="Surface", order=1)
 
-    matrix = types_mapped.SparseMatrix(order=-1)
-
+    # matrix = types_mapped.SparseMatrix(order=-1)
+    matrix = None
     equation = equations.FiniteSupportEquation(
         label="Spatial",
         required=False,

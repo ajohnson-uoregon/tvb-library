@@ -47,7 +47,7 @@ import tvb.basic.traits.types_basic as basic
 import tvb.datatypes.arrays as arrays
 from tvb.basic.traits import util, exceptions
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits.types_mapped import MappedType, SparseMatrix
+from tvb.basic.traits.types_mapped import MappedType #, SparseMatrix
 from tvb.basic.traits.core import FILE_STORAGE_NONE
 from tvb.basic.profile import TvbProfile
 from tvb.basic.readers import ZipReader, try_get_absolute_path
@@ -164,12 +164,12 @@ class Surface(MappedType):
         order=-1,
         doc="""An array of unit normal vectors for the surfaces triangles.""")
 
-    geodesic_distance_matrix = SparseMatrix(
-        label="Geodesic distance matrix",
-        order=-1,
-        required=False,
-        file_storage=FILE_STORAGE_NONE,
-        doc="""A sparse matrix of truncated geodesic distances""")  # 'CS'
+    # geodesic_distance_matrix = SparseMatrix(
+    #     label="Geodesic distance matrix",
+    #     order=-1,
+    #     required=False,
+    #     file_storage=FILE_STORAGE_NONE,
+    #     doc="""A sparse matrix of truncated geodesic distances""")  # 'CS'
 
     number_of_vertices = 0 #The number of vertices making up this surface.
 

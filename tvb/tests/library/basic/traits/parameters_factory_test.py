@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -49,7 +49,7 @@ class TestParametersFactory(BaseTestCase):
             'IndexArray',
             'BoolArray', 'OrientationArray',
             'FloatArray',
-            'ComplexArray', 'Array', 'SparseMatrix']
+            'ComplexArray', 'Array']
         subclasses = get_traited_subclasses(Array)
         for key in expected:
             assert key in subclasses

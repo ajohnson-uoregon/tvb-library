@@ -141,7 +141,7 @@ class Cortex(surfaces.CorticalSurface):
         if self.local_connectivity is None:
             self.local_connectivity = local_connectivity.LocalConnectivity(cutoff=40.0, use_storage=False, surface=self)
 
-        if self.local_connectivity.matrix.size == 0:
+        if self.local_connectivity.matrix is None:
             self.compute_local_connectivity()
 
         # Pad the local connectivity matrix with zeros when non-cortical regions
@@ -177,7 +177,7 @@ class Cortex(surfaces.CorticalSurface):
 
         self.local_connectivity.matrix_gdist = self.geodesic_distance_matrix.copy()
         self.local_connectivity.compute()  # Evaluate equation based distance
-        self.local_connectivity.trait["matrix"].log_debug(owner=self.__class__.__name__ + ".local_connectivity")
+        # self.local_connectivity.trait["matrix"].log_debug(owner=self.__class__.__name__ + ".local_connectivity")
 
         #HACK FOR DEBUGGING CAUSE TRAITS REPORTS self.local_connectivity.trait["matrix"] AS BEING EMPTY...
         lcmat = self.local_connectivity.matrix

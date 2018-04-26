@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -45,8 +45,7 @@ if TvbProfile.current.TRAITS_CONFIGURATION.use_storage:
     Array = mapped.Array
     SparseMatrix = mapped.SparseMatrix
 else:
-    import tvb.basic.traits.types_mapped_light as mapped 
+    import tvb.basic.traits.types_mapped_light as mapped
     MappedType = mapped.MappedTypeLight
     Array = mapped.Array
-    SparseMatrix = mapped.SparseMatrix
-    
+    # SparseMatrix = mapped.SparseMatrix

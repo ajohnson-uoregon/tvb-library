@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -126,7 +126,7 @@ class MappedTypeLight(Type):
         """
         included_info = included_info or {}
         summary = self._get_summary_info(array_name, included_info, mask_array_name, key_suffix)
-        ### Before return, prepare names for UI display.                
+        ### Before return, prepare names for UI display.
         result = dict()
         for key, value in six.iteritems(summary):
             result[array_name.capitalize().replace("_", " ") + " - " + key] = value
@@ -194,7 +194,7 @@ class Array(Type):
 
     @property
     def shape(self):
-        """  
+        """
         Property SHAPE for the wrapped array.
         """
         return self.data.shape
@@ -202,7 +202,7 @@ class Array(Type):
 
     @property
     def array_path(self):
-        """  
+        """
         Property PATH relative.
         """
         return self.trait.name
@@ -253,7 +253,7 @@ class Array(Type):
         """
         Simple access to debugging info on a traited array, usage ::
             obj.trait["array_name"].log_debug(owner="obj")
-            
+
         or ::
             self.trait["array_name"].log_debug(owner=self.__class__.__name__)
         """
@@ -276,38 +276,38 @@ class Array(Type):
             self.logger.debug("%s: %s is Empty" % (sts, name))
 
 
-class SparseMatrix(Array):
-    """
-    Map a big matrix.
-    Will require storage in File Structure.
-    """
-    wraps = sparse.csc_matrix
-    defaults = (((1, 1),), {'dtype': numpy.float64})
-    logger = get_logger(__name__)
-
-
-    def log_debug(self, owner=""):
-        """
-        Simple access to debugging info on a traited sparse matrix, usage ::
-            obj.trait["sparse_matrix_name"].log_debug(owner="obj")
-            
-        or ::
-            self.trait["sparse_matrix_name"].log_debug(owner=self.__class__.__name__)
-        """
-        name = ".".join((owner, self.trait.name))
-        sts = str(self.__class__)
-        if self.trait.value.size != 0:
-            shape = str(self.trait.value.shape)
-            sparse_format = str(self.trait.value.format)
-            nnz = str(self.trait.value.nnz)
-            dtype = str(self.trait.value.dtype)
-            array_max = str(self.trait.value.data.max())
-            array_min = str(self.trait.value.data.min())
-            self.logger.debug("%s: %s shape: %s" % (sts, name, shape))
-            self.logger.debug("%s: %s format: %s" % (sts, name, sparse_format))
-            self.logger.debug("%s: %s number of non-zeros: %s" % (sts, name, nnz))
-            self.logger.debug("%s: %s dtype: %s" % (sts, name, dtype))
-            self.logger.debug("%s: %s maximum: %s" % (sts, name, array_max))
-            self.logger.debug("%s: %s minimum: %s" % (sts, name, array_min))
-        else:
-            self.logger.debug("%s: %s is Empty" % (sts, name))
+# class SparseMatrix(Array):
+#     """
+#     Map a big matrix.
+#     Will require storage in File Structure.
+#     """
+#     wraps = sparse.csc_matrix
+#     defaults = (((1, 1),), {'dtype': numpy.float64})
+#     logger = get_logger(__name__)
+#
+#
+#     def log_debug(self, owner=""):
+#         """
+#         Simple access to debugging info on a traited sparse matrix, usage ::
+#             obj.trait["sparse_matrix_name"].log_debug(owner="obj")
+#
+#         or ::
+#             self.trait["sparse_matrix_name"].log_debug(owner=self.__class__.__name__)
+#         """
+#         name = ".".join((owner, self.trait.name))
+#         sts = str(self.__class__)
+#         if self.trait.value.size != 0:
+#             shape = str(self.trait.value.shape)
+#             sparse_format = str(self.trait.value.format)
+#             nnz = str(self.trait.value.nnz)
+#             dtype = str(self.trait.value.dtype)
+#             array_max = str(self.trait.value.data.max())
+#             array_min = str(self.trait.value.data.min())
+#             self.logger.debug("%s: %s shape: %s" % (sts, name, shape))
+#             self.logger.debug("%s: %s format: %s" % (sts, name, sparse_format))
+#             self.logger.debug("%s: %s number of non-zeros: %s" % (sts, name, nnz))
+#             self.logger.debug("%s: %s dtype: %s" % (sts, name, dtype))
+#             self.logger.debug("%s: %s maximum: %s" % (sts, name, array_max))
+#             self.logger.debug("%s: %s minimum: %s" % (sts, name, array_min))
+#         else:
+#             self.logger.debug("%s: %s is Empty" % (sts, name))
