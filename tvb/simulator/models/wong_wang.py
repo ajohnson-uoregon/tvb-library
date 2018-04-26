@@ -33,6 +33,7 @@ Models based on Wong-Wang's work.
 
 from .base import ModelNumbaDfun, LOG, numpy, basic, arrays
 from numba import guvectorize, float64
+from enum import Enum, unique
 
 @guvectorize([(float64[:],)*11], '(n),(m)' + ',()'*8 + '->(n)', nopython=True)
 def _numba_dfun(S, c, a, b, d, g, ts, w, j, io, dx):
@@ -142,17 +143,23 @@ class ReducedWongWang(ModelNumbaDfun):
 
     state_variable_range = {"S": numpy.array([0.0, 1.0])} # Population firing rate
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["S"],
-        default=["S"],
-        select_multiple=True,
-        doc="""default state variables to be monitored""",
-        order=10)
+    @unique
+    class Variables(Enum):
+        S = "S"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = ['S']
     _nvar = 1
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.S]
+        super(ReducedWongWang, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def configure(self):
         """  """

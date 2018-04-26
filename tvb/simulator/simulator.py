@@ -621,7 +621,7 @@ class Simulator(core.Type):
         for monitor in self.monitors:
             if not isinstance(monitor, monitors.Bold):
                 stock_shape = (monitor.period / self.integrator.dt,
-                               self.model.variables_of_interest.shape[0],
+                               len(self.model.variables_of_interest),
                                number_of_nodes,
                                self.model.number_of_modes)
                 memreq += numpy.prod(stock_shape) * bits_64
@@ -634,11 +634,11 @@ class Simulator(core.Type):
 
             else:
                 stock_shape = (monitor.hrf_length * monitor._stock_sample_rate,
-                               self.model.variables_of_interest.shape[0],
+                               len(self.model.variables_of_interest),
                                number_of_nodes,
                                self.model.number_of_modes)
                 interim_stock_shape = (1.0 / (2.0 ** -2 * self.integrator.dt),
-                                       self.model.variables_of_interest.shape[0],
+                                       len(self.model.variables_of_interest),
                                        number_of_nodes,
                                        self.model.number_of_modes)
                 memreq += numpy.prod(stock_shape) * bits_64

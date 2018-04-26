@@ -136,33 +136,6 @@ class Sequence(MapAsJson, String):
     wraps = (dict, list, tuple, set, slice, numpy.ndarray)
 
 
-class Enumerate(Sequence):
-    """
-    Traits type that mimics an enumeration.
-    """
-    wraps = numpy.ndarray
-
-
-    def __get__(self, inst, cls):
-        if inst is None:
-            return self
-        if self.trait.bound:
-            return numpy.array(super(Enumerate, self).__get__(inst, cls))
-        return numpy.array(self.trait.value)
-
-
-    def __set__(self, inst, value):
-        if not isinstance(value, list):
-            # So it works for simple selects aswell as multiple selects
-            value = [value]
-        if self.trait.select_multiple:
-            super(Enumerate, self).__set__(inst, value)
-        else:
-            # Bypass default since that only accepts arrays for multiple selects
-            setattr(inst, '_' + self.trait.name, self.to_json(value))
-            self.trait.value = value
-
-
 class JSONType(String):
     """
     Wrapper over a String which holds a serializable object.

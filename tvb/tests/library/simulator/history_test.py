@@ -44,6 +44,7 @@ from tvb.simulator.integrators import Identity
 from tvb.simulator.models import Model
 from tvb.simulator.monitors import Raw
 from tvb.simulator.simulator import Simulator
+from enum import Enum, unique
 
 
 class IdCoupling(Coupling):
@@ -59,9 +60,21 @@ class Sum(Model):
     nvar = 1
     _nvar = 1
     state_variable_range = {'x': [0, 100]}
-    variables_of_interest = basic.Enumerate(default=['x'], options=['x'])
+
+    @unique
+    class Variables(Enum):
+        X = "x"
+
+        def __get__(self, obj, type):
+            return self.value
+
     state_variables = ['x']
     cvar = numpy.array([0])
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X]
+        super(Sum, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, X, coupling, local_coupling=0):
         return X + coupling + local_coupling

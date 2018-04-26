@@ -32,6 +32,7 @@ Models developed by Stefanescu-Jirsa, based on reduced-set analyses of infinite 
 """
 
 from .base import Model, LOG, numpy, basic, arrays, scipy_integrate_trapz, scipy_stats_norm
+from enum import Enum, unique
 
 class ReducedSetBase(Model):
     number_of_modes = 3
@@ -185,16 +186,18 @@ class ReducedSetFitzHughNagumo(ReducedSetBase):
     #        :math:`\eta = 1`, :math:`\alpha = 2`, and :math:`\beta= 3`.""",
     #        order = 10)
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["xi", "eta", "alpha", "beta"],
-        default=["xi", "alpha"],
-        select_multiple=True,
-        doc=r"""This represents the default state-variables of this Model to be
-                                    monitored. It can be overridden for each Monitor if desired. The
-                                    corresponding state-variable indices for this model are :math:`\xi = 0`,
-                                    :math:`\eta = 1`, :math:`\alpha = 2`, and :math:`\beta= 3`.""",
-        order=10)
+    @unique
+    class Variables(Enum):
+        XI = "xi"
+        ETA = "eta"
+        ALPHA = "alpha"
+        BETA = "beta"
+
+        def __get__(self, obj, type):
+            return self.value
+
+    # Variables watched by Monitors
+
 
     state_variables = 'xi eta alpha beta'.split()
     _nvar = 4
@@ -209,6 +212,11 @@ class ReducedSetFitzHughNagumo(ReducedSetBase):
     II_i = None
     m_i = None
     n_i = None
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.XI, self.Variables.ALPHA]
+        super(ReducedSetFitzHughNagumo, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""
@@ -488,17 +496,20 @@ class ReducedSetHindmarshRose(ReducedSetBase):
     # conditions when the simulation isn't started from an explicit history,
     # it is also provides the default range of phase-plane plots.
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["xi", "eta", "tau", "alpha", "beta", "gamma"],
-        default=["xi", "eta", "tau"],
-        select_multiple=True,
-        doc=r"""This represents the default state-variables of this Model to be
-                monitored. It can be overridden for each Monitor if desired. The
-                corresponding state-variable indices for this model are :math:`\xi = 0`,
-                :math:`\eta = 1`, :math:`\tau = 2`, :math:`\alpha = 3`,
-                :math:`\beta = 4`, and :math:`\gamma = 5`""",
-        order=14)
+    @unique
+    class Variables(Enum):
+        XI = "xi"
+        ETA = "eta"
+        TAU = "tau"
+        ALPHA = "alpha"
+        BETA = "beta"
+        GAMMA = "gamma"
+
+        def __get__(self, obj, type):
+            return self.value
+
+    # Variables watched by Monitors
+
 
     state_variables = 'xi eta tau alpha beta gamma'.split()
     _nvar = 6
@@ -519,6 +530,11 @@ class ReducedSetHindmarshRose(ReducedSetBase):
     II_i = None
     m_i = None
     n_i = None
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.XI, self.Variables.ETA, self.Variables.TAU]
+        super(ReducedSetHindmarshRose, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""

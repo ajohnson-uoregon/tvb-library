@@ -34,7 +34,7 @@ Oscillator models.
 from .base import Model, ModelNumbaDfun, LOG, numpy, basic, arrays
 import numexpr
 from numba import guvectorize, float64
-
+from enum import Enum, unique
 
 
 class Generic2dOscillator(ModelNumbaDfun):
@@ -334,27 +334,26 @@ class Generic2dOscillator(ModelNumbaDfun):
     #     conditions when the simulation isn't started from an explicit
     #     history, it is also provides the default range of phase-plane plots
 
-    #    variables_of_interest = arrays.IntegerArray(
-    #        label = "Variables watched by Monitors.",
-    #        range = basic.Range(lo = 0.0, hi = 2.0, step = 1.0),
-    #        default = numpy.array([0], dtype=numpy.int32),
-    #        doc = """This represents the default state-variables of this Model to be
-    #        monitored. It can be overridden for each Monitor if desired. The
-    #        corresponding state-variable indices for this model are :math:`V = 0`
-    #        and :math:`W = 1`""",
-    #        order = 7)
+    @unique
+    class Variables(Enum):
+        V = "V"
+        W = "W"
+        VplusW = "V + W"
+        VminusW = "V - W"
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables or quantities available to Monitors",
-        options=["V", "W", "V + W", "V - W"],
-        default=["V", ],
-        select_multiple=True,
-        doc="The quantities of interest for monitoring for the generic 2D oscillator.",
-        order=12)
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = ['V', 'W']
     _nvar = 2
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.V]
+        super(Generic2dOscillator, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def _numpy_dfun(self, state_variables, coupling, local_coupling=0.0, ev=numexpr.evaluate):
         r"""
@@ -474,20 +473,23 @@ class Kuramoto(Model):
     #     conditions when the simulation isn't started from an explicit
     #     history, it is also provides the default range of phase-plane plots.
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["theta"],
-        default=["theta"],
-        select_multiple=True,
-        doc="""This represents the default state-variables of this Model to be
-                            monitored. It can be overridden for each Monitor if desired. The Kuramoto
-                            model, however, only has one state variable with and index of 0, so it
-                            is not necessary to change the default here.""",
-        order=7)
+    @unique
+    class Variables(Enum):
+        THETA = "theta"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = ['theta']
     _nvar = 1
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.THETA]
+        super(Kuramoto, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state_variables, coupling, local_coupling=0.0,
              ev=numexpr.evaluate, sin=numpy.sin, pi2=numpy.pi * 2):

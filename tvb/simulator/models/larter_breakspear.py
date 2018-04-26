@@ -32,7 +32,7 @@ Larter-Breakspear model based on the Morris-Lecar equations.
 """
 
 from .base import Model, LOG, numpy, basic, arrays
-
+from enum import Enum, unique
 
 class LarterBreakspear(Model):
     r"""
@@ -417,15 +417,15 @@ class LarterBreakspear(Model):
         range = numpy.arange(0.1,1.,0.001),
         doc = """Time scale factor""")
 
+    @unique
+    class Variables(Enum):
+        V = "V"
+        W = "W"
+        Z = "Z"
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["V", "W", "Z"],
-        default=["V"],
-        select_multiple=True,
-        doc="""This represents the default state-variables of this Model to be
-        monitored. It can be overridden for each Monitor if desired.""",
-        order=10)
+        def __get__(self, obj, type):
+            return self.value
+
 
     #Informational attribute, used for phase-plane and initial()
     state_variable_range = {"V": numpy.array([-1.5, 1.5]),
@@ -442,6 +442,11 @@ class LarterBreakspear(Model):
     _state_variables = ["V", "W", "Z"]
     _nvar = 3
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.V]
+        super(LarterBreakspear, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""

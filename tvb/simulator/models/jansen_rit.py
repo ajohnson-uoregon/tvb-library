@@ -34,7 +34,7 @@ Jansen-Rit and derivative models.
 from .base import ModelNumbaDfun, Model, numpy, basic, arrays
 import math
 from numba import guvectorize, float64
-
+from enum import Enum, unique
 
 class JansenRit(ModelNumbaDfun):
     r"""
@@ -207,32 +207,29 @@ class JansenRit(ModelNumbaDfun):
     # conditions when the simulation isn't started from an explicit history,
     # it is also provides the default range of phase-plane plots
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["y0", "y1", "y2", "y3", "y4", "y5"],
-        default=["y0", "y1", "y2", "y3"],
-        select_multiple=True,
-        doc="""This represents the default state-variables of this Model to be
-                                    monitored. It can be overridden for each Monitor if desired. The
-                                    corresponding state-variable indices for this model are :math:`y0 = 0`,
-                                    :math:`y1 = 1`, :math:`y2 = 2`, :math:`y3 = 3`, :math:`y4 = 4`, and
-                                    :math:`y5 = 5`""",
-        order=17)
+    @unique
+    class Variables(Enum):
+        Y0 = "y0"
+        Y1 = "y1"
+        Y2 = "y2"
+        Y3 = "y3"
+        Y4 = "y4"
+        Y5 = "y5"
 
-    #    variables_of_interest = arrays.IntegerArray(
-    #        label = "Variables watched by Monitors",
-    #        range = basic.Range(lo = 0.0, hi = 6.0, step = 1.0),
-    #        default = numpy.array([0, 3], dtype=numpy.int32),
-    #        doc = """This represents the default state-variables of this Model to be
-    #        monitored. It can be overridden for each Monitor if desired. The
-    #        corresponding state-variable indices for this model are :math:`y0 = 0`,
-    #        :math:`y1 = 1`, :math:`y2 = 2`, :math:`y3 = 3`, :math:`y4 = 4`, and
-    #        :math:`y5 = 5`""",
-    #        order = 17)
+        def __get__(self, obj, type):
+            return self.value
+
+
+
 
     state_variables = 'y0 y1 y2 y3 y4 y5'.split()
     _nvar = 6
     cvar = numpy.array([1, 2], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.Y0, self.Variables.Y1, self.Variables.Y2, self.Variables.Y3]
+        super(JansenRit, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def _numpy_dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""
@@ -511,17 +508,25 @@ class ZetterbergJansen(Model):
     # conditions when the simulation isn't started from an explicit history,
     # it is also provides the default range of phase-plane plots.
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["v1", "y1", "v2", "y2", "v3", "y3", "v4", "y4", "v5", "y5", "v6", "v7"],
-        default=["v6", "v7", "v2", "v3", "v4", "v5"],
-        select_multiple=True,
-        doc="""This represents the default state-variables of this Model to be
-                                    monitored. It can be overridden for each Monitor if desired. The
-                                    corresponding state-variable indices for this model are :math:`v_6 = 0`,
-                                    :math:`v_7 = 1`, :math:`v_2 = 2`, :math:`v_3 = 3`, :math:`v_4 = 4`, and
-                                    :math:`v_5 = 5`""",
-        order=42)
+    @unique
+    class Variables(Enum):
+        V1 = "v1"
+        Y1 = "y1"
+        V2 = "v2"
+        Y2 = "y2"
+        V3 = "v3"
+        Y3 = "y3"
+        V4 = "v4"
+        Y4 = "y4"
+        V5 = "v5"
+        Y5 = "y5"
+        V6 = "v6"
+        V7 = "v7"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = 'v1 y1 v2 y2 v3 y3 v4 y4 v5 y5 v6 v7'.split()
     _nvar = 12
@@ -532,6 +537,12 @@ class ZetterbergJansen(Model):
     ki_2 = None  # 2 * self.ki
     keke = None  # self.ke **2
     kiki = None  # self.ki **2
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.V6, self.Variables.V7, self.Variables.V2,
+                                     self.Variables.V3, self.Variables.V4, self.Variables.V5]
+        super(ZetterbergJansen, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state_variables, coupling, local_coupling=0.0):
         magic_exp_number = 709

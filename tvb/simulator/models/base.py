@@ -56,10 +56,15 @@ class Model(core.Type):
     ui_configurable_parameters = []
 
     state_variables = []
-    variables_of_interest = []
     _nvar = None
     number_of_modes = 1
     cvar = None
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            self.variables_of_interest = []
+        else:
+            self.variables_of_interest = variables_of_interest
 
     def _build_observer(self):
         template = ("def observe(state):\n"

@@ -36,6 +36,7 @@ Saggio codimension 3 Epileptor model
 
 from .base import numpy, basic, arrays, ModelNumbaDfun
 from numba import guvectorize, float64, int_
+from enum import Enum, unique
 
 
 class EpileptorCodim3(ModelNumbaDfun):
@@ -164,14 +165,16 @@ class EpileptorCodim3(ModelNumbaDfun):
                             "y": numpy.array([-0.1, 0.1]),
                             "z": numpy.array([0.0, 0.15])}
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=['x', 'y', 'z'],
-        default=['x', 'z'],
-        select_multiple=True,
-        doc="Quantities available to monitor.",
-        order=100
-    )
+    @unique
+    class Variables(Enum):
+        X = "x"
+        Y = "y"
+        Z = "z"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     # state variables names
     state_variables = ['x', 'y', 'z']
@@ -185,6 +188,11 @@ class EpileptorCodim3(ModelNumbaDfun):
     H = None
     L = None
     M = None
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X, self.Variables.Z]
+        super(EpileptorCodim3, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def _numpy_dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""
@@ -518,14 +526,16 @@ class EpileptorCodim3SlowMod(ModelNumbaDfun):
                             "uA": numpy.array([0.0, 0.0]),
                             "uB": numpy.array([0.0, 0.0])}
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=['x', 'y', 'z'],
-        default=['x', 'z'],
-        select_multiple=True,
-        doc="Quantities available to monitor.",
-        order=100
-    )
+    @unique
+    class Variables(Enum):
+        X = "x"
+        Y = "y"
+        Z = "z"
+
+        def __get__(self, obj, type):
+            return self.value
+
+    variables_of_interest = [Variables.X, Variables.Z]
 
     # state variables names
     state_variables = ['x', 'y', 'z', 'uA', 'uB']
@@ -539,6 +549,11 @@ class EpileptorCodim3SlowMod(ModelNumbaDfun):
     H = None
     L = None
     M = None
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X, self.Variables.Z]
+        super(EpileptorCodim3SlowMod, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def _numpy_dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""

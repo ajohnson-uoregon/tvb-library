@@ -33,6 +33,7 @@ Hindmarsh-Rose-Jirsa Epileptor model.
 
 from .base import ModelNumbaDfun, LOG, numpy, basic, arrays
 from numba import guvectorize, float64
+from enum import Enum, unique
 
 @guvectorize([(float64[:],) * 20], '(n),(m)' + ',()'*17 + '->(n)', nopython=True)
 def _numba_dfun(y, c_pop, x0, Iext, Iext2, a, b, slope, tt, Kvf, c, d, r, Ks, Kf, aa, bb, tau, modification, ydot):
@@ -289,19 +290,30 @@ class Epileptor(ModelNumbaDfun):
                             "y2": numpy.array([0., 2.]),
                             "g": numpy.array([-1., 1.])}
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=['x1', 'y1', 'z', 'x2', 'y2', 'g', 'x2 - x1'],
-        default=["x2 - x1", 'z'],
-        select_multiple=True,
-        doc="Quantities of the Epileptor available to monitor.",
-        order=100
-    )
+    @unique
+    class Variables(Enum):
+        X1 = "x1"
+        Y1 = "y1"
+        Z = "z"
+        X2 = "x2"
+        Y2 = "y2"
+        G = "g"
+        X2minusX1 = "x2 - x1"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = ['x1', 'y1', 'z', 'x2', 'y2', 'g']
 
     _nvar = 6
     cvar = numpy.array([0, 3], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X2minusX1, self.Variables.Z]
+        super(Epileptor, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def _numpy_dfun(self, state_variables, coupling, local_coupling=0.0,
              array=numpy.array, where=numpy.where, concat=numpy.concatenate):
@@ -510,20 +522,26 @@ class Epileptor2D(ModelNumbaDfun):
 
     # Typical bounds on state-variables in the Epileptor 2D model
     state_variable_range = {"x1": numpy.array([-2., 1.]),
-                            "z": numpy.array([2.0, 5.0])} 
+                            "z": numpy.array([2.0, 5.0])}
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=['x1', 'z'],
-        default=['x1'],
-        select_multiple=True,
-        doc="Quantities of the Epileptor 2D available to monitor.",
-        order=100)
+    class Variables(Enum):
+        X1 = "x1"
+        Z = "z"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = ['x1', 'z']
 
     _nvar = 2
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X1]
+        super(Epileptor2D, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
 
     def _numpy_dfun(self, state_variables, coupling, local_coupling=0.0,

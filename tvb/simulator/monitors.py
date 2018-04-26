@@ -71,6 +71,7 @@ import tvb.basic.traits.util as util
 import tvb.basic.traits.types_basic as basic
 import tvb.basic.traits.core as core
 from tvb.simulator.common import iround, numpy_add_at
+from enum import Enum, unique
 
 
 LOG = get_logger(__name__)
@@ -123,7 +124,10 @@ class Monitor(core.Type):
         self.dt = simulator.integrator.dt
         self.istep = iround(self.period / self.dt)
         self.voi = self.variables_of_interest
+        #print(self.voi)
         if self.voi is None or self.voi.size == 0:
+            # print(self.voi)
+            # print(simulator.model.variables_of_interest)
             self.voi = numpy.r_[:len(simulator.model.variables_of_interest)]
 
     def record(self, step, observed):
@@ -195,10 +199,11 @@ class Raw(Monitor):
         label = "Raw Monitor sees all!!! Resistance is futile...",
         order = -1)
 
-    def __init__(self):
-        super(Raw, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Raw, self).__init__(*args, **kwargs)
 
     def config_for_sim(self, simulator):
+        #print("raw monitor config for sim")
         if self.period != simulator.integrator.dt:
             LOG.debug('Raw period not equal to integration time step, overriding')
         self.period = simulator.integrator.dt
@@ -248,13 +253,17 @@ class SpatialAverage(Monitor):
             for mapping a surface based simulation back to the regions used in
             its `Long-range Connectivity.`""")
 
-    default_mask = basic.Enumerate(
-                              label = "Default Mask",
-                              options = ["cortical", "hemispheres"],
-                              default = ["hemispheres"],
-                              doc = r"""Fallback in case spatial mask is none and no surface provided
-                              to use either connectivity hemispheres or cortical attributes.""",
-                              order = -1)
+    @unique
+    class Masks(Enum):
+        CORTICAL = "cortical"
+        HEMISPHERES = "hemispheres"
+
+        def __get__(self, obj, type):
+            return self.value
+
+    # Fallback in case spatial mask is none and no surface provided
+    # to use either connectivity hemispheres or cortical attributes.
+    default_mask = Masks.HEMISPHERES
 
     def config_for_sim(self, simulator):
 
@@ -376,6 +385,9 @@ class TemporalAverage(Monitor):
         period, the ``_stock`` is averaged over time for return.
 
         """
+        # print("sample")
+        # print(self.voi)
+        # print(state.shape)
         self._stock[((step % self.istep) - 1), :] = state[self.voi]
         if step % self.istep == 0:
             avg_stock = numpy.mean(self._stock, axis=0)

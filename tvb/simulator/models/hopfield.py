@@ -32,7 +32,7 @@ Hopfield model with modifications following Golos & Daucé.
 """
 
 from .base import Model, LOG, numpy, basic, arrays
-
+from enum import Enum, unique
 
 class Hopfield(Model):
     r"""
@@ -125,22 +125,23 @@ class Hopfield(Model):
     #     conditions when the simulation isn't started from an explicit
     #     history, it is also provides the default range of phase-plane plots.
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["x", "theta"],
-        default=["x"],
-        select_multiple=True,
-        doc="""The values for each state-variable should be set to encompass
-            the expected dynamic range of that state-variable for the current
-            parameters, it is used as a mechanism for bounding random initial
-            conditions when the simulation isn't started from an explicit
-            history, it is also provides the default range of phase-plane plots.""",
-        order=5)
+    class Variables(Enum):
+        X = "x"
+        THETA = "theta"
+
+        def __get__(self, obj, type):
+            return self.value
+
 
     state_variables = ['x', 'theta']
 
     _nvar = 2
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X]
+        super(Hopfield, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def configure(self):
         """Set the threshold as a state variable for a dynamical threshold."""

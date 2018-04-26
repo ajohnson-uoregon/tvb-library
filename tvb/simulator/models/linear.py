@@ -32,7 +32,7 @@ Generic linear model.
 """
 
 from .base import Model, LOG, numpy, basic, arrays
-
+from enum import Enum, unique
 
 class Linear(Model):
     _ui_name = "Linear model"
@@ -48,16 +48,23 @@ class Linear(Model):
 
     state_variable_range = {"x": numpy.array([-1, 1])} # Range used for state variable initialization and visualization
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["x"],
-        default=["x"],
-        select_multiple=True,
-        order=3)
+    @unique
+    class Variables(Enum):
+        X = "x"
+
+        def __get__(self, obj, type):
+            return self.value
+
+
 
     state_variables = ['x']
     _nvar = 1
     cvar = numpy.array([0], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.X]
+        super(Linear, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state, coupling, local_coupling=0.0):
         x, = state

@@ -32,7 +32,7 @@ Wilson-Cowan equations based model definition.
 """
 
 from .base import Model, LOG, numpy, basic, arrays
-
+from enum import Enum, unique
 
 class WilsonCowan(Model):
     r"""
@@ -320,20 +320,31 @@ class WilsonCowan(Model):
     # conditions when the simulation isn't started from an explicit history,
     # it is also provides the default range of phase-plane plots
 
-    variables_of_interest = basic.Enumerate(
-        label="Variables watched by Monitors",
-        options=["E", "I", "E + I", "E - I"],
-        default=["E"],
-        select_multiple=True,
-        doc="""This represents the default state-variables of this Model to be
-               monitored. It can be overridden for each Monitor if desired. The
-               corresponding state-variable indices for this model are :math:`E = 0`
-               and :math:`I = 1`.""",
-        order=24)
+    @unique
+    class Variables(Enum):
+        E = "E"
+        I = "I"
+        EplusI = "E + I"
+        EminusI = "E - I"
+
+        def __get__(self, obj, type):
+            return self.value
+
+    # Variables watched by Monitors
+
+       # This represents the default state-variables of this Model to be
+       # monitored. It can be overridden for each Monitor if desired. The
+       # corresponding state-variable indices for this model are :math:`E = 0`
+       # and :math:`I = 1`.
 
     state_variables = 'E I'.split()
     _nvar = 2
     cvar = numpy.array([0, 1], dtype=numpy.int32)
+
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        if variables_of_interest is None:
+            variables_of_interest = [self.Variables.E]
+        super(WilsonCowan, self).__init__(variables_of_interest=variables_of_interest, *args, **kwargs)
 
     def dfun(self, state_variables, coupling, local_coupling=0.0):
         r"""
