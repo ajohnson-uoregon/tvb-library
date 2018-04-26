@@ -49,7 +49,7 @@ LOG = get_logger(__name__)
 DEFAULT_PLOT_GRANULARITY = 1024
 
 
-class Equation(basic.MapAsJson, core.Type):
+class Equation(core.Type):
     "Base class for Equation data types."
 
     # data
