@@ -111,7 +111,7 @@ class TestTraits(BaseTestCase):
             """ Dummy persisted class"""
             x = 5
             z = 0
-            j = basic.JSONType()
+            j = {}
 
             class In_Internal_Class(object):
                 """Internal of Internal class"""
@@ -125,7 +125,6 @@ class TestTraits(BaseTestCase):
         assert 5 == instance.y
 
         instance.j = {'dict_key': 10}
-        assert isinstance(instance._j, str)
         assert isinstance(instance.j, dict)
 
     def test_none_complex_attribute(self):

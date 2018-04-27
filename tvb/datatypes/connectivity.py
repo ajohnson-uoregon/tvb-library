@@ -121,7 +121,7 @@ class Connectivity(MappedType):
 
     # In case of edited Connectivity, this are the nodes left in interest area,
     # the rest were part of a lesion, so they were removed.
-    saved_selection = basic.JSONType(required=False)
+    saved_selection = None
 
     # framework
     @property

@@ -133,8 +133,8 @@ class MappedArray(MappedType):
 
     title = basic.String
     label_x, label_y = basic.String, basic.String
-    aggregation_functions = basic.JSONType(required=False)
-    dimensions_labels = basic.JSONType(required=False)
+    aggregation_functions = None
+    dimensions_labels = None
     nr_dimensions, length_1d, length_2d, length_3d, length_4d = [0] * 5
     array_data = Array()
 

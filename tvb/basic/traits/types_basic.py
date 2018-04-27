@@ -61,27 +61,3 @@ class String(core.Type):
     Traits type that wraps a Python string.
     """
     wraps = (str, unicode)
-
-
-class JSONType(String):
-    """
-    Wrapper over a String which holds a serializable object.
-    On set/get JSON load/dump will be called.
-    """
-
-
-    def __get__(self, inst, cls):
-        if inst:
-            string = super(JSONType, self).__get__(inst, cls)
-            if string is None or (not isinstance(string, (str, unicode))):
-                return string
-            if len(string) < 1:
-                return None
-            return json.loads(string)
-        return super(JSONType, self).__get__(inst, cls)
-
-
-    def __set__(self, inst, value):
-        if not isinstance(value, (str, unicode)):
-            value = json.dumps(value)
-        super(JSONType, self).__set__(inst, value)

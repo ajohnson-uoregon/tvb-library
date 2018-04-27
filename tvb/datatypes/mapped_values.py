@@ -33,8 +33,9 @@
 """
 
 from tvb.basic.traits.types_mapped import MappedType
-from tvb.basic.traits.types_basic import JSONType, String
+from tvb.basic.traits.types_basic import String
 from tvb.datatypes.time_series import TimeSeries
+import json
 
 
 # Accepted Value Types to be stored.
@@ -46,14 +47,20 @@ class ValueWrapper(MappedType):
     Class to wrap a singular value storage in DB.
     """
 
-    data_value = JSONType()
     data_type = String(default='unknown')
     data_name = String()
+
+    def __init__(self, data_value=None, *args, **kwargs):
+        if data_value is None:
+            self.data_value = {}
+        else:
+            self.data_value = data_value
+        super(ValueWrapper, self).__init__(*args, **kwargs)
 
     @property
     def display_name(self):
         """ Simple String to be used for display in UI."""
-        return "Value Wrapper - " + self.data_name +" : "+ str(self.data_value) + " ("+ str(self.data_type)+ ")"
+        return "Value Wrapper - " + self.data_name +" : "+ json.dumps(self.data_value) + " ("+ str(self.data_type)+ ")"
 
 
 class DatatypeMeasure(MappedType):
