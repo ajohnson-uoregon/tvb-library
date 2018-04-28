@@ -103,20 +103,24 @@ class StringArray(BaseArray):
 class PositionArray(FloatArray):
     _ui_name = "Array of positions"
 
-    coordinate_system = basic.String(label="Coordinate system",
-                                     default="cartesian",
-                                     doc="""The coordinate system used to specify the positions.
-                                     Eg: 'spherical', 'polar'""")
+    # The coordinate system used to specify the positions. Eg: 'spherical', 'polar'
 
-    coordinate_space = basic.String(label="Coordinate space",
-                                    default="None",
-                                    doc="The standard space the positions are in, eg, 'MNI', 'colin27'")
+
+    # The standard space the positions are in, eg, 'MNI', 'colin27'
+
+
+    def __init__(self, coordinate_system="cartesian", coordinate_space="None", *args, **kwargs):
+        self.coordinate_system = coordinate_system
+        self.coordinate_space = coordinate_space
+        super(PositionArray, self).__init__(*args, **kwargs)
 
 
 class OrientationArray(FloatArray):
     _ui_name = "Array of orientations"
-    coordinate_system_or = basic.String(label="Coordinate system",
-                                        default="cartesian")
+
+
+    def __init__(self, coordinate_system_or="cartesian", *args, **kwargs):
+        self.coordinate_system_or = coordinate_system_or
 
 
 class IndexArray(BaseArray):
@@ -131,8 +135,8 @@ class MappedArray(MappedType):
     KEY_SIZE = "size"
     KEY_OPERATION = "operation"
 
-    title = basic.String
-    label_x, label_y = basic.String, basic.String
+    title = ""
+    label_x, label_y = "", ""
     aggregation_functions = None
     dimensions_labels = None
     nr_dimensions, length_1d, length_2d, length_3d, length_4d = [0] * 5

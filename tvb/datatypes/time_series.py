@@ -69,7 +69,7 @@ class TimeSeries(types_mapped.MappedType):
     Base time-series dataType.
     """
 
-    title = basic.String
+
 
     data = arrays.FloatArray(
         label="Time-series data",
@@ -98,14 +98,16 @@ class TimeSeries(types_mapped.MappedType):
     sample_period = 1.0
 
     # Specify the measure unit for sample period (e.g sec, msec, usec, ...)
-    sample_period_unit = basic.String(
-        label="Sample Period Measure Unit",
-        default="ms")
+    sample_period_unit = "ms"
 
     sample_rate = 0.0
 
     has_surface_mapping = True
     has_volume_mapping = False
+
+    def __init__(self, title = "", *args, **kwargs):
+        self.title = title
+        super(TimeSeries, self).__init__(*args, **kwargs)
 
     def configure(self):
         """

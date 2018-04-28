@@ -52,7 +52,7 @@ class ProjectionMatrix(MappedType):
     The projection is between a source of type CorticalSurface and a set of Sensors.
     """
 
-    projection_type = basic.String
+    projection_type = ""
 
     __mapper_args__ = {'polymorphic_on': 'projection_type'}
 
@@ -65,7 +65,7 @@ class ProjectionMatrix(MappedType):
     skin_air = surfaces.SkinAir(label="Skin Air", default=None, required=False,
                                 doc="""Boundary between skin and air domains.""")
 
-    conductances = {'air': 0.0, 'skin': 1.0, 'skull': 0.01, 'brain': 1.0} 
+    conductances = {'air': 0.0, 'skin': 1.0, 'skull': 0.01, 'brain': 1.0}
 
     sources = surfaces.CorticalSurface(label="surface or region", default=None, required=True)
 
@@ -106,7 +106,7 @@ class ProjectionSurfaceEEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': EEG_POLYMORPHIC_IDENTITY}
 
-    projection_type = basic.String(default=EEG_POLYMORPHIC_IDENTITY)
+    projection_type = EEG_POLYMORPHIC_IDENTITY
 
     sensors = sensors.SensorsEEG
 
@@ -126,7 +126,7 @@ class ProjectionSurfaceMEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': MEG_POLYMORPHIC_IDENTITY}
 
-    projection_type = basic.String(default=MEG_POLYMORPHIC_IDENTITY)
+    projection_type = MEG_POLYMORPHIC_IDENTITY
 
     sensors = sensors.SensorsMEG
 
@@ -146,7 +146,7 @@ class ProjectionSurfaceSEEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': SEEG_POLYMORPHIC_IDENTITY}
 
-    projection_type = basic.String(default=SEEG_POLYMORPHIC_IDENTITY)
+    projection_type = SEEG_POLYMORPHIC_IDENTITY
 
     sensors = sensors.SensorsInternal
 

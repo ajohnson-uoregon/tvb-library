@@ -53,9 +53,8 @@ LOG = get_logger(__name__)
 class Connectivity(MappedType):
 
     # data
-    region_labels = arrays.StringArray(
-        label="Region labels",
-        doc="""Short strings, 'labels', for the regions represented by the connectivity matrix.""")
+    # Short strings, 'labels', for the regions represented by the connectivity matrix.
+    region_labels = ""
 
     weights = arrays.FloatArray(
         label="Connection strengths",
@@ -117,7 +116,7 @@ class Connectivity(MappedType):
     number_of_connections = 0 # The number of non-zero entries represented in this Connectivity
 
     # Original Connectivity, from which current connectivity was edited.
-    parent_connectivity = basic.String(required=False)
+    parent_connectivity = ""
 
     # In case of edited Connectivity, this are the nodes left in interest area,
     # the rest were part of a lesion, so they were removed.
@@ -378,7 +377,7 @@ class Connectivity(MappedType):
         if self.tract_lengths.size == 0:
             self.compute_tract_lengths()
 
-        if self.region_labels.size == 0:
+        if len(self.region_labels) == 0:
             self.compute_region_labels()
 
         if self.hemispheres is None or self.hemispheres.size == 0:

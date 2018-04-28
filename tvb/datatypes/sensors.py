@@ -61,7 +61,7 @@ class Sensors(MappedType):
 
     _ui_name = "Unknown sensors"
 
-    sensors_type = types_basic.String
+    sensors_type = ""
 
     __mapper_args__ = {'polymorphic_on': 'sensors_type'}
 
@@ -212,7 +212,7 @@ class SensorsEEG(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': EEG_POLYMORPHIC_IDENTITY}
 
-    sensors_type = types_basic.String(default=EEG_POLYMORPHIC_IDENTITY)
+    sensors_type = EEG_POLYMORPHIC_IDENTITY
 
     has_orientation = False
 
@@ -236,7 +236,7 @@ class SensorsMEG(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': MEG_POLYMORPHIC_IDENTITY}
 
-    sensors_type = types_basic.String(default=MEG_POLYMORPHIC_IDENTITY)
+    sensors_type = MEG_POLYMORPHIC_IDENTITY
 
     orientations = arrays.OrientationArray(label="Sensor orientations",
                                            doc="An array representing the orientation of the MEG SQUIDs")
@@ -265,7 +265,7 @@ class SensorsInternal(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': INTERNAL_POLYMORPHIC_IDENTITY}
 
-    sensors_type = types_basic.String(default=INTERNAL_POLYMORPHIC_IDENTITY)
+    sensors_type = INTERNAL_POLYMORPHIC_IDENTITY
 
 
     @classmethod

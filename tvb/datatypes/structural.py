@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -29,7 +29,7 @@
 #
 
 """
-The Volume datatypes. This brings together the scientific and framework 
+The Volume datatypes. This brings together the scientific and framework
 methods that are associated with the volume datatypes.
 
 """
@@ -96,6 +96,6 @@ class StructuralMRI(VolumetricDataMixin, arrays.MappedArray):
 
     array_data = arrays.FloatArray(label="contrast")
 
-    weighting = basic.String(label="MRI weighting")  # eg, "T1", "T2", "T2*", "PD", ...
+    weighting = ""  # eg, "T1", "T2", "T2*", "PD", ...
 
     volume = volumes.Volume

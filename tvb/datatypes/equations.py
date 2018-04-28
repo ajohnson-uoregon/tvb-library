@@ -62,10 +62,9 @@ class Equation(core.Type):
                      'SigmoidalCoupling', 'SigmoidalCouplingData', 'SigmoidalCouplingScientific',
                      'SigmoidalCouplingFramework']
 
-    equation = basic.String(
-        label="Equation as a string",
-        doc="""A latex representation of the equation, with the extra
-                escaping needed for interpretation via sphinx.""")
+    # A latex representation of the equation, with the extra
+    # escaping needed for interpretation via sphinx.
+    equation = ""
 
     # sci
 
@@ -230,11 +229,8 @@ class DiscreteEquation(FiniteSupportEquation):
     in the space is effectively just assigned a value.
 
     """
-    equation = basic.String(
-        label="Discrete Equation",
-        default="var",
-        locked=True,
-        doc="""The equation defines a function of :math:`x`""")
+    # The equation defines a function of :math:`x`
+    equation = "var"
 
 
 class Linear(TemporalApplicableEquation):
@@ -242,11 +238,8 @@ class Linear(TemporalApplicableEquation):
     A linear equation.
 
     """
-    equation = basic.String(
-        label="Linear Equation",
-        default="a * var + b",
-        locked=True,
-        doc=""":math:`result = a * x + b`""")
+    # :math:`result = a * x + b`
+    equation = "a * var + b"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -264,12 +257,7 @@ class Gaussian(SpatialApplicableEquation, FiniteSupportEquation):
 
     """
 
-    equation = basic.String(
-        label="Gaussian Equation",
-        default="(amp * exp(-((var-midpoint)**2 / (2.0 * sigma**2))))+offset",
-        locked=True,
-        doc=""":math:`(amp \\exp\\left(-\\left(\\left(x-midpoint\\right)^2 /
-        \\left(2.0 \\sigma^2\\right)\\right)\\right)) + offset`""")
+    equation = "(amp * exp(-((var-midpoint)**2 / (2.0 * sigma**2))))+offset"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -286,14 +274,7 @@ class DoubleGaussian(FiniteSupportEquation):
     """
     _ui_name = "Mexican-hat"
 
-    equation = basic.String(
-        label="Double Gaussian Equation",
-        default="(amp_1 * exp(-((var-midpoint_1)**2 / (2.0 * sigma_1**2)))) - (amp_2 * exp(-((var-midpoint_2)**2 / (2.0 * sigma_2**2))))",
-        locked=True,
-        doc=""":math:`amp_1 \\exp\\left(-\\left((x-midpoint_1)^2 / \\left(2.0
-        \\sigma_1^2\\right)\\right)\\right) -
-        amp_2 \\exp\\left(-\\left((x-midpoint_2)^2 / \\left(2.0
-        \\sigma_2^2\\right)\\right)\\right)`""")
+    equation = "(amp_1 * exp(-((var-midpoint_1)**2 / (2.0 * sigma_1**2)))) - (amp_2 * exp(-((var-midpoint_2)**2 / (2.0 * sigma_2**2))))"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -311,12 +292,7 @@ class Sigmoid(SpatialApplicableEquation, FiniteSupportEquation):
     when spatializing model parameters.
     """
 
-    equation = basic.String(
-        label="Sigmoid Equation",
-        default="(amp / (1.0 + exp(-1.8137993642342178 * (radius-var)/sigma))) + offset",
-        locked=True,
-        doc=""":math:`(amp / (1.0 + \\exp(-\\pi/\\sqrt(3.0)
-            (radius-x)/\\sigma))) + offset`""")
+    equation = "(amp / (1.0 + exp(-1.8137993642342178 * (radius-var)/sigma))) + offset"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -331,12 +307,7 @@ class GeneralizedSigmoid(TemporalApplicableEquation):
     A General Sigmoid equation.
     """
 
-    equation = basic.String(
-        label="Generalized Sigmoid Equation",
-        default="low + (high - low) / (1.0 + exp(-1.8137993642342178 * (var-midpoint)/sigma))",
-        locked=True,
-        doc=""":math:`low + (high - low) / (1.0 + \\exp(-\\pi/\\sqrt(3.0)
-            (x-midpoint)/\\sigma))`""")
+    equation = "low + (high - low) / (1.0 + exp(-1.8137993642342178 * (var-midpoint)/sigma))"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -351,11 +322,7 @@ class Sinusoid(TemporalApplicableEquation):
     A Sinusoid equation.
     """
 
-    equation = basic.String(
-        label="Sinusoid Equation",
-        default="amp * sin(6.283185307179586 * frequency * var)",
-        locked=True,
-        doc=""":math:`amp \\sin(2.0 \\pi frequency x)` """)
+    equation = "amp * sin(6.283185307179586 * frequency * var)"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -370,12 +337,7 @@ class Cosine(TemporalApplicableEquation):
     A Cosine equation.
     """
 
-    equation = basic.String(
-        label="Cosine Equation",
-        default="amp * cos(6.283185307179586 * frequency * var)",
-        locked=True,
-        doc=""":math:`amp \\cos(2.0 \\pi frequency x)` """)
-
+    equation = "amp * cos(6.283185307179586 * frequency * var)"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -390,14 +352,7 @@ class Alpha(TemporalApplicableEquation):
     An Alpha function belonging to the Exponential function family.
     """
 
-    equation = basic.String(
-        label="Alpha Equation",
-        default="where((var-onset) > 0, (alpha * beta) / (beta - alpha) * (exp(-alpha * (var-onset)) - exp(-beta * (var-onset))), 0.0 * var)",
-        locked=True,
-        doc=""":math:`(\\alpha * \\beta) / (\\beta - \\alpha) *
-            (\\exp(-\\alpha * (x-onset)) - \\exp(-\\beta * (x-onset)))` for :math:`(x-onset) > 0`""")
-
-
+    equation = "where((var-onset) > 0, (alpha * beta) / (beta - alpha) * (exp(-alpha * (var-onset)) - exp(-beta * (var-onset))), 0.0 * var)"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -420,21 +375,10 @@ class PulseTrain(TemporalApplicableEquation):
     * onset time    :
     """
 
-    equation = basic.String(
-        label="Pulse Train",
-        default="where((var % T) < tau, amp, 0)",
-        locked=True,
-        doc=""":math:`\\frac{\\tau}{T}
-        +\\sum_{n=1}^{\\infty}\\frac{2}{n\\pi}
-        \\sin\\left(\\frac{\\pi\\,n\\tau}{T}\\right)
-        \\cos\\left(\\frac{2\\pi\\,n}{T} var\\right)`.
-        The starting time is halfway through the first pulse.
-        The phase can be offset t with t - tau/2""")
+    equation = "where((var % T) < tau, amp, 0)"
 
     # onset is in milliseconds
     # T and tau are in milliseconds as well
-
-
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -509,11 +453,7 @@ class Gamma(HRFKernelEquation):
     # time-series to the beginning of the gamma hrf.
     # delay cannot be negative or greater than the hrf duration.
 
-    equation = basic.String(
-        label="Gamma Equation",
-        default="((var / tau) ** (n - 1) * exp(-(var / tau)) )/ (tau * factorial)",
-        locked=True,
-        doc=""":math:`h(var) = \\frac{(\\frac{var}{\\tau})^{(n-1)}\\exp{-(\\frac{var}{\\tau})}}{\\tau(n-1)!}`.""")
+    equation = "((var / tau) ** (n - 1) * exp(-(var / tau)) )/ (tau * factorial)"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -577,15 +517,7 @@ class DoubleExponential(HRFKernelEquation):
 
     _ui_name = "HRF kernel: Difference of Exponentials"
 
-    equation = basic.String(
-        label="Double Exponential Equation",
-        default="((amp_1 * exp(-var/tau_1) * sin(2.*pi*f_1*var)) - (amp_2 * exp(-var/ tau_2) * sin(2.*pi*f_2*var)))",
-        locked=True,
-        doc=""":math:`h(var) = amp_1\\exp(\\frac{-var}{\tau_1})
-        \\sin(2\\cdot\\pi f_1 \\cdot var) - amp_2\\cdot \\exp(-\\frac{var}
-        {\\tau_2})*\\sin(2\\pi f_2 var)`.""")
-
-
+    equation = "((amp_1 * exp(-var/tau_1) * sin(2.*pi*f_1*var)) - (amp_2 * exp(-var/ tau_2) * sin(2.*pi*f_2*var)))"
 
     def __init__(self, parameters = None, *args, **kwargs):
         if parameters is None:
@@ -640,19 +572,7 @@ class FirstOrderVolterra(HRFKernelEquation):
 
     _ui_name = "HRF kernel: Volterra Kernel"
 
-    equation = basic.String(
-        label="First Order Volterra Kernel",
-        default="1/3. * exp(-0.5*(var / tau_s)) * (sin(sqrt(1./tau_f - 1./(4.*tau_s**2)) * var)) / (sqrt(1./tau_f - 1./(4.*tau_s**2)))",
-        locked=True,
-        doc=""":math:`G(t - t^{\\prime}) =
-             e^{\\frac{1}{2} \\left(\\frac{t - t^{\\prime}}{\\tau_s} \\right)}
-             \\frac{\sin\\left((t - t^{\\prime})
-             \\sqrt{\\frac{1}{\\tau_f} - \\frac{1}{4 \\tau_s^2}}\\right)}
-             {\\sqrt{\\frac{1}{\\tau_f} - \\frac{1}{4 \\tau_s^2}}}
-             \\; \\; \\; \\; \\; \\;  for \\; \\; \\; t \\geq t^{\\prime}
-             = 0 \\; \\; \\; \\; \\; \\;  for \\; \\; \\;  t < t^{\\prime}`.""")
-
-
+    equation = "1/3. * exp(-0.5*(var / tau_s)) * (sin(sqrt(1./tau_f - 1./(4.*tau_s**2)) * var)) / (sqrt(1./tau_f - 1./(4.*tau_s**2)))"
 
     def __init__(self, parameters=None, *args, **kwargs):
         if parameters is None:
@@ -711,12 +631,7 @@ class MixtureOfGammas(HRFKernelEquation):
 
     _ui_name = "HRF kernel: Mixture of Gammas"
 
-    equation = basic.String(
-        label="Mixture of Gammas",
-        default="(l * var)**(a_1-1) * exp(-l*var) / gamma_a_1 - c * (l*var)**(a_2-1) * exp(-l*var) / gamma_a_2",
-        locked=True,
-        doc=""":math:`\\frac{\\lambda \\,t^{a_{1} - 1} \\,\\, \\exp^{-\\lambda \\,t}}{\\Gamma(a_{1})}
-        - 0.5 \\frac{\\lambda \\,t^{a_{2} - 1} \\,\\, \\exp^{-\\lambda \\,t}}{\\Gamma(a_{2})}`.""")
+    equation = "(l * var)**(a_1-1) * exp(-l*var) / gamma_a_1 - c * (l*var)**(a_2-1) * exp(-l*var) / gamma_a_2"
 
 
 

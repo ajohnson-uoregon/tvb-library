@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -29,7 +29,7 @@
 #
 
 """
-The Volume datatypes. This brings together the scientific and framework 
+The Volume datatypes. This brings together the scientific and framework
 methods that are associated with the volume datatypes.
 
 .. moduleauthor:: Stuart A. Knock <Stuart@tvb.invalid>
@@ -51,7 +51,7 @@ class Volume(types_mapped.MappedType):
     """
     origin = arrays.PositionArray(label = "Volume origin coordinates")
     voxel_size = arrays.FloatArray(label = "Voxel size") # need a triplet, xyz
-    voxel_unit = basic.String(label = "Voxel Measure Unit", default = "mm")
+    voxel_unit = "mm"
 
     def _find_summary_info(self):
         summary = {"Volume type": self.__class__.__name__,

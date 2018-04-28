@@ -199,7 +199,7 @@ class Surface(MappedType):
 
     bi_hemispheric = False
 
-    surface_type = basic.String
+    surface_type = ""
 
     valid_for_simulations = False
 
@@ -1193,13 +1193,13 @@ class WhiteMatterSurface(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': WHITE_MATTER}
     _ui_name = "A white matter - gray  surface"
-    surface_type = basic.String(default=WHITE_MATTER)
+    surface_type = WHITE_MATTER
 
 
 class CorticalSurface(Surface):
     """Cortical or pial surface."""
     _ui_name = "A cortical surface"
-    surface_type = basic.String(default=CORTICAL, order=-1)
+    surface_type = CORTICAL
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': CORTICAL}
 
@@ -1209,7 +1209,7 @@ class SkinAir(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': OUTER_SKIN}
     _ui_name = "Skin"
-    surface_type = basic.String(default=OUTER_SKIN)
+    surface_type = OUTER_SKIN
 
     @classmethod
     def from_file(cls, source_file="outer_skin_4096.zip", instance=None):
@@ -1221,7 +1221,7 @@ class BrainSkull(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': INNER_SKULL}
     _ui_name = "Brain - inner skull interface surface."
-    surface_type = basic.String(default=INNER_SKULL)
+    surface_type = INNER_SKULL
 
     @classmethod
     def from_file(cls, source_file="inner_skull_4096.zip", instance=None):
@@ -1234,7 +1234,7 @@ class SkullSkin(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': OUTER_SKULL}
     _ui_name = "Outer-skull - scalp interface surface"
-    surface_type = basic.String(default=OUTER_SKULL)
+    surface_type = OUTER_SKULL
 
     @classmethod
     def from_file(cls, source_file="outer_skull_4096.zip", instance=None):
@@ -1250,7 +1250,7 @@ class EEGCap(OpenSurface):
     """EEG cap surface."""
     __mapper_args__ = {'polymorphic_identity': EEG_CAP}
     _ui_name = "EEG Cap"
-    surface_type = basic.String(default=EEG_CAP)
+    surface_type = EEG_CAP
 
     @classmethod
     def from_file(cls, source_file="scalp_1082.zip", instance=None):
@@ -1261,7 +1261,7 @@ class FaceSurface(OpenSurface):
     """Face surface."""
     __mapper_args__ = {'polymorphic_identity': FACE}
     _ui_name = "Face surface"
-    surface_type = basic.String(default=FACE)
+    surface_type = FACE
 
     @classmethod
     def from_file(cls, source_file="face_8614.zip", instance=None):

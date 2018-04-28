@@ -56,10 +56,8 @@ class FourierSpectrum(arrays.MappedArray):
         label="Source time-series",
         doc="Links to the time-series on which the FFT is applied.")
 
-    windowing_function = basic.String(
-        label="Windowing function",
-        doc="""The windowing function applied to each time segment prior to
-            application of the FFT.""")
+    # The windowing function applied to each time segment prior to application of the FFT.
+    windowing_function = ""
 
     amplitude = arrays.FloatArray(
         label="Amplitude",
@@ -236,17 +234,14 @@ class WaveletCoefficients(arrays.MappedArray):
 
     source = time_series.TimeSeries(label="Source time-series")
 
-    mother = basic.String(
-        label="Mother wavelet",
-        default="morlet",
-        doc="""A string specifying the type of mother wavelet to use,
-            default is 'morlet'.""")  # default to 'morlet'
+    # A string specifying the type of mother wavelet to use, default is 'morlet'.
+
 
     frequencies = arrays.FloatArray(
         label="Frequencies",
         doc="A vector that maps scales to frequencies.")
 
-    normalisation = basic.String(label="Normalisation type")
+
     # 'unit energy' | 'gabor'
 
     amplitude = arrays.FloatArray(
@@ -266,9 +261,11 @@ class WaveletCoefficients(arrays.MappedArray):
 
     __generate_table__ = True
 
-    def __init__(self, sample_period=0.0, q_ratio=5.0):
+    def __init__(self, sample_period=0.0, q_ratio=5.0, mother="morlet", normalisation=""):
         self.sample_period = sample_period
         self.q_ratio = q_ratio
+        self.mother = mother
+        self.normalisation = normalisation
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -404,10 +401,8 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
         doc="""Links to the time-series on which the node_coherence is
                 applied.""")
 
-    windowing_function = basic.String(
-        label="Windowing function",
-        doc="""The windowing function applied to each time segment prior to
-                application of the FFT.""")
+    # The windowing function applied to each time segment prior to application of the FFT.
+    windowing_function = ""
 
     __generate_table__ = True
 

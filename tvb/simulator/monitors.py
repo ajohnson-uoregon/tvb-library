@@ -577,10 +577,10 @@ class EEG(Projection):
         default=None, label='Projection matrix', order=2,
         doc='Projection matrix to apply to sources.')
 
-    reference = basic.String(required=False, label="EEG Reference", order=5,
-                             doc='EEG Electrode to be used as reference, or "average" to '
-                                 'apply an average reference. If none is provided, the '
-                                 'produced time-series are the idealized or reference-free.')
+    # 'EEG Electrode to be used as reference, or "average" to '
+    # 'apply an average reference. If none is provided, the '
+    # 'produced time-series are the idealized or reference-free.'
+    reference = ""
 
     sensors = SensorsEEG(required=True, label="EEG Sensors", order=1,
                          doc='Sensors to use for this EEG monitor')
