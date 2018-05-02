@@ -85,24 +85,20 @@ class Monitor(core.Type):
     # list of class names not shown in UI
     _base_classes = ['Monitor', 'Projection', 'ProgressLogger']
 
-    variables_of_interest = arrays.IntegerArray(
-        label = "Model variables to watch", order=11,
-        doc = ("Indices of model's variables of interest (VOI) that this monitor should record. "
-               "Note that the indices should start at zero, so that if a model offers VOIs V, W and "
-               "V+W, and W is selected, and this monitor should record W, then the correct index is 0.")
-        #order = -1
-    )
-
     istep = None
     dt = None
     voi = None
     _stock = numpy.empty([])
 
-    def __init__(self, period=0.9765625, *args, **kwargs):
+    def __init__(self, period=0.9765625, variables_of_interest=None, *args, **kwargs):
         self.period = period
         # Sampling period in milliseconds, must be an integral multiple
         # of integration-step size. As a guide: 2048 Hz => 0.48828125 ms ;
         # 1024 Hz => 0.9765625 ms ; 512 Hz => 1.953125 ms.
+        if variables_of_interest is None:
+            self.variables_of_interest = numpy.array([])
+        self.variables_of_interest = variables_of_interest
+        # Model variables to watch
 
 
     def __str__(self):
@@ -194,9 +190,8 @@ class Raw(Monitor):
     """
     _ui_name = "Raw recording"
 
-    variables_of_interest = arrays.IntegerArray(
-        label = "Raw Monitor sees all!!! Resistance is futile...",
-        order = -1)
+    # Raw Monitor sees all!!! Resistance is futile...
+    variables_of_interest = numpy.array([])
 
     def __init__(self, *args, **kwargs):
         super(Raw, self).__init__(*args, **kwargs)
@@ -245,12 +240,12 @@ class SpatialAverage(Monitor):
     """
     _ui_name = "Spatial average with temporal sub-sample"
 
-    spatial_mask = arrays.IntegerArray( #TODO: Check it's a vector of length Nodes (like region mapping for surface)
-        label = "An index mask of nodes into areas",
-        doc = """A vector of length==nodes that assigns an index to each node
-            specifying the "region" to which it belongs. The default usage is
-            for mapping a surface based simulation back to the regions used in
-            its `Long-range Connectivity.`""")
+    # #TODO: Check it's a vector of length Nodes (like region mapping for surface)
+    # A vector of length==nodes that assigns an index to each node
+    # specifying the "region" to which it belongs. The default usage is
+    # for mapping a surface based simulation back to the regions used in
+    # its `Long-range Connectivity.`
+    spatial_mask = numpy.array([])
 
     @unique
     class Masks(Enum):

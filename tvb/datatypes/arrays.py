@@ -62,11 +62,6 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-class IntegerArray(BaseArray):
-    _ui_name = "Array of integers"
-    dtype = numpy.int_
-
-
 class ComplexArray(BaseArray):
     _ui_name = "Array of complex numbers"
     dtype = numpy.complex128

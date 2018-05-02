@@ -109,12 +109,8 @@ class Hopfield(Model):
         doc="""The slow time-scale for threshold calculus :math:`\theta`, state-variable of the model.""",
         order=2)
 
-    dynamic = arrays.IntegerArray(
-        label="Dynamic",
-        default=numpy.array([0, ]),
-        range=numpy.arange(0,1.,1),
-        doc="""Boolean value for static/dynamic threshold theta for (0/1).""",
-        order=3)
+    # Boolean value for static/dynamic threshold theta for (0/1).
+    dynamic = False
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
     state_variable_range = {"x": numpy.array([-1., 2.]),

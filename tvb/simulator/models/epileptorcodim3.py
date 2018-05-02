@@ -148,11 +148,8 @@ class EpileptorCodim3(ModelNumbaDfun):
         doc="Slow permittivity coupling strength, the default is no coupling",
         order=11)
 
-    N = arrays.IntegerArray(
-        label="N",
-        default=numpy.array([1]),
-        doc="The branch of the resting state, default is 1",
-        order=12)
+    # The branch of the resting state, default is 1
+    N = 1
 
     modification = arrays.BoolArray(
         label="modification",
@@ -506,11 +503,8 @@ class EpileptorCodim3SlowMod(ModelNumbaDfun):
         doc="Slow permittivity coupling strength, the default is no coupling",
         order=19)
 
-    N = arrays.IntegerArray(
-        label="N",
-        default=numpy.array([1]),
-        doc="The branch of the resting state, default is 1",
-        order=20)
+    # The branch of the resting state, default is 1
+    N = 1
 
     modification = arrays.BoolArray(
         label="modification",

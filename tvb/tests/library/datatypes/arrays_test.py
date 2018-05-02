@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -46,15 +46,6 @@ class TestArrays(BaseTestCase):
         array_dt = arrays.FloatArray()
         array_dt.data = data
         assert array_dt.shape == (10, 10)
-
-    def test_integer_array(self):
-        """
-        Create an integer array, check that shape is correct.
-        """
-        data = numpy.arange(100, dtype=int)
-        array_dt = arrays.IntegerArray()
-        array_dt.data = data
-        assert array_dt.shape == (100,)
 
     def test_complex_array(self):
         """
