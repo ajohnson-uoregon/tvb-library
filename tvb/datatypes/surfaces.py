@@ -142,10 +142,8 @@ class ValidationResult(object):
 class Surface(MappedType):
     """A base class for other surfaces."""
 
-    vertices = arrays.PositionArray(
-        label="Vertex positions",
-        order=-1,
-        doc="""An array specifying coordinates for the surface vertices.""")
+    # An array specifying coordinates for the surface vertices.
+    vertices = numpy.array([], dtype=numpy.float64)
 
     triangles = arrays.IndexArray(
         label="Triangles",

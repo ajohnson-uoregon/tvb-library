@@ -74,10 +74,6 @@ class Connectivity(MappedType):
         default=numpy.array([3.0]), file_storage=core.FILE_STORAGE_NONE,
         doc="""A single number or matrix of conduction speeds for the myelinated fibre tracts between regions.""")
 
-    centres = arrays.PositionArray(
-        label="Region centres",
-        doc="An array specifying the location of the centre of each region.")
-
     # A boolean vector specifying whether or not a region is part of the cortex.
     cortical = numpy.array([], dtype=numpy.bool)
 
@@ -117,6 +113,12 @@ class Connectivity(MappedType):
     # In case of edited Connectivity, this are the nodes left in interest area,
     # the rest were part of a lesion, so they were removed.
     saved_selection = None
+
+    def __init__(self, centres=None, *args, **kwargs):
+        # An array specifying the location of the centre of each region.
+        if centres is None:
+            centres = numpy.array([], dtype=numpy.float64)
+        self.centres = centres
 
     # framework
     @property
@@ -366,7 +368,6 @@ class Connectivity(MappedType):
         self.trait["weights"].log_debug(owner=self.__class__.__name__)
         self.trait["tract_lengths"].log_debug(owner=self.__class__.__name__)
         self.trait["speed"].log_debug(owner=self.__class__.__name__)
-        self.trait["centres"].log_debug(owner=self.__class__.__name__)
         self.trait["orientations"].log_debug(owner=self.__class__.__name__)
         self.trait["areas"].log_debug(owner=self.__class__.__name__)
 

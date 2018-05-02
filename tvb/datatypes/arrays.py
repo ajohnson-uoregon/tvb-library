@@ -62,21 +62,6 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-class PositionArray(FloatArray):
-    _ui_name = "Array of positions"
-
-    # The coordinate system used to specify the positions. Eg: 'spherical', 'polar'
-
-
-    # The standard space the positions are in, eg, 'MNI', 'colin27'
-
-
-    def __init__(self, coordinate_system="cartesian", coordinate_space="None", *args, **kwargs):
-        self.coordinate_system = coordinate_system
-        self.coordinate_space = coordinate_space
-        super(PositionArray, self).__init__(*args, **kwargs)
-
-
 class OrientationArray(FloatArray):
     _ui_name = "Array of orientations"
 

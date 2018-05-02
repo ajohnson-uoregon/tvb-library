@@ -66,7 +66,7 @@ class Sensors(MappedType):
 
     labels = []
 
-    locations = arrays.PositionArray(label="Sensor locations")
+    locations = numpy.array([], dtype=numpy.float64)
 
     has_orientation = False
 

@@ -44,7 +44,6 @@ class TestParametersFactory(BaseTestCase):
         """
         # We imported array so we should have all these traited classes registered
         expected = [
-            'PositionArray',
             'IndexArray',
             'OrientationArray',
             'FloatArray',

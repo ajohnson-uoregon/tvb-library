@@ -40,6 +40,8 @@ from tvb.basic.logger.builder import get_logger
 from tvb.basic.traits import types_mapped
 from tvb.datatypes import arrays
 
+import numpy
+
 
 LOG = get_logger(__name__)
 
@@ -49,7 +51,8 @@ class Volume(types_mapped.MappedType):
     Data defined on a regular grid in three dimensions.
 
     """
-    origin = arrays.PositionArray(label = "Volume origin coordinates")
+    # Volume origin coordinates
+    origin = numpy.array([], dtype=numpy.float64)
     voxel_size = arrays.FloatArray(label = "Voxel size") # need a triplet, xyz
     voxel_unit = "mm"
 
