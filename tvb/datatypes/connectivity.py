@@ -80,11 +80,9 @@ class Connectivity(MappedType):
     # A boolean vector specifying whether or not a region is part of the right hemisphere
     hemispheres = numpy.array([], dtype=numpy.bool)
 
-    orientations = arrays.OrientationArray(
-        label="Average region orientation",
-        required=False,
-        doc="""Unit vectors of the average orientation of the regions represented in the connectivity matrix.
-        NOTE: Unknown data should be zeros.""")
+    # Unit vectors of the average orientation of the regions represented in the connectivity matrix.
+    # NOTE: Unknown data should be zeros.
+    orientations = numpy.array([], dtype=numpy.float64)
 
     areas = arrays.FloatArray(
         label="Area of regions",
@@ -368,7 +366,6 @@ class Connectivity(MappedType):
         self.trait["weights"].log_debug(owner=self.__class__.__name__)
         self.trait["tract_lengths"].log_debug(owner=self.__class__.__name__)
         self.trait["speed"].log_debug(owner=self.__class__.__name__)
-        self.trait["orientations"].log_debug(owner=self.__class__.__name__)
         self.trait["areas"].log_debug(owner=self.__class__.__name__)
 
         if self.tract_lengths.size == 0:

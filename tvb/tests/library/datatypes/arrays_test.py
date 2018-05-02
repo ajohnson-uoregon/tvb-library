@@ -47,16 +47,6 @@ class TestArrays(BaseTestCase):
         array_dt.data = data
         assert array_dt.shape == (10, 10)
 
-    def test_orientation_array(self):
-        """
-        Create an orientation array, check that shape is correct.
-        """
-        data = numpy.random.random((10, 10))
-        array_dt = arrays.OrientationArray(coordinate_system_or="test_system")
-        array_dt.data = data
-        assert array_dt.shape == (10, 10)
-        assert array_dt.coordinate_system_or == "test_system"
-
     def test_index_array(self):
         """
         Create an index array, check that shape is correct.

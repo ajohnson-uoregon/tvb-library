@@ -62,14 +62,6 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-class OrientationArray(FloatArray):
-    _ui_name = "Array of orientations"
-
-
-    def __init__(self, coordinate_system_or="cartesian", *args, **kwargs):
-        self.coordinate_system_or = coordinate_system_or
-
-
 class IndexArray(BaseArray):
     _ui_name = "Index array"
     target = Array(label="Indexed array",

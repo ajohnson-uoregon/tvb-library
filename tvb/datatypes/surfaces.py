@@ -151,15 +151,11 @@ class Surface(MappedType):
         target=vertices,
         doc="""Array of indices into the vertices, specifying the triangles which define the surface.""")
 
-    vertex_normals = arrays.OrientationArray(
-        label="Vertex normal vectors",
-        order=-1,
-        doc="""An array of unit normal vectors for the surfaces vertices.""")
+    # An array of unit normal vectors for the surfaces vertices.
+    vertex_normals = numpy.array([], dtype=numpy.float64)
 
-    triangle_normals = arrays.OrientationArray(
-        label="Triangle normal vectors",
-        order=-1,
-        doc="""An array of unit normal vectors for the surfaces triangles.""")
+    # An array of unit normal vectors for the surfaces triangles.
+    triangle_normals = numpy.array([], dtype=numpy.float64)
 
     # geodesic_distance_matrix = SparseMatrix(
     #     label="Geodesic distance matrix",

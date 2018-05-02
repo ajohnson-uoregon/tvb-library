@@ -70,7 +70,7 @@ class Sensors(MappedType):
 
     has_orientation = False
 
-    orientations = arrays.OrientationArray(required=False)
+    orientations = numpy.array([], dtype=numpy.float64)
 
     number_of_sensors = 0 # The number of sensors described by these Sensors.
 
@@ -237,8 +237,8 @@ class SensorsMEG(Sensors):
 
     sensors_type = MEG_POLYMORPHIC_IDENTITY
 
-    orientations = arrays.OrientationArray(label="Sensor orientations",
-                                           doc="An array representing the orientation of the MEG SQUIDs")
+    # An array representing the orientation of the MEG SQUIDs
+    orientations = numpy.array([], dtype=numpy.float64)
 
     has_orientation = True
 
