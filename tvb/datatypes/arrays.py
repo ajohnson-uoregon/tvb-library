@@ -62,10 +62,10 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-class ComplexArray(BaseArray):
-    _ui_name = "Array of complex numbers"
-    dtype = numpy.complex128
-    stored_metadata = [key for key in MappedType.DEFAULT_STORED_ARRAY_METADATA if key != MappedType.METADATA_ARRAY_VAR]
+# class ComplexArray(BaseArray):
+#     _ui_name = "Array of complex numbers"
+#     dtype = numpy.complex128
+#     stored_metadata = [key for key in MappedType.DEFAULT_STORED_ARRAY_METADATA if key != MappedType.METADATA_ARRAY_VAR]
 
 
 class BoolArray(BaseArray):

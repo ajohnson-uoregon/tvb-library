@@ -47,21 +47,12 @@ class TestArrays(BaseTestCase):
         array_dt.data = data
         assert array_dt.shape == (10, 10)
 
-    def test_complex_array(self):
-        """
-        Create a complex array, check that shape is correct.
-        """
-        data = numpy.array([numpy.complex(100, 2) for _ in range(100)])
-        array_dt = arrays.ComplexArray()
-        array_dt.data = data
-        assert array_dt.shape == (100,)
-
     def test_bool_array(self):
         """
         Create a boolean array, check that shape is correct.
         """
         data = numpy.array([[False for _ in range(12)] for _ in range(10)])
-        array_dt = arrays.ComplexArray()
+        array_dt = arrays.BoolArray()
         array_dt.data = data
         assert array_dt.shape == (10, 12)
 

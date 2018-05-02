@@ -42,13 +42,15 @@ from tvb.basic.traits import core
 from tvb.basic.logger.builder import get_logger
 from tvb.datatypes import arrays, time_series, connectivity
 
+import numpy
+
 LOG = get_logger(__name__)
 
 
 class Covariance(arrays.MappedArray):
     """Covariance datatype."""
 
-    array_data = arrays.ComplexArray(file_storage=core.FILE_STORAGE_EXPAND)
+    array_data = numpy.array([], dtype=numpy.complex128)
 
     source = time_series.TimeSeries(
         label="Source time-series",

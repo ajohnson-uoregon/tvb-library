@@ -48,7 +48,7 @@ class TestParametersFactory(BaseTestCase):
             'IndexArray',
             'BoolArray', 'OrientationArray',
             'FloatArray',
-            'ComplexArray', 'Array']
+            'Array']
         subclasses = get_traited_subclasses(Array)
         for key in expected:
             assert key in subclasses

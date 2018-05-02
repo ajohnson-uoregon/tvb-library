@@ -50,7 +50,7 @@ class FourierSpectrum(arrays.MappedArray):
     Result of a Fourier  Analysis.
     """
     # Overwrite attribute from superclass
-    array_data = arrays.ComplexArray(file_storage=core.FILE_STORAGE_EXPAND)
+    array_data = numpy.array([], dtype=numpy.complex128)
 
     source = time_series.TimeSeries(
         label="Source time-series",
@@ -230,7 +230,7 @@ class WaveletCoefficients(arrays.MappedArray):
     arrays (FloatArray)
     """
     # Overwrite attribute from superclass
-    array_data = arrays.ComplexArray()
+    array_data = numpy.array([], dtype=numpy.complex128)
 
     source = time_series.TimeSeries(label="Source time-series")
 
@@ -383,19 +383,6 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
     Result of a NodeComplexCoherence Analysis.
     """
 
-    cross_spectrum = arrays.ComplexArray(
-        label="The cross spectrum",
-        file_storage=core.FILE_STORAGE_EXPAND,
-        doc=""" A complex ndarray that contains the nodes x nodes cross
-                spectrum for every frequency frequency and for every segment.""")
-
-    array_data = arrays.ComplexArray(
-        label="Complex Coherence",
-        file_storage=core.FILE_STORAGE_EXPAND,
-        doc="""The complex coherence coefficients calculated from the cross
-                spectrum. The imaginary values of this complex ndarray represent the
-                imaginary coherence.""")
-
     source = time_series.TimeSeries(
         label="Source time-series",
         doc="""Links to the time-series on which the node_coherence is
@@ -411,13 +398,25 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
     _max_freq = None
     spectrum_types = ["Imaginary", "Real", "Absolute"]
 
-    def __init__(self, epoch_length=0.0, segment_length = 0.0):
+    def __init__(self, epoch_length=0.0, segment_length = 0.0, cross_spectrum=None,
+                 array_data=None):
         self.epoch_length = epoch_length
         #The timeseries was segmented into equally sized blocks
         #(overlapping if necessary), prior to the application of the FFT.
         #The segement length determines the frequency resolution of the
         #resulting spectra.
         self.segment_length = segment_length
+        # A complex ndarray that contains the nodes x nodes cross
+        # spectrum for every frequency frequency and for every segment.
+        if cross_spectrum is None:
+            cross_spectrum = numpy.array([], dtype=numpy.complex128)
+        self.cross_spectrum = cross_spectrum
+        # The complex coherence coefficients calculated from the cross
+        # spectrum. The imaginary values of this complex ndarray represent the
+        # imaginary coherence.
+        if array_data is None:
+            array_data = numpy.array([], dtype=numpy.complex128)
+        self.array_data = array_data
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
