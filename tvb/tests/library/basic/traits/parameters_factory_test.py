@@ -46,7 +46,7 @@ class TestParametersFactory(BaseTestCase):
         expected = [
             'StringArray', 'PositionArray',
             'IndexArray',
-            'BoolArray', 'OrientationArray',
+            'OrientationArray',
             'FloatArray',
             'Array']
         subclasses = get_traited_subclasses(Array)

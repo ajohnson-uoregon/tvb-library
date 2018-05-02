@@ -182,11 +182,8 @@ class Surface(MappedType):
 
     ##--------------------- FRAMEWORK ATTRIBUTES -----------------------------##
 
-    hemisphere_mask = arrays.BoolArray(
-        label="An array specifying if a vertex belongs to the right hemisphere",
-        file_storage=FILE_STORAGE_NONE,
-        required=False,
-        order=-1)
+    # An array specifying if a vertex belongs to the right hemisphere
+    hemisphere_mask = numpy.array([], dtype=numpy.bool)
 
     zero_based_triangles = False
 

@@ -77,8 +77,8 @@ class Sensors(MappedType):
     # introduced to accommodate real sensors sets which have sensors
     # that should be zero during simulation i.e. ECG (heart), EOG,
     # reference gradiometers, etc.
-    usable = arrays.BoolArray(required=False, label="Usable sensors",
-                              doc="The sensors in set which are used for signal data.")
+    # The sensors in set which are used for signal data.
+    usable = numpy.array([], dtype=numpy.bool)
 
     @classmethod
     def from_file(cls, source_file="eeg_brainstorm_65.txt", instance=None):

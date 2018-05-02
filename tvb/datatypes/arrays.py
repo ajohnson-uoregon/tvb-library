@@ -62,25 +62,6 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-# class ComplexArray(BaseArray):
-#     _ui_name = "Array of complex numbers"
-#     dtype = numpy.complex128
-#     stored_metadata = [key for key in MappedType.DEFAULT_STORED_ARRAY_METADATA if key != MappedType.METADATA_ARRAY_VAR]
-
-
-class BoolArray(BaseArray):
-    _ui_name = "Boolean array"
-    dtype = numpy.bool
-    stored_metadata = [MappedType.METADATA_ARRAY_SHAPE]
-
-    def _find_summary_info(self):
-        summary = {"Array type": self.__class__.__name__,
-                   "Shape": self.shape,
-                   'Number True': self.value.sum(),
-                   'Percent True': self.value.mean() * 100, }
-        return summary
-
-
 class StringArray(BaseArray):
     _ui_name = "Array of strings"
     # if you want variable length strings, you must use dtype=object

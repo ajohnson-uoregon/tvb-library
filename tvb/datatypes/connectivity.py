@@ -78,15 +78,11 @@ class Connectivity(MappedType):
         label="Region centres",
         doc="An array specifying the location of the centre of each region.")
 
-    cortical = arrays.BoolArray(
-        label="Cortical",
-        required=False,
-        doc="""A boolean vector specifying whether or not a region is part of the cortex.""")
+    # A boolean vector specifying whether or not a region is part of the cortex.
+    cortical = numpy.array([], dtype=numpy.bool)
 
-    hemispheres = arrays.BoolArray(
-        label="Hemispheres (True for Right and False for Left Hemisphere",
-        required=False,
-        doc="""A boolean vector specifying whether or not a region is part of the right hemisphere""")
+    # A boolean vector specifying whether or not a region is part of the right hemisphere
+    hemispheres = numpy.array([], dtype=numpy.bool)
 
     orientations = arrays.OrientationArray(
         label="Average region orientation",

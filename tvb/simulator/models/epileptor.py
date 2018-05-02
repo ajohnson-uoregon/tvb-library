@@ -275,12 +275,9 @@ class Epileptor(ModelNumbaDfun):
         doc="Time scaling of the whole system",
         order=9)
 
-    modification = arrays.BoolArray(
-        label="modification",
-        default=numpy.array([0]),
-        doc="When modification is True, then use nonlinear influence on z. \
-        The default value is False, i.e., linear influence.",
-        order=10)
+    # When modification is True, then use nonlinear influence on z. \
+    # The default value is False, i.e., linear influence.
+    modification = False
 
     # Typical bounds on state variables in the Epileptor model.
     state_variable_range = {"x1": numpy.array([-2., 1.]),
@@ -513,12 +510,9 @@ class Epileptor2D(ModelNumbaDfun):
         doc="Time scaling of the whole system to the system in real time.",
         order=11)
 
-    modification = arrays.BoolArray(
-        label="modification",
-        default=numpy.array([0]),
-        doc="When modification is True, then use nonlinear influence on z. \
-        The default value is False, i.e., linear influence.",
-        order=12)
+    # When modification is True, then use nonlinear influence on z. \
+    # The default value is False, i.e., linear influence.
+    modification = False
 
     # Typical bounds on state-variables in the Epileptor 2D model
     state_variable_range = {"x1": numpy.array([-2., 1.]),

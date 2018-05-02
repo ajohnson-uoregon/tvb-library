@@ -151,12 +151,9 @@ class EpileptorCodim3(ModelNumbaDfun):
     # The branch of the resting state, default is 1
     N = 1
 
-    modification = arrays.BoolArray(
-        label="modification",
-        default=numpy.array([1]),
-        doc="When modification is True, then use the modification to stabilise the system for negative values of "
-            "dstar. If modification is False, then don't use the modification. The default value is True ",
-        order=13)
+    # When modification is True, then use the modification to stabilise the system for negative values of
+    # dstar. If modification is False, then don't use the modification. The default value is True
+    modification = True
 
     state_variable_range = {"x": numpy.array([0.4, 0.6]),
                             "y": numpy.array([-0.1, 0.1]),
@@ -506,13 +503,9 @@ class EpileptorCodim3SlowMod(ModelNumbaDfun):
     # The branch of the resting state, default is 1
     N = 1
 
-    modification = arrays.BoolArray(
-        label="modification",
-        default=numpy.array([1]),
-        doc="When modification is True, then use the modification to stabilise the system for negative values of "
-            "dstar. If modification is False, then don't use the modification. The default value is True ",
-        order=21
-    )
+    # When modification is True, then use the modification to stabilise the system for negative values of
+    # dstar. If modification is False, then don't use the modification. The default value is True
+    modification = True
 
     state_variable_range = {"x": numpy.array([0.4, 0.6]),
                             "y": numpy.array([-0.1, 0.1]),
