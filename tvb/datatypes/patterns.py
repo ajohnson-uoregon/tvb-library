@@ -39,7 +39,7 @@ methods that are associated with the pattern datatypes.
 
 
 import numpy
-from tvb.basic.traits import types_basic as basic, types_mapped
+from tvb.basic.traits import types_mapped
 from tvb.datatypes import arrays, surfaces, volumes, connectivity, equations
 from tvb.basic.logger.builder import get_logger
 
@@ -228,7 +228,7 @@ class StimuliSurface(SpatioTemporalPattern):
 
     focal_points_surface = []
 
-    focal_points_triangles = [] 
+    focal_points_triangles = []
 
     def configure_space(self, region_mapping=None):
         """

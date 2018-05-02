@@ -68,7 +68,6 @@ from tvb.datatypes.projections import (ProjectionMatrix,
     ProjectionSurfaceEEG, ProjectionSurfaceMEG, ProjectionSurfaceSEEG)
 import tvb.datatypes.equations as equations
 import tvb.basic.traits.util as util
-import tvb.basic.traits.types_basic as basic
 import tvb.basic.traits.core as core
 from tvb.simulator.common import iround, numpy_add_at
 from enum import Enum, unique

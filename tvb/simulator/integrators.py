@@ -48,7 +48,7 @@ will be consistent with Monitor periods corresponding to any of [4096, 2048, 102
 import functools
 import numpy
 import scipy.integrate
-from tvb.basic.traits import core, types_basic as basic
+from tvb.basic.traits import core
 from tvb.datatypes import arrays
 from . import noise
 from .common import get_logger, simple_gen_astr

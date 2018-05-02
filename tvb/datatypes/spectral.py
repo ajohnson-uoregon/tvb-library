@@ -39,7 +39,7 @@ methods that are associated with the Spectral datatypes.
 import json
 import numpy
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits import util, core, types_basic as basic
+from tvb.basic.traits import util, core
 from tvb.datatypes import arrays, time_series
 
 LOG = get_logger(__name__)

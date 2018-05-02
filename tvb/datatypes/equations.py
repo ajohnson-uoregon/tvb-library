@@ -39,7 +39,7 @@ methods that are associated with the Equation datatypes.
 import json
 import numpy
 import numexpr
-from tvb.basic.traits import core, parameters_factory, types_basic as basic
+from tvb.basic.traits import core, parameters_factory
 from tvb.basic.logger.builder import get_logger
 
 

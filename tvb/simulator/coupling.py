@@ -84,7 +84,6 @@ following:
 import numpy
 
 import tvb.basic.traits.core as core
-import tvb.basic.traits.types_basic as basic
 import tvb.datatypes.arrays as arrays
 
 from tvb.simulator.common import get_logger

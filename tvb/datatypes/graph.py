@@ -38,7 +38,7 @@ that are associated with the Graph datatypes.
 
 """
 
-from tvb.basic.traits import core, types_basic as basic
+from tvb.basic.traits import core
 from tvb.basic.logger.builder import get_logger
 from tvb.datatypes import arrays, time_series, connectivity
 
@@ -91,7 +91,7 @@ class CorrelationCoefficients(arrays.MappedArray):
         doc="Links to the time-series on which Correlation (coefficients) is applied.")
 
     # list of strings representing names of each data dimension
-    labels_ordering = ["Node", "Node", "State Variable", "Mode"] 
+    labels_ordering = ["Node", "Node", "State Variable", "Mode"]
 
     __generate_table__ = True
 

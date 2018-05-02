@@ -43,7 +43,7 @@ RandomState.
 
 import numpy
 from tvb.datatypes import arrays, equations
-from tvb.basic.traits import types_basic as basic, core
+from tvb.basic.traits import core
 from .common import get_logger, simple_gen_astr
 
 

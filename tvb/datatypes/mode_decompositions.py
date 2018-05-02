@@ -40,7 +40,6 @@ framework methods that are associated with the Mode Decomposition datatypes.
 import numpy
 from tvb.basic.logger.builder import get_logger
 import tvb.basic.traits.core as core
-import tvb.basic.traits.types_basic as basic
 import tvb.datatypes.arrays as arrays
 import tvb.datatypes.time_series as time_series
 from tvb.basic.traits.types_mapped import MappedType

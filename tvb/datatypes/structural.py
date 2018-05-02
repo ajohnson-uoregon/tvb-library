@@ -36,7 +36,6 @@ methods that are associated with the volume datatypes.
 
 import numpy
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits import types_basic as basic
 from tvb.datatypes import volumes, arrays
 from tvb.basic.arguments_serialisation import preprocess_space_parameters
 

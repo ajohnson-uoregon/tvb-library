@@ -31,7 +31,7 @@ Jansen-Rit and derivative models.
 
 """
 
-from .base import ModelNumbaDfun, Model, numpy, basic, arrays
+from .base import ModelNumbaDfun, Model, numpy, arrays
 import math
 from numba import guvectorize, float64
 from enum import Enum, unique

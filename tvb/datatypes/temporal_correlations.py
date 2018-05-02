@@ -38,7 +38,6 @@ framework methods that are associated with the Temporal Correlation datatypes.
 """
 
 import tvb.basic.traits.core as core
-import tvb.basic.traits.types_basic as basic
 import tvb.datatypes.arrays as arrays
 import tvb.datatypes.time_series as time_series
 from tvb.basic.logger.builder import get_logger
@@ -60,7 +59,7 @@ class CrossCorrelation(MappedType):
     time = arrays.FloatArray(label="Temporal Offsets")
 
     # list of strings representing names of each data dimension
-    labels_ordering = ["Offsets", "Node", "Node", "State Variable", "Mode"] 
+    labels_ordering = ["Offsets", "Node", "Node", "State Variable", "Mode"]
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

@@ -37,7 +37,6 @@ from scipy.stats import norm as scipy_stats_norm
 from tvb.simulator.common import get_logger
 import tvb.datatypes.arrays as arrays
 import tvb.basic.traits.core as core
-import tvb.basic.traits.types_basic as basic
 import tvb.simulator.noise as noise_module
 
 

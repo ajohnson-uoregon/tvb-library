@@ -45,7 +45,6 @@ import numpy
 import scipy.sparse
 from tvb.basic.profile import TvbProfile
 import tvb.basic.traits.core as core
-import tvb.basic.traits.types_basic as basic
 from tvb.basic.filters.chain import UIFilter, FilterChain
 
 from tvb.datatypes import cortex, connectivity, arrays, patterns

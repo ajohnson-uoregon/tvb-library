@@ -43,7 +43,6 @@ methods that are associated with the surfaces data.
 import warnings
 import json
 import numpy
-import tvb.basic.traits.types_basic as basic
 import tvb.datatypes.arrays as arrays
 from tvb.basic.traits import util, exceptions
 from tvb.basic.logger.builder import get_logger

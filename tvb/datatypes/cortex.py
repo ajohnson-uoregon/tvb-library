@@ -34,7 +34,7 @@ import numpy
 import scipy.sparse
 from tvb.basic.traits import util
 from tvb.basic.readers import try_get_absolute_path, FileReader
-from tvb.basic.traits import core, types_basic as basic
+from tvb.basic.traits import core
 from tvb.basic.logger.builder import get_logger
 from . import arrays, local_connectivity, region_mapping, surfaces
 

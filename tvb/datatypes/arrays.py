@@ -38,7 +38,7 @@ methods that are associated with the Array datatypes.
 """
 
 import numpy
-from tvb.basic.traits import core, types_basic as basic
+from tvb.basic.traits import core
 from tvb.basic.traits.types_mapped import MappedType, Array
 from tvb.basic.traits.exceptions import ValidationException
 

@@ -39,7 +39,6 @@ import tvb.datatypes.equations as equations
 import tvb.datatypes.arrays as arrays
 import tvb.datatypes.time_series as time_series
 from tvb.basic.traits.types_mapped import MappedType
-from tvb.basic.traits import types_basic as basic
 from tvb.simulator.models import WilsonCowan, ReducedSetHindmarshRose
 
 
