@@ -44,7 +44,7 @@ class TestParametersFactory(BaseTestCase):
         """
         # We imported array so we should have all these traited classes registered
         expected = [
-            'StringArray', 'PositionArray',
+            'PositionArray',
             'IndexArray',
             'OrientationArray',
             'FloatArray',
@@ -57,5 +57,5 @@ class TestParametersFactory(BaseTestCase):
         """
         Try to create an instance of a class using the traited method.
         """
-        inst = get_traited_instance_for_name("StringArray", Array, {})
-        assert isinstance(inst, arrays.StringArray)
+        inst = get_traited_instance_for_name("FloatArray", Array, {})
+        assert isinstance(inst, arrays.FloatArray)

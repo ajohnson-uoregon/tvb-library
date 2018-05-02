@@ -47,15 +47,6 @@ class TestArrays(BaseTestCase):
         array_dt.data = data
         assert array_dt.shape == (10, 10)
 
-    def test_string_array(self):
-        """
-        Create a string array, check that shape is correct.
-        """
-        data = numpy.array([['test' for _ in range(12)] for _ in range(10)])
-        array_dt = arrays.StringArray()
-        array_dt.data = data
-        assert array_dt.shape == (10, 12)
-
     def test_position_array(self):
         """
         Create a position array, check that shape is correct.

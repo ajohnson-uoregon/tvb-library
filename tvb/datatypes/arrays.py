@@ -62,20 +62,6 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-class StringArray(BaseArray):
-    _ui_name = "Array of strings"
-    # if you want variable length strings, you must use dtype=object
-    # otherwise, must specify max lenth as 'na' where n is integer,
-    # e.g. dtype='100a' for a string w/ max len 100 characters.
-    dtype = None
-    stored_metadata = [MappedType.METADATA_ARRAY_SHAPE]
-
-    def _find_summary_info(self):
-        summary = {"Array type": self.__class__.__name__,
-                   "Shape": self.shape}
-        return summary
-
-
 class PositionArray(FloatArray):
     _ui_name = "Array of positions"
 

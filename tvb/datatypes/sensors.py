@@ -64,7 +64,7 @@ class Sensors(MappedType):
 
     __mapper_args__ = {'polymorphic_on': 'sensors_type'}
 
-    labels = arrays.StringArray(label="Sensor labels")
+    labels = []
 
     locations = arrays.PositionArray(label="Sensor locations")
 
