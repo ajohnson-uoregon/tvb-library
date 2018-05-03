@@ -62,13 +62,6 @@ class FloatArray(BaseArray):
     dtype = numpy.float64
 
 
-class IndexArray(BaseArray):
-    _ui_name = "Index array"
-    target = Array(label="Indexed array",
-                   file_storage=core.FILE_STORAGE_NONE,
-                   doc="A link to the array that the indices index.")
-
-
 class MappedArray(MappedType):
     "An array stored in the database."
     KEY_SIZE = "size"

@@ -90,10 +90,8 @@ class Connectivity(MappedType):
         doc="""Estimated area represented by the regions in the connectivity matrix.
         NOTE: Unknown data should be zeros.""")
 
-    idelays = arrays.IndexArray(
-        label="Conduction delay indices",
-        required=False, file_storage=core.FILE_STORAGE_NONE,
-        doc="An array of time delays between regions in integration steps.")
+    # An array of time delays between regions in integration steps.
+    idelays = numpy.array([])
 
     delays = arrays.FloatArray(
         label="Conduction delay",
@@ -449,7 +447,6 @@ class Connectivity(MappedType):
         """
         # Express delays in integration steps
         self.idelays = numpy.rint(self.delays / dt).astype(numpy.int32)
-        self.trait["idelays"].log_debug(owner=self.__class__.__name__)
 
     def compute_tract_lengths(self):
         """

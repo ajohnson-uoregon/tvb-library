@@ -254,4 +254,5 @@ class SpatialPatternVolume(SpatialPattern):
 
     volume = volumes.Volume(label="Volume")
 
-    focal_points_volume = arrays.IndexArray(label="Focal points", target=volume)
+    # indexes into volume
+    focal_points_volume = numpy.array([])

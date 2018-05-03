@@ -46,15 +46,3 @@ class TestArrays(BaseTestCase):
         array_dt = arrays.FloatArray()
         array_dt.data = data
         assert array_dt.shape == (10, 10)
-
-    def test_index_array(self):
-        """
-        Create an index array, check that shape is correct.
-        """
-        target_data = numpy.random.random((10, 3))
-        target_array = arrays.FloatArray()
-        target_array.data = target_data
-        array_dt = arrays.IndexArray(target=target_array)
-        array_dt.data = numpy.arange(30).reshape((10, 3))
-        assert array_dt.shape == (10, 3)
-        assert array_dt.target.shape == (10, 3)

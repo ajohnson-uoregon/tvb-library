@@ -145,11 +145,8 @@ class Surface(MappedType):
     # An array specifying coordinates for the surface vertices.
     vertices = numpy.array([], dtype=numpy.float64)
 
-    triangles = arrays.IndexArray(
-        label="Triangles",
-        order=-1,
-        target=vertices,
-        doc="""Array of indices into the vertices, specifying the triangles which define the surface.""")
+    # Array of indices into the vertices, specifying the triangles which define the surface.
+    triangles = numpy.array([])
 
     # An array of unit normal vectors for the surfaces vertices.
     vertex_normals = numpy.array([], dtype=numpy.float64)
@@ -181,7 +178,7 @@ class Surface(MappedType):
 
     zero_based_triangles = False
 
-    split_triangles = arrays.IndexArray(order=-1, required=False)
+    split_triangles = numpy.array([])
 
     number_of_split_slices = 0
 
