@@ -86,7 +86,7 @@ class CorrelationCoefficients(arrays.MappedArray):
     PEARSON_MIN = -1
     PEARSON_MAX = 1
 
-    array_data = arrays.FloatArray(file_storage=core.FILE_STORAGE_DEFAULT)
+    array_data = numpy.array([])
 
     source = time_series.TimeSeries(
         label="Source time-series",

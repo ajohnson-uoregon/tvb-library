@@ -156,18 +156,13 @@ class Simulator(core.Type):
             methods. It is used to compute the time courses of the model state
             variables.""")
 
-    initial_conditions = arrays.FloatArray(
-        label="Initial Conditions",
-        default=None,
-        order=-1,
-        required=False,
-        doc="""Initial conditions from which the simulation will begin. By
-        default, random initial conditions are provided. Needs to be the same shape
-        as simulator 'history', ie, initial history function which defines the
-        minimal initial state of the network with time delays before time t=0.
-        If the number of time points in the provided array is insufficient the
-        array will be padded with random values based on the 'state_variables_range'
-        attribute.""")
+    """Initial conditions from which the simulation will begin. By
+    default, random initial conditions are provided. Needs to be the same shape
+    as simulator 'history', ie, initial history function which defines the
+    minimal initial state of the network with time delays before time t=0.
+    If the number of time points in the provided array is insufficient the
+    array will be padded with random values based on the 'state_variables_range'
+    attribute."""
 
     monitors = monitors.Monitor(
         label="Monitor(s)",
@@ -185,12 +180,18 @@ class Simulator(core.Type):
 
     history = None # type: SparseHistory
 
-    def __init__(self, conduction_speed=3.0, simulation_length=1000.0):
+    def __init__(self, conduction_speed=3.0, simulation_length=1000.0,
+                 initial_conditions=None, *args, **kwargs):
         self.conduction_speed = conduction_speed
         # Conduction speed for ``Long-range connectivity`` (mm/ms)
         # numpy.arange(0.01,100.0,1.0)
         self.simulation_length = simulation_length
         # The length of a simulation (default in milliseconds)
+
+        self.initial_conditions = initial_conditions
+
+        super(Simulator, self).__init__(*args, **kwargs)
+
 
     @property
     def good_history_shape(self):

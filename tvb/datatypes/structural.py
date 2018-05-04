@@ -93,7 +93,7 @@ class StructuralMRI(VolumetricDataMixin, arrays.MappedArray):
     # without the field below weighting and volume columns are going to be added to the MAPPED_ARRAY table
     __generate_table__ = True
 
-    array_data = arrays.FloatArray(label="contrast")
+    array_data = numpy.array([], dtype=numpy.float64)
 
     weighting = ""  # eg, "T1", "T2", "T2*", "PD", ...
 

@@ -80,119 +80,35 @@ class JansenRit(ModelNumbaDfun):
                                   'mu']
 
     # Define traited attributes for this model, these represent possible kwargs.
-    A = arrays.FloatArray(
-        label="A",
-        default=numpy.array([3.25]),
-        range=numpy.arange(2.6,9.75,0.05),
-        doc="""Maximum amplitude of EPSP [mV]. Also called average synaptic gain.""",
-        order=1)
+    A = numpy.array([3.25])
 
-    B = arrays.FloatArray(
-        label="B",
-        default=numpy.array([22.0]),
-        range=numpy.arange(17.6,110.0,0.2),
-        doc="""Maximum amplitude of IPSP [mV]. Also called average synaptic gain.""",
-        order=2)
+    B = numpy.array([22.0])
 
-    a = arrays.FloatArray(
-        label=":math:`a`",
-        default=numpy.array([0.1]),
-        range=numpy.arange(0.05,0.15,0.01),
-        doc="""Reciprocal of the time constant of passive membrane and all
-        other spatially distributed delays in the dendritic network [ms^-1].
-        Also called average synaptic time constant.""",
-        order=3)
+    a = numpy.array([0.1])
 
-    b = arrays.FloatArray(
-        label=":math:`b`",
-        default=numpy.array([0.05]),
-        range=numpy.arange(0.025,0.075,0.005),
-        doc="""Reciprocal of the time constant of passive membrane and all
-        other spatially distributed delays in the dendritic network [ms^-1].
-        Also called average synaptic time constant.""",
-        order=4)
+    b = numpy.array([0.05])
 
-    v0 = arrays.FloatArray(
-        label=":math:`v_0`",
-        default=numpy.array([5.52]),
-        range=numpy.arange(3.12,6.0,0.02),
-        doc="""Firing threshold (PSP) for which a 50% firing rate is achieved.
-        In other words, it is the value of the average membrane potential
-        corresponding to the inflection point of the sigmoid [mV].
+    v0 = numpy.array([5.52])
 
-	    The usual value for this parameter is 6.0.""",
-        order=5)
+    nu_max = numpy.array([0.0025])
 
-    nu_max = arrays.FloatArray(
-        label=r":math:`\nu_{max}`",
-        default=numpy.array([0.0025]),
-        range=numpy.arange(0.00125,0.00375,0.00001),
-        doc="""Determines the maximum firing rate of the neural population
-        [s^-1].""",
-        order=6)
+    r = numpy.array([0.56])
 
-    r = arrays.FloatArray(
-        label=":math:`r`",
-        default=numpy.array([0.56]),
-        range=numpy.arange(0.28,0.84,0.01),
-        doc="""Steepness of the sigmoidal transformation [mV^-1].""",
-        order=7)
+    J = numpy.array([135.0])
 
-    J = arrays.FloatArray(
-        label=":math:`J`",
-        default=numpy.array([135.0]),
-        range=numpy.arange(65.0,1350.0,1.),
-        doc="""Average number of synapses between populations.""",
-        order=8)
+    a_1 = numpy.array([1.0])
 
-    a_1 = arrays.FloatArray(
-        label=r":math:`\alpha_1`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.5,1.5,0.1),
-        doc="""Average probability of synaptic contacts in the feedback excitatory loop.""",
-        order=9)
+    a_2 = numpy.array([0.8])
 
-    a_2 = arrays.FloatArray(
-        label=r":math:`\alpha_2`",
-        default=numpy.array([0.8]),
-        range=numpy.arange(0.4,1.2,0.1),
-        doc="""Average probability of synaptic contacts in the slow feedback excitatory loop.""",
-        order=10)
+    a_3 = numpy.array([0.25])
 
-    a_3 = arrays.FloatArray(
-        label=r":math:`\alpha_3`",
-        default=numpy.array([0.25]),
-        range=numpy.arange(0.125,0.375,0.005),
-        doc="""Average probability of synaptic contacts in the feedback inhibitory loop.""",
-        order=11)
+    a_4 = numpy.array([0.25])
 
-    a_4 = arrays.FloatArray(
-        label=r":math:`\alpha_4`",
-        default=numpy.array([0.25]),
-        range=numpy.arange(0.125,0.375,0.005),
-        doc="""Average probability of synaptic contacts in the slow feedback inhibitory loop.""",
-        order=12)
+    p_min = numpy.array([0.12])
 
-    p_min = arrays.FloatArray(
-        label=":math:`p_{min}`",
-        default=numpy.array([0.12]),
-        range=numpy.arange(0.0,0.12,0.01),
-        doc="""Minimum input firing rate.""",
-        order=13)
+    p_max = numpy.array([0.32])
 
-    p_max = arrays.FloatArray(
-        label=":math:`p_{max}`",
-        default=numpy.array([0.32]),
-        range=numpy.arange(0.0,0.32,0.01),
-        doc="""Maximum input firing rate.""",
-        order=14)
-
-    mu = arrays.FloatArray(
-        label=r":math:`\mu_{max}`",
-        default=numpy.array([0.22]),
-        range=numpy.arange(0.0,0.22,0.01),
-        doc="""Mean input firing rate""",
-        order=15)
+    mu = numpy.array([0.22])
 
     #Used for phase-plane axis ranges and to bound random initial() conditions.
     state_variable_range = {"y0": numpy.array([-1.0, 1.0]),
@@ -351,143 +267,44 @@ class ZetterbergJansen(Model):
                                   'gamma_2', 'gamma_3', 'gamma_4', 'gamma_5', 'P', 'U', 'Q']
 
     #Define traited attributes for this model, these represent possible kwargs.
-    He = arrays.FloatArray(
-        label=":math:`H_e`",
-        default=numpy.array([3.25]),
-        range=numpy.arange(2.6,9.75,0.05),
-        doc="""Maximum amplitude of EPSP [mV]. Also called average synaptic gain.""",
-        order=1)
+    He = numpy.array([3.25])
 
-    Hi = arrays.FloatArray(
-        label=":math:`H_i`",
-        default=numpy.array([22.0]),
-        range=numpy.arange(17.6,110.0,0.2),
-        doc="""Maximum amplitude of IPSP [mV]. Also called average synaptic gain.""",
-        order=2)
+    Hi = numpy.array([22.0])
 
-    ke = arrays.FloatArray(
-        label=r":math:`\kappa_e`",
-        default=numpy.array([0.1]),
-        range=numpy.arange(0.05,0.15,0.01),
-        doc="""Reciprocal of the time constant of passive membrane and all
-        other spatially distributed delays in the dendritic network [ms^-1].
-        Also called average synaptic time constant.""",
-        order=3)
+    ke = numpy.array([0.1])
 
-    ki = arrays.FloatArray(
-        label=r":math:`\kappa_i`",
-        default=numpy.array([0.05]),
-        range=numpy.arange(0.025,0.075,0.005),
-        doc="""Reciprocal of the time constant of passive membrane and all
-        other spatially distributed delays in the dendritic network [ms^-1].
-        Also called average synaptic time constant.""",
-        order=4)
+    ki = numpy.array([0.05])
 
 
-    e0 = arrays.FloatArray(
-        label=r":math:`e_0`",
-        default=numpy.array([0.0025]),
-        range=numpy.arange(0.00125,0.00375,0.00001),
-        doc="""Half of the maximum population mean firing rate [ms^-1].""",
-        order=6)
+    e0 = numpy.array([0.0025])
 
 
-    rho_2 = arrays.FloatArray(
-        label=r":math:`\rho_2`",
-        default=numpy.array([6.0]),
-        range=numpy.arange(3.12,10.0,0.02),
-        doc="""Firing threshold (PSP) for which a 50% firing rate is achieved.
-        In other words, it is the value of the average membrane potential
-        corresponding to the inflection point of the sigmoid [mV]. Population mean firing threshold.""",
-        order=5)
+    rho_2 = numpy.array([6.0])
 
-    rho_1 = arrays.FloatArray(
-        label=r":math:`\rho_1`",
-        default=numpy.array([0.56]),
-        range=numpy.arange(0.28,0.84,0.01),
-        doc="""Steepness of the sigmoidal transformation [mV^-1].""",
-        order=7)
+    rho_1 = numpy.array([0.56])
 
-    gamma_1 = arrays.FloatArray(
-        label=r":math:`\gamma_1`",
-        default=numpy.array([135.0]),
-        range=numpy.arange(65.0,1350.0,5.),
-        doc="""Average number of synapses between populations (pyramidal to stellate).""",
-        order=8)
+    gamma_1 = numpy.array([135.0])
 
-    gamma_2 = arrays.FloatArray(
-        label=r":math:`\gamma_2`",
-        default=numpy.array([108.]),
-        range=numpy.arange(0.0,200,10.0),
-        doc="""Average number of synapses between populations (stellate to pyramidal).""",
-        order=9)
+    gamma_2 = numpy.array([108.])
 
-    gamma_3 = arrays.FloatArray(
-        label=r":math:`\gamma_3`",
-        default=numpy.array([33.75]),
-        range=numpy.arange(0.0,200,10.0),
-        doc="""Connectivity constant (pyramidal to interneurons)""",
-        order=10)
+    gamma_3 = numpy.array([33.75])
 
-    gamma_4 = arrays.FloatArray(
-        label=r":math:`\gamma_4`",
-        default=numpy.array([33.75]),
-        range=numpy.arange(0.0,200,10.0),
-        doc="""Connectivity constant (interneurons to pyramidal)""",
-        order=11)
+    gamma_4 = numpy.array([33.75])
 
 
-    gamma_5 = arrays.FloatArray(
-        label=r":math:`\gamma_5`",
-        default=numpy.array([15]),
-        range=numpy.arange(0.0,100,10.0),
-        doc="""Connectivity constant (interneurons to interneurons)""",
-        order=12)
+    gamma_5 = numpy.array([15])
 
-    gamma_1T = arrays.FloatArray(
-        label=r":math:`\gamma_{1T}`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.0,1000.0,5.),
-        doc="""Coupling factor from the extrinisic input to the spiny stellate population.""",
-        order=17)
+    gamma_1T = numpy.array([1.0])
 
-    gamma_2T = arrays.FloatArray(
-        label=r":math:`\gamma_{2T}`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.0,1000.0,5.),
-        doc="""Coupling factor from the extrinisic input to the pyramidal population.""",
-        order=18)
+    gamma_2T = numpy.array([1.0])
 
-    gamma_3T = arrays.FloatArray(
-        label=r":math:`\gamma_{3T}`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.0,1000.0,5.),
-        doc="""Coupling factor from the extrinisic input to the inhibitory population.""",
-        order=19)
+    gamma_3T = numpy.array([1.0])
 
-    P = arrays.FloatArray(
-        label=":math:`P`",
-        default=numpy.array([0.12]),
-        range=numpy.arange(0.0,0.350,0.01),
-        doc="""Maximum firing rate to the pyramidal population [ms^-1].
-        (External stimulus. Constant intensity.Entry point for coupling.)""",
-        order=13)
+    P = numpy.array([0.12])
 
-    U = arrays.FloatArray(
-        label=":math:`U`",
-        default=numpy.array([0.12]),
-        range=numpy.arange(0.0,0.350,0.01),
-        doc="""Maximum firing rate to the stellate population [ms^-1].
-        (External stimulus. Constant intensity.Entry point for coupling.)""",
-        order=14)
+    U = numpy.array([0.12])
 
-    Q = arrays.FloatArray(
-        label=":math:`Q`",
-        default=numpy.array([0.12]),
-        range=numpy.arange(0.0,0.350,0.01),
-        doc="""Maximum firing rate to the interneurons population [ms^-1].
-        (External stimulus. Constant intensity.Entry point for coupling.)""",
-        order=15)
+    Q = numpy.array([0.12])
 
     #Used for phase-plane axis ranges and to bound random initial() conditions.
     state_variable_range = {"v1": numpy.array([-100.0, 100.0]),

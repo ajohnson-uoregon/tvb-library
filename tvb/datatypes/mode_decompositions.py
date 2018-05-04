@@ -57,30 +57,31 @@ class PrincipalComponents(MappedType):
         label="Source time-series",
         doc="Links to the time-series on which the PCA is applied.")
 
-    weights = arrays.FloatArray(
-        label="Principal vectors",
-        doc="""The vectors of the 'weights' with which each time-series is
-            represented in each component.""",
-        file_storage=core.FILE_STORAGE_EXPAND)
 
-    fractions = arrays.FloatArray(
-        label="Fraction explained",
-        doc="""A vector or collection of vectors representing the fraction of
-            the variance explained by each principal component.""",
-        file_storage=core.FILE_STORAGE_EXPAND)
+    def __init__(self, weights=None, fractions=None, norm_source=None,
+                 component_time_series=None, normalised_component_time_series=None,
+                 *args, **kwargs):
+        if weights is None:
+            weights = numpy.array([])
+        self.weights = weights
 
-    norm_source = arrays.FloatArray(
-        label="Normalised source time series",
-        file_storage=core.FILE_STORAGE_EXPAND)
+        if fractions is None:
+            fractions = numpy.array([])
+        self.fractions = fractions
 
-    component_time_series = arrays.FloatArray(
-        label="Component time series",
-        file_storage=core.FILE_STORAGE_EXPAND)
+        if norm_source is None:
+            norm_source = numpy.array([])
+        self.norm_source = norm_source
 
-    normalised_component_time_series = arrays.FloatArray(
-        label="Normalised component time series",
-        file_storage=core.FILE_STORAGE_EXPAND)
+        if component_time_series is None:
+            component_time_series = numpy.array([])
+        self.component_time_series = component_time_series
 
+        if normalised_component_time_series is None:
+            normalised_component_time_series = numpy.array([])
+        self.normalised_component_time_series = normalised_component_time_series
+
+        super(PrincipalComponents, self).__init__(*args, **kwargs)
 
     def write_data_slice(self, partial_result):
         """
@@ -162,7 +163,6 @@ class PrincipalComponents(MappedType):
         """Normalised source time-series."""
         self.norm_source = ((self.source.data - self.source.data.mean(axis=0)) /
                             self.source.data.std(axis=0))
-        self.trait["norm_source"].log_debug(owner=self.__class__.__name__)
 
     # TODO: ??? Any value in making this a TimeSeries datatypes ???
     def compute_component_time_series(self):
@@ -177,7 +177,6 @@ class PrincipalComponents(MappedType):
                 component_ts[:, var, :, mode] = numpy.dot(w, ts.T).T
 
         self.component_time_series = component_ts
-        self.trait["component_time_series"].log_debug(owner=self.__class__.__name__)
 
     # TODO: ??? Any value in making this a TimeSeries datatypes ???
     def compute_normalised_component_time_series(self):
@@ -192,7 +191,6 @@ class PrincipalComponents(MappedType):
                 component_ts[:, var, :, mode] = numpy.dot(w, nts.T).T
 
         self.normalised_component_time_series = component_ts
-        self.trait["normalised_component_time_series"].log_debug(owner=self.__class__.__name__)
 
 
 class IndependentComponents(MappedType):
@@ -204,35 +202,39 @@ class IndependentComponents(MappedType):
         label="Source time-series",
         doc="Links to the time-series on which the ICA is applied.")
 
-    mixing_matrix = arrays.FloatArray(
-        label="Mixing matrix - Spatial Maps",
-        doc="""The linear mixing matrix (Mixing matrix) """)
-
-    unmixing_matrix = arrays.FloatArray(
-        label="Unmixing matrix - Spatial maps",
-        doc="""The estimated unmixing matrix used to obtain the unmixed
-            sources from the data""")
-
-    prewhitening_matrix = arrays.FloatArray(
-        label="Pre-whitening matrix",
-        doc=""" """)
-
-    norm_source = arrays.FloatArray(
-        label="Normalised source time series. Zero centered and whitened.",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    component_time_series = arrays.FloatArray(
-        label="Component time series. Unmixed sources.",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    normalised_component_time_series = arrays.FloatArray(
-        label="Normalised component time series",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    def __init__(self, n_components=0):
+    def __init__(self, n_components=0, mixing_matrix=None, unmixing_matrix=None,
+                 prewhitening_matrix=None, norm_source=None,
+                 component_time_series=None, normalised_component_time_series=None,
+                 *args, **kwargs):
         self.n_components = n_components # Number of independent components
         # Observed data matrix is considered to be a linear combination
         # of n non-Gaussian independent components
+
+        if mixing_matrix is None:
+            mixing_matrix = numpy.array([])
+        self.mixing_matrix = mixing_matrix
+
+        if unmixing_matrix is None:
+            unmixing_matrix = numpy.array([])
+        self.unmixing_matrix = unmixing_matrix
+
+        if prewhitening_matrix is None:
+            prewhitening_matrix = numpy.array([])
+        self.prewhitening_matrix = prewhitening_matrix
+
+        if norm_source is None:
+            norm_source = numpy.array([])
+        self.norm_source = norm_source
+
+        if component_time_series is None:
+            component_time_series = numpy.array([])
+        self.component_time_series = component_time_series
+
+        if normalised_component_time_series is None:
+            normalised_component_time_series = numpy.array([])
+        self.normalised_component_time_series = normalised_component_time_series
+
+        super(IndependentComponents, self).__init__(*args, **kwargs)
 
     def write_data_slice(self, partial_result):
         """

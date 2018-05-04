@@ -77,69 +77,23 @@ class ReducedWongWang(ModelNumbaDfun):
     ui_configurable_parameters = ['a', 'b', 'd', 'gamma', 'tau_s', 'w', 'J_N', 'I_o']
 
     #Define traited attributes for this model, these represent possible kwargs.
-    a = arrays.FloatArray(
-        label=":math:`a`",
-        default=numpy.array([0.270, ]),
-        range=numpy.arange(0.0,0.270,0.01),
-        doc="[n/C]. Input gain parameter, chosen to fit numerical solutions.",
-        order=1)
+    a = numpy.array([0.270, ])
 
-    b = arrays.FloatArray(
-        label=":math:`b`",
-        default=numpy.array([0.108, ]),
-        range=numpy.arange(0.0,1.0,0.01),
-        doc="[kHz]. Input shift parameter chosen to fit numerical solutions.",
-        order=2)
+    b = numpy.array([0.108, ])
 
-    d = arrays.FloatArray(
-        label=":math:`d`",
-        default=numpy.array([154., ]),
-        range=numpy.arange(0.0,200.0,0.01),
-        doc="""[ms]. Parameter chosen to fit numerical solutions.""",
-        order=3)
+    d = numpy.array([154., ])
 
-    gamma = arrays.FloatArray(
-        label=r":math:`\gamma`",
-        default=numpy.array([0.641, ]),
-        range=numpy.arange(0.0,1.0,0.01),
-        doc="""Kinetic parameter""",
-        order=4)
+    gamma = numpy.array([0.641, ])
 
-    tau_s = arrays.FloatArray(
-        label=r":math:`\tau_S`",
-        default=numpy.array([100., ]),
-        range=numpy.arange(50.0,150.0,1.0),
-        doc="""Kinetic parameter. NMDA decay time constant.""",
-        order=5)
+    tau_s = numpy.array([100., ])
 
-    w = arrays.FloatArray(
-        label=r":math:`w`",
-        default=numpy.array([0.6, ]),
-        range=numpy.arange(0.0,1.0,0.01),
-        doc="""Excitatory recurrence""",
-        order=6)
+    w = numpy.array([0.6, ])
 
-    J_N = arrays.FloatArray(
-        label=r":math:`J_{N}`",
-        default=numpy.array([0.2609, ]),
-        range=numpy.arange(0.2609,0.5,0.001),
-        doc="""Excitatory recurrence""",
-        order=7)
+    J_N = numpy.array([0.2609, ])
 
-    I_o = arrays.FloatArray(
-        label=":math:`I_{o}`",
-        default=numpy.array([0.33, ]),
-        range=numpy.arange(0.0,1.0,0.01),
-        doc="""[nA] Effective external input""",
-        order=8)
+    I_o = numpy.array([0.33, ])
 
-    sigma_noise = arrays.FloatArray(
-        label=r":math:`\sigma_{noise}`",
-        default=numpy.array([0.000000001, ]),
-        range=numpy.arange(0.0,0.005),
-        doc="""[nA] Noise amplitude. Take this value into account for stochatic
-        integration schemes.""",
-        order=-1)
+    sigma_noise = numpy.array([0.000000001, ])
 
     state_variable_range = {"S": numpy.array([0.0, 1.0])} # Population firing rate
 

@@ -57,11 +57,6 @@ class BaseArray(Array):
         return summary
 
 
-class FloatArray(BaseArray):
-    _ui_name = "Floating-point array"
-    dtype = numpy.float64
-
-
 class MappedArray(MappedType):
     "An array stored in the database."
     KEY_SIZE = "size"

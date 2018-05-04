@@ -109,61 +109,21 @@ class ReducedSetFitzHughNagumo(ReducedSetBase):
                                   'mu']
 
     # Define traited attributes for this model, these represent possible kwargs.
-    tau = arrays.FloatArray(
-        label=r":math:`\tau`",
-        default=numpy.array([3.0]),
-        range=numpy.arange(1.5,4.5,0.01),
-        doc="""doc...(prob something about timescale seperation)""",
-        order=1)
+    tau = numpy.array([3.0])
 
-    a = arrays.FloatArray(
-        label=":math:`a`",
-        default=numpy.array([0.45]),
-        range=numpy.arange(0,1,0.01),
-        doc="""doc...""",
-        order=2)
+    a = numpy.array([0.45])
 
-    b = arrays.FloatArray(
-        label=":math:`b`",
-        default=numpy.array([0.9]),
-        range=numpy.arange(0,1,0.01),
-        doc="""doc...""",
-        order=3)
+    b = numpy.array([0.9])
 
-    K11 = arrays.FloatArray(
-        label=":math:`K_{11}`",
-        default=numpy.array([0.5]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Internal coupling, excitatory to excitatory""",
-        order=4)
+    K11 = numpy.array([0.5])
 
-    K12 = arrays.FloatArray(
-        label=":math:`K_{12}`",
-        default=numpy.array([0.15]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Internal coupling, inhibitory to excitatory""",
-        order=5)
+    K12 = numpy.array([0.15])
 
-    K21 = arrays.FloatArray(
-        label=":math:`K_{21}`",
-        default=numpy.array([0.15]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Internal coupling, excitatory to inhibitory""",
-        order=6)
+    K21 = numpy.array([0.15])
 
-    sigma = arrays.FloatArray(
-        label=r":math:`\sigma`",
-        default=numpy.array([0.35]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Standard deviation of Gaussian distribution""",
-        order=7)
+    sigma = numpy.array([0.35])
 
-    mu = arrays.FloatArray(
-        label=r":math:`\mu`",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Mean of Gaussian distribution""",
-        order=8)
+    mu = numpy.array([0.0])
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
     state_variable_range = {"xi": numpy.array([-4.0, 4.0]),
@@ -399,89 +359,29 @@ class ReducedSetHindmarshRose(ReducedSetBase):
                                   'K12', 'K21', 'sigma', 'mu']
 
     # Define traited attributes for this model, these represent possible kwargs.
-    r = arrays.FloatArray(
-        label=":math:`r`",
-        default=numpy.array([0.006]),
-        range=numpy.arange(0,0.1,0.0005),
-        doc="""Adaptation parameter""",
-        order=1)
+    r = numpy.array([0.006])
 
-    a = arrays.FloatArray(
-        label=":math:`a`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
-        order=2)
+    a = numpy.array([1.0])
 
-    b = arrays.FloatArray(
-        label=":math:`b`",
-        default=numpy.array([3.0]),
-        range=numpy.arange(0,3,0.01),
-        doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
-        order=3)
+    b = numpy.array([3.0])
 
-    c = arrays.FloatArray(
-        label=":math:`c`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
-        order=4)
+    c = numpy.array([1.0])
 
-    d = arrays.FloatArray(
-        label=":math:`d`",
-        default=numpy.array([5.0]),
-        range=numpy.arange(2.5,7.5,0.01),
-        doc="""Dimensionless parameter as in the Hindmarsh-Rose model""",
-        order=5)
+    d = numpy.array([5.0])
 
-    s = arrays.FloatArray(
-        label=":math:`s`",
-        default=numpy.array([4.0]),
-        range=numpy.arange(2,6,0.01),
-        doc="""Adaptation paramters, governs feedback""",
-        order=6)
+    s = numpy.array([4.0])
 
-    xo = arrays.FloatArray(
-        label=":math:`x_{o}`",
-        default=numpy.array([-1.6]),
-        range=numpy.arange(-2.4,-0.8,0.01),
-        doc="""Leftmost equilibrium point of x""",
-        order=7)
+    xo = numpy.array([-1.6])
 
-    K11 = arrays.FloatArray(
-        label=":math:`K_{11}`",
-        default=numpy.array([0.5]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Internal coupling, excitatory to excitatory""",
-        order=8)
+    K11 = numpy.array([0.5])
 
-    K12 = arrays.FloatArray(
-        label=":math:`K_{12}`",
-        default=numpy.array([0.1]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Internal coupling, inhibitory to excitatory""",
-        order=9)
+    K12 = numpy.array([0.1])
 
-    K21 = arrays.FloatArray(
-        label=":math:`K_{21}`",
-        default=numpy.array([0.15]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Internal coupling, excitatory to inhibitory""",
-        order=10)
+    K21 = numpy.array([0.15])
 
-    sigma = arrays.FloatArray(
-        label=r":math:`\sigma`",
-        default=numpy.array([0.3]),
-        range=numpy.arange(0,1,0.01),
-        doc="""Standard deviation of Gaussian distribution""",
-        order=11)
+    sigma = numpy.array([0.3])
 
-    mu = arrays.FloatArray(
-        label=r":math:`\mu`",
-        default=numpy.array([3.3]),
-        range=numpy.arange(1.1,3.3,0.01),
-        doc="""Mean of Gaussian distribution""",
-        order=12)
+    mu = numpy.array([3.3])
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
     state_variable_range = {"xi": numpy.array([-4.0, 4.0]),

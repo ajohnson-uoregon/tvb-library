@@ -95,19 +95,9 @@ class Hopfield(Model):
     ui_configurable_parameters = ['taux', 'tauT', 'dynamic']
 
     # Define traited attributes for this model, these represent possible kwargs.
-    taux = arrays.FloatArray(
-        label=":math:`\\tau_{x}`",
-        default=numpy.array([1.]),
-        range=numpy.arange(0.01,100.,0.01),
-        doc="""The fast time-scale for potential calculus :math:`x`, state-variable of the model.""",
-        order=1)
+    taux = numpy.array([1.])
 
-    tauT = arrays.FloatArray(
-        label=":math:`\\tau_{\\theta}`",
-        default=numpy.array([5.]),
-        range=numpy.arange(0.01,100.,0.01),
-        doc="""The slow time-scale for threshold calculus :math:`\theta`, state-variable of the model.""",
-        order=2)
+    tauT = numpy.array([5.])
 
     # Boolean value for static/dynamic threshold theta for (0/1).
     dynamic = False

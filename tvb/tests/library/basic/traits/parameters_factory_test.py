@@ -44,15 +44,7 @@ class TestParametersFactory(BaseTestCase):
         """
         # We imported array so we should have all these traited classes registered
         expected = [
-            'FloatArray',
             'Array']
         subclasses = get_traited_subclasses(Array)
         for key in expected:
             assert key in subclasses
-
-    def test_get_traited_instance(self):
-        """
-        Try to create an instance of a class using the traited method.
-        """
-        inst = get_traited_instance_for_name("FloatArray", Array, {})
-        assert isinstance(inst, arrays.FloatArray)

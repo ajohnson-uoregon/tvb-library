@@ -50,7 +50,6 @@ class FourierSpectrum(arrays.MappedArray):
     Result of a Fourier  Analysis.
     """
     # Overwrite attribute from superclass
-    array_data = numpy.array([], dtype=numpy.complex128)
 
     source = time_series.TimeSeries(
         label="Source time-series",
@@ -59,38 +58,45 @@ class FourierSpectrum(arrays.MappedArray):
     # The windowing function applied to each time segment prior to application of the FFT.
     windowing_function = ""
 
-    amplitude = arrays.FloatArray(
-        label="Amplitude",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    phase = arrays.FloatArray(
-        label="Phase",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    power = arrays.FloatArray(
-        label="Power",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    average_power = arrays.FloatArray(
-        label="Average Power",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    normalised_average_power = arrays.FloatArray(
-        label="Normalised Power",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
     _frequency = None
     _freq_step = None
     _max_freq = None
 
     __generate_table__ = True
 
-    def __init__(self, segment_length=0.0):
+    def __init__(self, segment_length=0.0, array_data=None, amplitude=None,
+                 phase=None, power=None, average_power=None,
+                 normalised_average_power=None, *args, **kwargs):
         self.segment_length = segment_length
         #The timeseries was segmented into equally sized blocks
         #(overlapping if necessary), prior to the application of the FFT.
         #The segement length determines the frequency resolution of the
         #resulting spectra
+        if array_data is None:
+            array_data = numpy.array([], dtype=numpy.complex128)
+        self.array_data = array_data
+
+        if amplitude is None:
+            amplitude = numpy.array([])
+        self.amplitude = amplitude
+
+        if phase is None:
+            phase = numpy.array([])
+        self.phase = phase
+
+        if power is None:
+            power = numpy.array([])
+        self.power = power
+
+        if average_power is None:
+            average_power = numpy.array([])
+        self.average_power = average_power
+
+        if normalised_average_power is None:
+            normalised_average_power = numpy.array([])
+        self.normalised_average_power = normalised_average_power
+
+        super(FourierSpectrum, self).__init__(*args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -227,45 +233,45 @@ class WaveletCoefficients(arrays.MappedArray):
     """
     This class bundles all the elements of a Wavelet Analysis into a single
     object, including the input TimeSeries datatype and the output results as
-    arrays (FloatArray)
+    arrays
     """
     # Overwrite attribute from superclass
-    array_data = numpy.array([], dtype=numpy.complex128)
-
     source = time_series.TimeSeries(label="Source time-series")
-
-    # A string specifying the type of mother wavelet to use, default is 'morlet'.
-
-
-    frequencies = arrays.FloatArray(
-        label="Frequencies",
-        doc="A vector that maps scales to frequencies.")
-
-
-    # 'unit energy' | 'gabor'
-
-    amplitude = arrays.FloatArray(
-        label="Amplitude",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    phase = arrays.FloatArray(
-        label="Phase",
-        file_storage=core.FILE_STORAGE_EXPAND)
-
-    power = arrays.FloatArray(
-        label="Power",
-        file_storage=core.FILE_STORAGE_EXPAND)
 
     _frequency = None
     _time = None
 
     __generate_table__ = True
 
-    def __init__(self, sample_period=0.0, q_ratio=5.0, mother="morlet", normalisation=""):
+    def __init__(self, sample_period=0.0, q_ratio=5.0, mother="morlet", normalisation="",
+                 array_data=None, frequencies=None, amplitude=None, phase=None,
+                 power=None, *args, **kwargs):
         self.sample_period = sample_period
         self.q_ratio = q_ratio
         self.mother = mother
         self.normalisation = normalisation
+
+        if array_data is None:
+            array_data = numpy.array([], dtype=numpy.complex128)
+        self.array_data = array_data
+
+        if frequencies is None:
+            frequencies = numpy.array([])
+        self.frequencies = numpy.array(frequencies)
+
+        if amplitude is None:
+            amplitude = numpy.array([])
+        self.amplitude = amplitude
+
+        if phase is None:
+            phase = numpy.array([])
+        self.phase = phase
+
+        if power is None:
+            power = numpy.array([])
+        self.power = power
+
+        super(WaveletCoefficients, self).__init__(*args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -340,19 +346,26 @@ class CoherenceSpectrum(arrays.MappedArray):
     Result of a NodeCoherence Analysis.
     """
     # Overwrite attribute from superclass
-    array_data = arrays.FloatArray(file_storage=core.FILE_STORAGE_EXPAND)
 
     source = time_series.TimeSeries(
         label="Source time-series",
         doc="""Links to the time-series on which the node_coherence is
             applied.""")
 
-    frequency = arrays.FloatArray(label="Frequency")
-
     __generate_table__ = True
 
-    def __init__(self, nfft=256):
+    def __init__(self, nfft=256, array_data=None, frequency=None, *args, **kwargs):
         self.nfft = nfft # Data-points per block; NOTE: must be a power of 2
+
+        if array_data is None:
+            array_data = numpy.array([])
+        self.array_data = array_data
+
+        if frequency is None:
+            frequency = numpy.array([])
+        self.frequency = frequency
+
+        super(CoherenceSpectrum, self).__init__(*args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

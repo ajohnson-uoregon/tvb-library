@@ -217,205 +217,71 @@ class LarterBreakspear(Model):
                                   'd_Z', 'QV_max', 'QZ_max', 't_scale']
 
     #Define traited attributes for this model, these represent possible kwargs.
-    gCa = arrays.FloatArray(
-        label = ":math:`g_{Ca}`",
-        default = numpy.array([1.1]),
-        range = numpy.arange(0.9,1.5,0.1),
-        doc = """Conductance of population of Ca++ channels.""")
+    gCa = numpy.array([1.1])
 
-    gK = arrays.FloatArray(
-        label = ":math:`g_{K}`",
-        default = numpy.array([2.0]),
-        range = numpy.arange(1.95,2.05,0.025),
-        doc = """Conductance of population of K channels.""")
+    gK = numpy.array([2.0])
 
-    gL = arrays.FloatArray(
-        label = ":math:`g_{L}`",
-        default = numpy.array([0.5]),
-        range = numpy.arange(0.45,0.55,0.05),
-        doc = """Conductance of population of leak channels.""")
+    gL = numpy.array([0.5])
 
-    phi = arrays.FloatArray(
-        label = r":math:`\phi`",
-        default = numpy.array([0.7]),
-        range = numpy.arange(0.3,0.9,0.1),
-        doc = """Temperature scaling factor.""")
+    phi = numpy.array([0.7])
 
-    gNa = arrays.FloatArray(
-        label = ":math:`g_{Na}`",
-        default = numpy.array([6.7]),
-        range = numpy.arange(0.0,10.0,0.1),
-        doc = """Conductance of population of Na channels.""")
+    gNa = numpy.array([6.7])
 
-    TK = arrays.FloatArray(
-        label = ":math:`T_{K}`",
-        default = numpy.array([0.0]),
-        range = numpy.arange(0.0,0.0001,0.00001),
-        doc = """Threshold value for K channels.""")
+    TK = numpy.array([0.0])
 
-    TCa = arrays.FloatArray(
-        label = ":math:`T_{Ca}`",
-        default = numpy.array([-0.01]),
-        range = numpy.arange(-0.02,-0.01,0.0025),
-        doc = "Threshold value for Ca channels.")
+    TCa = numpy.array([-0.01])
 
-    TNa = arrays.FloatArray(
-        label = ":math:`T_{Na}`",
-        default = numpy.array([0.3]),
-        range = numpy.arange(0.25,0.3,0.025),
-        doc = "Threshold value for Na channels.")
+    TNa = numpy.array([0.3])
 
-    VCa = arrays.FloatArray(
-        label = ":math:`V_{Ca}`",
-        default = numpy.array([1.0]),
-        range = numpy.arange(0.9,1.1,0.05),
-        doc = """Ca Nernst potential.""")
+    VCa = numpy.array([1.0])
 
-    VK = arrays.FloatArray(
-        label = ":math:`V_{K}`",
-        default = numpy.array([-0.7]),
-        range = numpy.arange(-0.8,1.,0.1),
-        doc = """K Nernst potential.""")
+    VK = numpy.array([-0.7])
 
-    VL = arrays.FloatArray(
-        label = ":math:`V_{L}`",
-        default = numpy.array([-0.5]),
-        range = numpy.arange(-0.7,-0.4,0.1),
-        doc = """Nernst potential leak channels.""")
+    VL = numpy.array([-0.5])
 
-    VNa = arrays.FloatArray(
-        label = ":math:`V_{Na}`",
-        default = numpy.array([0.53]),
-        range = numpy.arange(0.51,0.55,0.01),
-        doc = """Na Nernst potential.""")
+    VNa = numpy.array([0.53])
 
-    d_K = arrays.FloatArray(
-        label = r":math:`\delta_{K}`",
-        default = numpy.array([0.3]),
-        range = numpy.arange(0.1,0.4,0.1),
-        doc = """Variance of K channel threshold.""")
+    d_K = numpy.array([0.3])
 
-    tau_K = arrays.FloatArray(
-        label = r":math:`\tau_{K}`",
-        default = numpy.array([1.0]),
-        range = numpy.arange(1.0,10.0,1.0),
-        doc = """Time constant for K relaxation time (ms)""")
+    tau_K = numpy.array([1.0])
 
-    d_Na = arrays.FloatArray(
-        label = r":math:`\delta_{Na}`",
-        default = numpy.array([0.15]),
-        range = numpy.arange(0.1,0.2,0.05),
-        doc = "Variance of Na channel threshold.")
+    d_Na = numpy.array([0.15])
 
-    d_Ca = arrays.FloatArray(
-        label = r":math:`\delta_{Ca}`",
-        default = numpy.array([0.15]),
-        range = numpy.arange(0.1,0.2,0.05),
-        doc = "Variance of Ca channel threshold.")
+    d_Ca =  numpy.array([0.15])
 
-    aei = arrays.FloatArray(
-        label = ":math:`a_{ei}`",
-        default = numpy.array([2.0]),
-        range = numpy.arange(0.1,2.0,0.1),
-        doc = """Excitatory-to-inhibitory synaptic strength.""")
+    aei = numpy.array([2.0])
 
-    aie = arrays.FloatArray(
-        label = ":math:`a_{ie}`",
-        default = numpy.array([2.0]),
-        range = numpy.arange(0.5,2.0,0.1),
-        doc = """Inhibitory-to-excitatory synaptic strength.""")
+    aie = numpy.array([2.0])
 
-    b = arrays.FloatArray(
-        label = ":math:`b`",
-        default = numpy.array([0.1]),
-        range = numpy.arange(0.0001,1.0,0.0001),
-        doc = """Time constant scaling factor. The original value is 0.1""")
+    b = numpy.array([0.1])
 
-    C = arrays.FloatArray(
-        label = ":math:`C`",
-        default = numpy.array([0.1]),
-        range = numpy.arange(0.0,1.0,0.01),
-        doc = """Strength of excitatory coupling. Balance between internal and
-        local (and global) coupling strength. C > 0 introduces interdependences between
-        consecutive columns/nodes. C=1 corresponds to maximum coupling between node and no self-coupling.
-        This strenght should be set to sensible values when a whole network is connected. """)
+    C = numpy.array([0.1])
 
-    ane = arrays.FloatArray(
-        label = ":math:`a_{ne}`",
-        default = numpy.array([1.0]),
-        range = numpy.arange(0.4,1.0,0.05),
-        doc = """Non-specific-to-excitatory synaptic strength.""")
+    ane = numpy.array([1.0])
 
-    ani = arrays.FloatArray(
-        label = ":math:`a_{ni}`",
-        default = numpy.array([0.4]),
-        range = numpy.arange(0.3,0.5,0.05),
-        doc = """Non-specific-to-inhibitory synaptic strength.""")
+    ani = numpy.array([0.4])
 
-    aee = arrays.FloatArray(
-        label = ":math:`a_{ee}`",
-        default = numpy.array([0.4]),
-        range = numpy.arange(0.0,0.6,0.05),
-        doc = """Excitatory-to-excitatory synaptic strength.""")
+    aee = numpy.array([0.4])
 
-    Iext = arrays.FloatArray(
-       label = ":math:`I_{ext}`",
-       default = numpy.array([0.3]),
-       range = numpy.arange(0.165,0.3,0.005),
-       doc = """Subcortical input strength. It represents a non-specific
-       excitation or thalamic inputs.""")
+    Iext = numpy.array([0.3])
 
-    rNMDA = arrays.FloatArray(
-        label = ":math:`r_{NMDA}`",
-        default = numpy.array([0.25]),
-        range = numpy.arange(0.2,0.3,0.05),
-        doc = """Ratio of NMDA to AMPA receptors.""")
+    rNMDA = numpy.array([0.25])
 
-    VT = arrays.FloatArray(
-        label = ":math:`V_{T}`",
-        default = numpy.array([0.0]),
-        range = numpy.arange(0.0,0.7,0.01),
-        doc = """Threshold potential (mean) for excitatory neurons.
-        In [Breaksetal_2003_b]_ this value is 0.""")
+    VT = numpy.array([0.0])
 
-    d_V = arrays.FloatArray(
-        label = r":math:`\delta_{V}`",
-        default = numpy.array([0.65]),
-        range = numpy.arange(0.49,0.7,0.01),
-        doc = """Variance of the excitatory threshold. It is one of the main
-        parameters explored in [Breaksetal_2003_b]_.""")
+    d_V = numpy.array([0.65])
 
-    ZT = arrays.FloatArray(
-        label = ":math:`Z_{T}`",
-        default = numpy.array([0.0]),
-        range = numpy.arange(0.0,0.1,0.005),
-        doc = """Threshold potential (mean) for inihibtory neurons.""")
+    ZT = numpy.array([0.0])
 
-    d_Z = arrays.FloatArray(
-        label = r":math:`\delta_{Z}`",
-        default = numpy.array([0.7]),
-        range = numpy.arange(0.001,0.75,0.05),
-        doc = """Variance of the inhibitory threshold.""")
+    d_Z = numpy.array([0.7])
 
     # NOTE: the values were not in the article.
-    QV_max = arrays.FloatArray(
-        label = ":math:`Q_{max}`",
-        default = numpy.array([1.0]),
-        range = numpy.arange(0.1,1.,0.001),
-        doc = """Maximal firing rate for excitatory populations (kHz)""")
+    QV_max = numpy.array([1.0])
 
-    QZ_max = arrays.FloatArray(
-        label = ":math:`Q_{max}`",
-        default = numpy.array([1.0]),
-        range = numpy.arange(0.1,1.,0.001),
-        doc = """Maximal firing rate for excitatory populations (kHz)""")
+    QZ_max = numpy.array([1.0])
 
 
-    t_scale = arrays.FloatArray(
-        label = ":math:`t_{scale}`",
-        default = numpy.array([1.0]),
-        range = numpy.arange(0.1,1.,0.001),
-        doc = """Time scale factor""")
+    t_scale = numpy.array([1.0])
 
     @unique
     class Variables(Enum):

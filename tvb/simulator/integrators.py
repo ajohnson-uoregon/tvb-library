@@ -74,12 +74,8 @@ class Integrator(core.Type):
     """
     _base_classes = ['Integrator', 'IntegratorStochastic', 'RungeKutta4thOrderDeterministic']
 
-    clamped_state_variable_values = arrays.FloatArray(
-        label = "The values of the state variables which are clamped ",
-        default = None,
-        order=-1)
-
-    def __init__(self, dt=0.01220703125, clamped_state_variable_indices=None):
+    def __init__(self, dt=0.01220703125, clamped_state_variable_indices=None,
+                 clamped_state_variable_values=None):
         self.dt = dt
         # The step size used by the integration routine in ms. This
         # should be chosen to be small enough for the integration to be
@@ -89,9 +85,12 @@ class Integrator(core.Type):
         # models are numerically stable with there default parameters and because
         # it is consitent with Monitors using sample periods corresponding to
         # powers of 2 from 128 to 4096Hz
+
         self.clamped_state_variable_indices = clamped_state_variable_indices
         # indices of the state variables to be clamped by the integrators
         # to the values in the clamped_values array
+
+        self.clamped_state_variable_values = clamped_state_variable_values
 
     def scheme(self, X, dfun, coupling, local_coupling, stimulus):
         """

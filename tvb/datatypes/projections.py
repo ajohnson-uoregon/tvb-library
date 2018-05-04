@@ -38,6 +38,7 @@ from tvb.basic.readers import try_get_absolute_path, FileReader
 import tvb.datatypes.arrays as arrays
 from tvb.datatypes import surfaces, sensors
 from tvb.basic.traits.types_mapped import MappedType
+import numpy
 
 
 EEG_POLYMORPHIC_IDENTITY = "projEEG"
@@ -71,7 +72,7 @@ class ProjectionMatrix(MappedType):
     sensors = sensors.Sensors(label="Sensors", default=None, required=False,
                               doc=""" A set of sensors to compute projection matrix for them. """)
 
-    projection_data = arrays.FloatArray(label="Projection Matrix Data", default=None, required=True)
+    projection_data = None
 
 
     @property

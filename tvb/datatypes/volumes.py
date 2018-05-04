@@ -53,7 +53,7 @@ class Volume(types_mapped.MappedType):
     """
     # Volume origin coordinates
     origin = numpy.array([], dtype=numpy.float64)
-    voxel_size = arrays.FloatArray(label = "Voxel size") # need a triplet, xyz
+    voxel_size = numpy.array([], dtype=numpy.float64) # need a triplet, xyz
     voxel_unit = "mm"
 
     def _find_summary_info(self):

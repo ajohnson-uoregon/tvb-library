@@ -70,11 +70,8 @@ class TimeSeries(types_mapped.MappedType):
     """
 
 
+    # An array of time-series data, with a shape of [tpts, :], where ':' represents 1 or more dimensions
 
-    data = arrays.FloatArray(
-        label="Time-series data",
-        file_storage=core.FILE_STORAGE_EXPAND,
-        doc="""An array of time-series data, with a shape of [tpts, :], where ':' represents 1 or more dimensions""")
 
     nr_dimensions = 4 # Number of dimension in timeseries; default is 4
 
@@ -86,12 +83,9 @@ class TimeSeries(types_mapped.MappedType):
     # A dictionary containing mappings of the form {'dimension_name' : [labels for this dimension] }
     labels_dimensions = {}
 
-    time = arrays.FloatArray(
-        file_storage=core.FILE_STORAGE_EXPAND,
-        label="Time-series time",
-        required=False,
-        doc="""An array of time values for the time-series, with a shape of [tpts,].
-        This is 'time' as returned by the simulator's monitors.""")
+    # An array of time values for the time-series, with a shape of [tpts,].
+    # This is 'time' as returned by the simulator's monitors.
+
 
     start_time = 0.0
 
@@ -105,8 +99,16 @@ class TimeSeries(types_mapped.MappedType):
     has_surface_mapping = True
     has_volume_mapping = False
 
-    def __init__(self, title = "", *args, **kwargs):
+    def __init__(self, title = "", data=None, time=None, *args, **kwargs):
         self.title = title
+
+        if data is None:
+            data = numpy.array([], dtype=numpy.float64)
+        self.data = data
+
+        if time is None:
+            time = numpy.array([], dtype=numpy.float64)
+        self.time = time
         super(TimeSeries, self).__init__(*args, **kwargs)
 
     def configure(self):

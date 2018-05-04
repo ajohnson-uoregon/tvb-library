@@ -42,6 +42,7 @@ import tvb.datatypes.arrays as arrays
 import tvb.datatypes.time_series as time_series
 from tvb.basic.logger.builder import get_logger
 from tvb.basic.traits.types_mapped import MappedType
+import numpy
 
 LOG = get_logger(__name__)
 
@@ -50,13 +51,13 @@ class CrossCorrelation(MappedType):
     """
     Result of a CrossCorrelation Analysis.
     """
-    array_data = arrays.FloatArray(file_storage=core.FILE_STORAGE_EXPAND)
+    array_data = numpy.array([])
 
     source = time_series.TimeSeries(
         label="Source time-series",
         doc="""Links to the time-series on which the cross_correlation is applied.""")
 
-    time = arrays.FloatArray(label="Temporal Offsets")
+    time = numpy.array([])
 
     # list of strings representing names of each data dimension
     labels_ordering = ["Offsets", "Node", "Node", "State Variable", "Mode"]

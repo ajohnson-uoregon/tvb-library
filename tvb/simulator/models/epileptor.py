@@ -162,118 +162,39 @@ class Epileptor(ModelNumbaDfun):
     _ui_name = "Epileptor"
     ui_configurable_parameters = ["Iext", "Iext2", "r", "x0", "slope"]
 
-    a = arrays.FloatArray(
-        label="a",
-        default=numpy.array([1]),
-        doc="Coefficient of the cubic term in the first state variable",
-        order=-1)
+    a = numpy.array([1])
 
-    b = arrays.FloatArray(
-        label="b",
-        default=numpy.array([3]),
-        doc="Coefficient of the squared term in the first state variabel",
-        order=-1)
+    b = numpy.array([3])
 
-    c = arrays.FloatArray(
-        label="c",
-        default=numpy.array([1]),
-        doc="Additive coefficient for the second state variable, \
-        called :math:`y_{0}` in Jirsa paper",
-        order=-1)
+    c = numpy.array([1])
 
-    d = arrays.FloatArray(
-        label="d",
-        default=numpy.array([5]),
-        doc="Coefficient of the squared term in the second state variable",
-        order=-1)
+    d = numpy.array([5])
 
-    r = arrays.FloatArray(
-        label="r",
-        range=numpy.arange(0.0,0.001,0.00005),
-        default=numpy.array([0.00035]),
-        doc="Temporal scaling in the third state variable, \
-        called :math:`1/\\tau_{0}` in Jirsa paper",
-        order=4)
+    r = numpy.array([0.00035])
 
-    s = arrays.FloatArray(
-        label="s",
-        default=numpy.array([4]),
-        doc="Linear coefficient in the third state variable",
-        order=-1)
+    s = numpy.array([4])
 
-    x0 = arrays.FloatArray(
-        label="x0",
-        range=numpy.arange(-3.0,-1.0,0.1),
-        default=numpy.array([-1.6]),
-        doc="Epileptogenicity parameter",
-        order=3)
+    x0 = numpy.array([-1.6])
 
-    Iext = arrays.FloatArray(
-        label="Iext",
-        range=numpy.arange(1.5,5.0,0.1),
-        default=numpy.array([3.1]),
-        doc="External input current to the first population",
-        order=1)
+    Iext = numpy.array([3.1])
 
-    slope = arrays.FloatArray(
-        label="slope",
-        range=numpy.arange(-16.0,6.0,0.1),
-        default=numpy.array([0.]),
-        doc="Linear coefficient in the first state variable",
-        order=5)
+    slope = numpy.array([0.])
 
-    Iext2 = arrays.FloatArray(
-        label="Iext2",
-        range=numpy.arange(0.0,1.0,0.05),
-        default=numpy.array([0.45]),
-        doc="External input current to the second population",
-        order=2)
+    Iext2 = numpy.array([0.45])
 
-    tau = arrays.FloatArray(
-        label="tau",
-        default=numpy.array([10]),
-        doc="Temporal scaling coefficient in fifth state variable",
-        order=-1)
+    tau = numpy.array([10])
 
-    aa = arrays.FloatArray(
-        label="aa",
-        default=numpy.array([6]),
-        doc="Linear coefficient in fifth state variable",
-        order=-1)
+    aa = numpy.array([6])
 
-    bb = arrays.FloatArray(
-        label="bb",
-        default=numpy.array([2]),
-        doc="Linear coefficient of lowpass excitatory coupling in fourth state variable",
-        order=-1)
+    bb = numpy.array([2])
 
-    Kvf = arrays.FloatArray(
-        label="K_vf",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0.0,4.0,0.5),
-        doc="Coupling scaling on a very fast time scale.",
-        order=6)
+    Kvf = numpy.array([0.0])
 
-    Kf = arrays.FloatArray(
-        label="K_f",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0.0,4.0,0.5),
-        doc="Correspond to the coupling scaling on a fast time scale.",
-        order=7)
+    Kf = numpy.array([0.0])
 
-    Ks = arrays.FloatArray(
-        label="K_s",
-        default=numpy.array([0.0]),
-        range=numpy.arange(-4.0,4.0,0.1),
-        doc="Permittivity coupling, that is from the fast time scale toward the slow time scale",
-        order=8)
+    Ks = numpy.array([0.0])
 
-    tt = arrays.FloatArray(
-        label="tt",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.001,10.0,0.001),
-        doc="Time scaling of the whole system",
-        order=9)
+    tt = numpy.array([1.0])
 
     # When modification is True, then use nonlinear influence on z. \
     # The default value is False, i.e., linear influence.
@@ -435,80 +356,27 @@ class Epileptor2D(ModelNumbaDfun):
     _ui_name = "Epileptor2D"
     ui_configurable_parameters = ["r", "Iext", "x0"]
 
-    a = arrays.FloatArray(
-        label="a",
-        default=numpy.array([1]),
-        doc="Coefficient of the cubic term in the first state-variable.",
-        order=1)
+    a = numpy.array([1])
 
-    b = arrays.FloatArray(
-        label="b",
-        default=numpy.array([3]),
-        doc="Coefficient of the squared term in the first state-variable.",
-        order=2)
+    b = numpy.array([3])
 
-    c = arrays.FloatArray(
-        label="c",
-        default=numpy.array([1]),
-        doc="Additive coefficient for the second state-variable x_{2}, \
-        called :math:`y_{0}` in Jirsa paper.",
-        order=3)
+    c = numpy.array([1])
 
-    d = arrays.FloatArray(
-        label="d",
-        default=numpy.array([5]),
-        doc="Coefficient of the squared term in the second state-variable x_{2}.",
-        order=4)
+    d = numpy.array([5])
 
-    r = arrays.FloatArray(
-        label="r",
-        range=numpy.arange(0.0,0.001,0.00005),
-        default=numpy.array([0.00035]),
-        doc="Temporal scaling in the slow state-variable, \
-        called :math:`1\\tau_{0}` in Jirsa paper (see class Epileptor).",
-        order=5)
+    r = numpy.array([0.00035])
 
-    x0 = arrays.FloatArray(
-        label="x0",
-        range=numpy.arange(-3.0,-1.0,0.1),
-        default=numpy.array([-1.6]),
-        doc="Epileptogenicity parameter.",
-        order=6)
+    x0 = numpy.array([-1.6])
 
-    Iext = arrays.FloatArray(
-        label="Iext",
-        range=numpy.arange(1.5,5.0,0.1),
-        default=numpy.array([3.1]),
-        doc="External input current to the first state-variable.",
-        order=7)
+    Iext = numpy.array([3.1])
 
-    slope = arrays.FloatArray(
-        label="slope",
-        range=numpy.arange(-16.0,6.0,0.1),
-        default=numpy.array([0.]),
-        doc="Linear coefficient in the first state-variable.",
-        order=8)
+    slope = numpy.array([0.])
 
-    Kvf = arrays.FloatArray(
-        label="K_vf",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0.0,4.0,0.5),
-        doc="Coupling scaling on a very fast time scale.",
-        order=9)
+    Kvf = numpy.array([0.0])
 
-    Ks = arrays.FloatArray(
-        label="K_s",
-        default=numpy.array([0.0]),
-        range=numpy.arange(-4.0,4.0,0.1),
-        doc="Permittivity coupling, that is from the fast time scale toward the slow time scale.",
-        order=10)
+    Ks = numpy.array([0.0])
 
-    tt = arrays.FloatArray(
-        label="tt",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.001,1.0,0.001),
-        doc="Time scaling of the whole system to the system in real time.",
-        order=11)
+    tt = numpy.array([1.0])
 
     # When modification is True, then use nonlinear influence on z. \
     # The default value is False, i.e., linear influence.

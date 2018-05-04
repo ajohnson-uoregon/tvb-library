@@ -38,13 +38,7 @@ class Linear(Model):
     _ui_name = "Linear model"
     ui_configurable_parameters = ['gamma']
 
-    gamma = arrays.FloatArray(
-        label=r":math:`\gamma`",
-        default=numpy.array([-10.0]),
-        range=numpy.arange(-100.0,0.0,1.0),
-        doc="The damping coefficient specifies how quickly the node's activity relaxes, must be larger"
-            " than the node's in-degree in order to remain stable.",
-        order=1)
+    gamma = numpy.array([-10.0])
 
     state_variable_range = {"x": numpy.array([-1, 1])} # Range used for state variable initialization and visualization
 

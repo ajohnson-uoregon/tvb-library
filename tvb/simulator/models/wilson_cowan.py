@@ -152,164 +152,75 @@ class WilsonCowan(Model):
                                   'alpha_e', 'alpha_i']
 
     # Define traited attributes for this model, these represent possible kwargs.
-    c_ee = arrays.FloatArray(
-        label=":math:`c_{ee}`",
-        default=numpy.array([12.0]),
-        range=numpy.arange(11,16,0.01),
-        doc="""Excitatory to excitatory  coupling coefficient""",
-        order=1)
+    # Excitatory to excitatory  coupling coefficient
+    c_ee = numpy.array([12.0])
 
-    c_ie = arrays.FloatArray(
-        label=":math:`c_{ei}`",
-        default=numpy.array([4.0]),
-        range=numpy.arange(2,15,0.01),
-        doc="""Inhibitory to excitatory coupling coefficient""",
-        order=2)
+    # Inhibitory to excitatory coupling coefficient
+    c_ie = numpy.array([4.0])
 
-    c_ei = arrays.FloatArray(
-        label=":math:`c_{ie}`",
-        default=numpy.array([13.0]),
-        range=numpy.arange(2,22,0.01),
-        doc="""Excitatory to inhibitory coupling coefficient.""",
-        order=3)
+    # Excitatory to inhibitory coupling coefficient.
+    c_ei = numpy.array([13.0])
 
-    c_ii = arrays.FloatArray(
-        label=":math:`c_{ii}`",
-        default=numpy.array([11.0]),
-        range=numpy.arange(2,15,0.01),
-        doc="""Inhibitory to inhibitory coupling coefficient.""",
-        order=4)
+    # Inhibitory to inhibitory coupling coefficient.
+    c_ii = numpy.array([11.0])
 
-    tau_e = arrays.FloatArray(
-        label=r":math:`\tau_e`",
-        default=numpy.array([10.0]),
-        range=numpy.arange(0,150,0.01),
-        doc="""Excitatory population, membrane time-constant [ms]""",
-        order=5)
+    # Excitatory population, membrane time-constant [ms]
+    tau_e = numpy.array([10.0])
 
-    tau_i = arrays.FloatArray(
-        label=r":math:`\tau_i`",
-        default=numpy.array([10.0]),
-        range=numpy.arange(0,150,0.01),
-        doc="""Inhibitory population, membrane time-constant [ms]""",
-        order=6)
+    # Inhibitory population, membrane time-constant [ms]
+    tau_i = numpy.array([10.0])
 
-    a_e = arrays.FloatArray(
-        label=":math:`a_e`",
-        default=numpy.array([1.2]),
-        range=numpy.arange(0,1.4, 0.01),
-        doc="""The slope parameter for the excitatory response function""",
-        order=7)
+    # The slope parameter for the excitatory response function
+    a_e = numpy.array([1.2])
 
-    b_e = arrays.FloatArray(
-        label=":math:`b_e`",
-        default=numpy.array([2.8]),
-        range=numpy.arange(1.4,6,0.01),
-        doc="""Position of the maximum slope of the excitatory sigmoid function""",
-        order=8)
+    # Position of the maximum slope of the excitatory sigmoid function
+    b_e = numpy.array([2.8])
 
-    c_e = arrays.FloatArray(
-        label=":math:`c_e`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(1,20,1),
-        doc="""The amplitude parameter for the excitatory response function""",
-        order=9)
+    # The amplitude parameter for the excitatory response function
+    c_e = numpy.array([1.0])
 
-    theta_e = arrays.FloatArray(
-        label=r":math:`\theta_e`",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0,60,0.01),
-        doc="""Excitatory threshold""",
-        order=10)
+    # Excitatory threshold
+    theta_e = numpy.array([0.0])
 
-    a_i = arrays.FloatArray(
-        label=":math:`a_i`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0,2,0.01),
-        doc="""The slope parameter for the inhibitory response function""",
-        order=11)
+    # The slope parameter for the inhibitory response function
+    a_i = numpy.array([1.0])
 
-    b_i = arrays.FloatArray(
-        label=r":math:`b_i`",
-        default=numpy.array([4.0]),
-        range=numpy.arange(2,6,0.01),
-        doc="""Position of the maximum slope of a sigmoid function [in
-        threshold units]""",
-        order=12)
+    #Position of the maximum slope of a sigmoid function [in threshold units]
+    b_i = numpy.array([4.0])
 
-    theta_i = arrays.FloatArray(
-        label=r":math:`\theta_i`",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0,60,0.01),
-        doc="""Inhibitory threshold""",
-        order=13)
+    # Inhibitory threshold
+    theta_i = numpy.array([0.0])
 
-    c_i = arrays.FloatArray(
-        label=":math:`c_i`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(1,20,1),
-        doc="""The amplitude parameter for the inhibitory response function""",
-        order=14)
+    # The amplitude parameter for the inhibitory response function
+    c_i = numpy.array([1.0])
 
-    r_e = arrays.FloatArray(
-        label=":math:`r_e`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(.5,2,0.01),
-        doc="""Excitatory refractory period""",
-        order=15)
+    # Excitatory refractory period
+    r_e = numpy.array([1.0])
 
-    r_i = arrays.FloatArray(
-        label=":math:`r_i`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0.5,2,0.01),
-        doc="""Inhibitory refractory period""",
-        order=16)
+    # Inhibitory refractory period
+    r_i = numpy.array([1.0])
 
-    k_e = arrays.FloatArray(
-        label=":math:`k_e`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(.5,2,0.01),
-        doc="""Maximum value of the excitatory response function""",
-        order=17)
+    # Maximum value of the excitatory response function
+    k_e = numpy.array([1.0])
 
-    k_i = arrays.FloatArray(
-        label=":math:`k_i`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0,2,0.01),
-        doc="""Maximum value of the inhibitory response function""",
-        order=18)
+    # Maximum value of the inhibitory response function
+    k_i = numpy.array([1.0])
 
-    P = arrays.FloatArray(
-        label=":math:`P`",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0,20,0.01),
-        doc="""External stimulus to the excitatory population.
-        Constant intensity.Entry point for coupling.""",
-        order=19)
+    # External stimulus to the excitatory population.
+    # Constant intensity.Entry point for coupling.
+    P = numpy.array([0.0])
 
-    Q = arrays.FloatArray(
-        label=":math:`Q`",
-        default=numpy.array([0.0]),
-        range=numpy.arange(0,20,0.01),
-        doc="""External stimulus to the inhibitory population.
-        Constant intensity.Entry point for coupling.""",
-        order=20)
+    # External stimulus to the inhibitory population.
+    # Constant intensity.Entry point for coupling.
+    Q = numpy.array([0.0])
 
-    alpha_e = arrays.FloatArray(
-        label=r":math:`\alpha_e`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0,20,0.01),
-        doc="""External stimulus to the excitatory population.
-        Constant intensity.Entry point for coupling.""",
-        order=21)
+    # External stimulus to the excitatory population.
+    # Constant intensity.Entry point for coupling.
+    alpha_e = numpy.array([1.0])
 
-    alpha_i = arrays.FloatArray(
-        label=r":math:`\alpha_i`",
-        default=numpy.array([1.0]),
-        range=numpy.arange(0,20,0.01),
-        doc="""External stimulus to the inhibitory population.
-        Constant intensity.Entry point for coupling.""",
-        order=22)
+    # External stimulus to the inhibitory population.
+    # Constant intensity.Entry point for coupling.
+    alpha_i = numpy.array([1.0])
 
     # Used for phase-plane axis ranges and to bound random initial() conditions.
     state_variable_range = {"E": numpy.array([0.0, 1.0]),

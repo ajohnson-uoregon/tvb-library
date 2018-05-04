@@ -56,7 +56,6 @@ class TestTraits(BaseTestCase):
         assert 1 == len(model_wc.c_ii)
         assert type(model_wc.tau_e) == numpy.ndarray
         assert 1 == len(model_wc.tau_e)
-        assert isinstance(model_wc._tau_e, str)
 
     def test_modifying_attributes(self):
         """
@@ -75,11 +74,10 @@ class TestTraits(BaseTestCase):
         assert eqn_x.parameters['amp'] == -0.0625
         assert eqn_x.parameters['midpoint'] == 0.0
 
-        a1 = arrays.FloatArray()
-        a1.data = numpy.array([20.0, ])
+        a1 = numpy.array([20.0, ])
         a2 = deepcopy(a1)
-        a2.data = numpy.array([42.0, ])
-        assert a1.data[0] != a2.data[0]
+        a2 = numpy.array([42.0, ])
+        assert a1[0] != a2[0]
 
         model1 = ReducedSetHindmarshRose()
         model1.a = numpy.array([55.0, ])

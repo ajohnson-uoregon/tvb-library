@@ -67,34 +67,23 @@ class Cortex(surfaces.CorticalSurface):
     region_areas = None
     region_orientation = None
 
-    coupling_strength = arrays.FloatArray(
-        label="Local coupling strength",
-        range= range(0,20,1), #basic.Range(lo=0.0, hi=20.0, step=1.0),
-        default=numpy.array([1.0]),
-        file_storage=core.FILE_STORAGE_NONE,
-        doc="""A factor that rescales local connectivity strengths.""")
+    # A factor that rescales local connectivity strengths.
+    coupling_strength = numpy.array([1.0], dtype=numpy.float64)
 
-    eeg_projection = arrays.FloatArray(
-        label="EEG projection", order=-1,
-        # NOTE: This is redundant if the EEG monitor isn't used, but it makes life simpler.
-        required=False,
-        doc="""A 2-D array which projects the neural activity on the cortical
-            surface to a set of EEG sensors.""")
+    # A 2-D array which projects the neural activity on the cortical
+    # surface to a set of EEG sensors.
+    eeg_projection = numpy.array([], dtype=numpy.float64)
     #  requires linked sensors.SensorsEEG
 
-    meg_projection = arrays.FloatArray(
-        label="MEG projection",
-        # linked = ?sensors, skull, skin, etc?
-        doc="""A 2-D array which projects the neural activity on the cortical
-            surface to a set of MEG sensors.""",
-        required=False, order=-1, )
+
+    # A 2-D array which projects the neural activity on the cortical
+    # surface to a set of MEG sensors.
+    meg_projection = numpy.array([], dtype=numpy.float64)
     #  requires linked SensorsMEG
 
-    internal_projection = arrays.FloatArray(
-        label="Internal projection",
-        required=False, order=-1,
-        doc="""A 2-D array which projects the neural activity on the
-            cortical surface to a set of embeded sensors.""")
+    # A 2-D array which projects the neural activity on the
+    # cortical surface to a set of embeded sensors.
+    internal_projection = numpy.array([], dtype=numpy.float64)
     #  requires linked SensorsInternal
 
     def populate_cortex(self, cortex_surface, cortex_parameters=None):

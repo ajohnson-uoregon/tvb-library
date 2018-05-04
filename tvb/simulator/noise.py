@@ -233,17 +233,18 @@ class Additive(Noise):
 
     """
 
-    nsig = arrays.FloatArray(
-        configurable_noise=True,
-        label=":math:`D`",
-        required=True,
-        default=numpy.array([1.0]),
-        range= numpy.arange(0,10,0.1), #basic.Range(lo=0.0, hi=10.0, step=0.1),
-        order=1,
-        doc="""The noise dispersion, it is the standard deviation of the
-        distribution from which the Gaussian random variates are drawn. NOTE:
-        Sensible values are typically ~<< 1% of the dynamic range of a Model's
-        state variables.""")
+    # The noise dispersion, it is the standard deviation of the
+    # distribution from which the Gaussian random variates are drawn. NOTE:
+    # Sensible values are typically ~<< 1% of the dynamic range of a Model's
+    # state variables.
+
+
+    def __init__(self, nsig=None, *args, **kwargs):
+        if nsig is None:
+            nsig = numpy.array([1.0], dtype=numpy.float64)
+        self.nsig = nsig
+
+        super(Additive, self).__init__(*args, **kwargs)
 
     def gfun(self, state_variables):
         r"""
@@ -273,17 +274,11 @@ class Multiplicative(Noise):
 
     """
 
-    nsig = arrays.FloatArray(
-        configurable_noise=True,
-        label=":math:`D`",
-        required=True,
-        default=numpy.array([1.0, ]),
-        range=numpy.arange(0,10,0.1), #basic.Range(lo=0.0, hi=10.0, step=0.1),
-        order=1,
-        doc="""The noise dispersion, it is the standard deviation of the
-        distribution from which the Gaussian random variates are drawn. NOTE:
-        Sensible values are typically ~<< 1% of the dynamic range of a Model's
-        state variables.""")
+    # The noise dispersion, it is the standard deviation of the
+    # distribution from which the Gaussian random variates are drawn. NOTE:
+    # Sensible values are typically ~<< 1% of the dynamic range of a Model's
+    # state variables.
+    nsig = numpy.array([1.0], dtype=numpy.float64)
 
     b = equations.TemporalApplicableEquation(
         label=":math:`b`",
