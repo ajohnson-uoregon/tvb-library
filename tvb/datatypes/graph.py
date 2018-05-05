@@ -50,13 +50,17 @@ LOG = get_logger(__name__)
 class Covariance(arrays.MappedArray):
     """Covariance datatype."""
 
-    array_data = numpy.array([], dtype=numpy.complex128)
-
     source = time_series.TimeSeries(
         label="Source time-series",
         doc="Links to the time-series on which NodeCovariance is applied.")
 
     __generate_table__ = True
+
+    def __init__(self, array_data=None, *args, **kwargs):
+        if array_data is None:
+            array_data = numpy.array([], dtype=numpy.complex128)
+
+        super(Covariance, self).__init__(array_data=array_data, *args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -86,7 +90,7 @@ class CorrelationCoefficients(arrays.MappedArray):
     PEARSON_MIN = -1
     PEARSON_MAX = 1
 
-    array_data = numpy.array([])
+
 
     source = time_series.TimeSeries(
         label="Source time-series",
@@ -96,6 +100,12 @@ class CorrelationCoefficients(arrays.MappedArray):
     labels_ordering = ["Node", "Node", "State Variable", "Mode"]
 
     __generate_table__ = True
+
+    def __init__(self, array_data=None, *args, **kwargs):
+        if array_data is None:
+            array_data = numpy.array([])
+
+        super(CorrelationCoefficients, self).__init__(array_data=array_data, *args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

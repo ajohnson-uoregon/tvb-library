@@ -74,7 +74,6 @@ class FourierSpectrum(arrays.MappedArray):
         #resulting spectra
         if array_data is None:
             array_data = numpy.array([], dtype=numpy.complex128)
-        self.array_data = array_data
 
         if amplitude is None:
             amplitude = numpy.array([])
@@ -96,7 +95,7 @@ class FourierSpectrum(arrays.MappedArray):
             normalised_average_power = numpy.array([])
         self.normalised_average_power = normalised_average_power
 
-        super(FourierSpectrum, self).__init__(*args, **kwargs)
+        super(FourierSpectrum, self).__init__(array_data=array_data, *args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -253,7 +252,6 @@ class WaveletCoefficients(arrays.MappedArray):
 
         if array_data is None:
             array_data = numpy.array([], dtype=numpy.complex128)
-        self.array_data = array_data
 
         if frequencies is None:
             frequencies = numpy.array([])
@@ -271,7 +269,7 @@ class WaveletCoefficients(arrays.MappedArray):
             power = numpy.array([])
         self.power = power
 
-        super(WaveletCoefficients, self).__init__(*args, **kwargs)
+        super(WaveletCoefficients, self).__init__(array_data=array_data, *args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -359,13 +357,12 @@ class CoherenceSpectrum(arrays.MappedArray):
 
         if array_data is None:
             array_data = numpy.array([])
-        self.array_data = array_data
 
         if frequency is None:
             frequency = numpy.array([])
         self.frequency = frequency
 
-        super(CoherenceSpectrum, self).__init__(*args, **kwargs)
+        super(CoherenceSpectrum, self).__init__(array_data=array_data, *args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""
@@ -412,7 +409,7 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
     spectrum_types = ["Imaginary", "Real", "Absolute"]
 
     def __init__(self, epoch_length=0.0, segment_length = 0.0, cross_spectrum=None,
-                 array_data=None):
+                 array_data=None, *args, **kwargs):
         self.epoch_length = epoch_length
         #The timeseries was segmented into equally sized blocks
         #(overlapping if necessary), prior to the application of the FFT.
@@ -429,7 +426,8 @@ class ComplexCoherenceSpectrum(arrays.MappedArray):
         # imaginary coherence.
         if array_data is None:
             array_data = numpy.array([], dtype=numpy.complex128)
-        self.array_data = array_data
+
+        super(ComplexCoherenceSpectrum, self).__init__(array_data=array_data, *args, **kwargs)
 
     def configure(self):
         """After populating few fields, compute the rest of the fields"""

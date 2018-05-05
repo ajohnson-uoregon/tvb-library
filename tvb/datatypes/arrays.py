@@ -39,22 +39,8 @@ methods that are associated with the Array datatypes.
 
 import numpy
 from tvb.basic.traits import core
-from tvb.basic.traits.types_mapped import MappedType, Array
+from tvb.basic.traits.types_mapped import MappedType
 from tvb.basic.traits.exceptions import ValidationException
-
-
-class BaseArray(Array):
-    """Base class for array-type traits."""
-
-    def _find_summary_info(self):
-        """Summarize array contents."""
-        summary = {"Array type": self.__class__.__name__,
-                   "Shape": self.shape,
-                   "Maximum": self.value.max(),
-                   "Minimum": self.value.min(),
-                   "Mean": self.value.mean(),
-                   "Median": numpy.median(self.value)}
-        return summary
 
 
 class MappedArray(MappedType):
@@ -67,9 +53,15 @@ class MappedArray(MappedType):
     aggregation_functions = None
     dimensions_labels = None
     nr_dimensions, length_1d, length_2d, length_3d, length_4d = [0] * 5
-    array_data = Array()
 
     __generate_table__ = True
+
+    def __init__(self, array_data=None, *args, **kwargs):
+        if array_data is None:
+            array_data = numpy.array([])
+        self.array_data = array_data
+
+        super(MappedArray, self).__init__(*args, **kwargs)
 
     def _find_summary_info(self):
         """

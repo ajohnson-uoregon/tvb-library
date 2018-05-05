@@ -42,10 +42,6 @@ from tvb.basic.profile import TvbProfile
 if TvbProfile.current.TRAITS_CONFIGURATION.use_storage:
     import tvb.core.traits.types_mapped as mapped
     MappedType = mapped.MappedType
-    Array = mapped.Array
-    SparseMatrix = mapped.SparseMatrix
 else:
     import tvb.basic.traits.types_mapped_light as mapped
     MappedType = mapped.MappedTypeLight
-    Array = mapped.Array
-    # SparseMatrix = mapped.SparseMatrix
