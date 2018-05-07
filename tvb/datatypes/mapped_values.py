@@ -41,28 +41,6 @@ import json
 ACCEPTED_TYPES = ['float', 'int']
 
 
-class ValueWrapper(MappedType):
-    """
-    Class to wrap a singular value storage in DB.
-    """
-
-
-
-    def __init__(self, data_value=None, data_type='unknown', data_name="", *args, **kwargs):
-        if data_value is None:
-            self.data_value = {}
-        else:
-            self.data_value = data_value
-        self.data_type = data_type
-        self.data_name = data_name
-        super(ValueWrapper, self).__init__(*args, **kwargs)
-
-    @property
-    def display_name(self):
-        """ Simple string to be used for display in UI."""
-        return "Value Wrapper - " + self.data_name +" : "+ json.dumps(self.data_value) + " ("+ str(self.data_type)+ ")"
-
-
 class DatatypeMeasure(MappedType):
     """
     Class to hold the metric for a previous stored DataType.

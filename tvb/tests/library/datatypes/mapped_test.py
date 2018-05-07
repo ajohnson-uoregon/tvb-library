@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -41,10 +41,6 @@ class TestMapped(BaseTestCase):
     """
     Tests the defaults for `tvb.datatypes.mapped_values` module.
     """
-
-    def test_valuewrapper(self):
-        dt = mapped_values.ValueWrapper(data_value=10, data_type="Integer", data_name="TestVale")
-        assert dt.display_name == "Value Wrapper - TestVale : 10 (Integer)"
 
     def test_datatypemeasure(self):
         data = numpy.random.random((10, 10, 10, 10))
