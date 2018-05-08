@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -45,14 +45,9 @@ class TestCommon(BaseTestCase):
     """
     Define test cases for common:
         - initialise each class
-        - check default parameters 
-        
-    """
+        - check default parameters
 
-    def test_struct(self):
-        st = common.Struct(x=42.0, y=33.0)
-        assert st.x == 42.0
-        assert st.y == 33.0
+    """
 
     def test_linear_interpolation(self):
         t_start = 0.0
@@ -62,20 +57,6 @@ class TestCommon(BaseTestCase):
         t_mid = 0.5
         val = common.linear_interp1d(t_start, t_end, y_start, y_end, t_mid)
         assert val == 6.0
-
-    def test_unravel_history(self):
-        """
-        This class does not work and it's not used ... maybe should tag it as
-        deprecated
-        """
-        pass
-
-    def test_Buffer(self):
-        """
-        It seems to be unused as well ... maybe should tag it as
-        deprecated
-        """
-        pass
 
     @pytest.mark.skipif(not hasattr(numpy.add, 'at'),
                         reason='Cannot test fallback numpy.add.at implementation without '

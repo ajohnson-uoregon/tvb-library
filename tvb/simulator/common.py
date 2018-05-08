@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -134,33 +134,10 @@ except ImportError:
     LOG.warning(msg)
     psutil = None
 
-class Struct(dict):
-    """
-    the Struct class is a dictionary with matlab/C struct-like access
-    to its fields:
-
-    >>> parameters = Struct(x=23.4345, alpha=1.522e-4)
-    >>> parameters.x + 1
-    24.4345
-    >>> parameters.x_init = 6
-    >>> parameters.x_init + 1
-    7
-    >>> print parameters.y
-    None
-
-    note that this class returns None if the field does not exist!
-
-    """
-
-    def __getattr__(self, attr):
-        return self.get(attr, None)
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
-
 
 def linear_interp1d(start_time, end_time, start_value, end_value, interp_point):
     """
-    performs a one dimensional linear interpolation using two 
+    performs a one dimensional linear interpolation using two
     timepoints (start_time, end_time) for two floating point (possibly
     NumPy arrays) states (start_value, end_value) to return state at timepoint
     start_time < interp_point < end_time.
@@ -189,37 +166,37 @@ def heaviside(array):
         return ret
 
 # FIXME: this may not work yet
-# FIXME: write a numpy array subclass that takes care of this 
+# FIXME: write a numpy array subclass that takes care of this
 #         using indexing magic. makes our life easier.
 def unravel_history(history, horizon, step, arange=numpy.arange):
     """
-    in our simulator, history is a 3D numpy array where the time 
+    in our simulator, history is a 3D numpy array where the time
     dimension is periodic. This means sometimes, the layout is like
 
         [ ... , t(horizon-1), t(horizon), t(1), t(2), ... ]
 
-    but we may need the correctly ordered version 
+    but we may need the correctly ordered version
 
         [ t(1), t(2), ... , t(horizon-1), t(horizon) ]
 
-    given some step. This function does that. 
+    given some step. This function does that.
     """
     allt, allv, allr = map(arange, history.shape)
     # ISomething like(?):
-    # return numpy.roll(history, step, axis=0) 
+    # return numpy.roll(history, step, axis=0)
     return history[ (allt + step) % horizon, allv, allr ]
 
 
 def iround(x):
     """
     iround(number) -> integer
-    Trying to get a stable and portable result when rounding a number to the 
+    Trying to get a stable and portable result when rounding a number to the
     nearest integer.
 
     NOTE: I'm introducing this because of the unstability we found when
     using int(round()). Should use always the same rounding strategy.
 
-    Try :    
+    Try :
     >>> int(4.999999999999999)
     4
     >>> int(4.99999999999999999999)
@@ -230,35 +207,15 @@ def iround(x):
     return int(y) + (y > 0)
 
 
-class Buffer(object):
-    """
-    Draft of a history object that allows us to track the current
-    state and access the history array in different but consistent 
-    ways
-    """
-    step = 0
-    raw = None
-    horizon = None
-
-    def __init__(self):
-        raise NotImplementedError
-
-    def __getindex__(self, idx):
-        return self.raw[(idx + self.step)% self.horizon, :, :]
-
-    def __setindex__(self, idx, rawin):
-        self.raw[(idx + self.step)% self.horizon, :, :] = rawin
-
-
 def zip_directory(path, zip_file):
     """
     Zip a given directory...
-    Didn't know where to put this. 
-    I need to pack zips from the scripting interface. 
-    To avoid duplicating code I leave this small function here. 
+    Didn't know where to put this.
+    I need to pack zips from the scripting interface.
+    To avoid duplicating code I leave this small function here.
 
     :param path -- where to store the zip
-    :param zip_file 
+    :param zip_file
     """
     for dirname, subdirs, files in os.walk(path):
         zip_file.write(dirname)
