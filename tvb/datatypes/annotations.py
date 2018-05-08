@@ -116,18 +116,6 @@ class AnnotationTerm(object):
 
 
 
-class AnnotationArray(Array):
-    """
-    Holds a flatten form for the annotations for a full connectivity.
-    Each region in the connectivity can have None, or a tree of AnnotationTerms
-    To be stored in a compound DS in H5.
-    """
-
-    dtype = types_basic.DType(default=ANNOTATION_DTYPE)
-
-    stored_metadata = [MappedType.METADATA_ARRAY_SHAPE]
-
-
 
 class ConnectivityAnnotations(MappedType):
     """
