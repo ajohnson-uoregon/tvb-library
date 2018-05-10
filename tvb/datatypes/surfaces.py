@@ -114,31 +114,6 @@ HEMISPHERE_RIGHT = "RIGHT"
 HEMISPHERE_UNKNOWN = "NONE"
 
 
-class ValidationResult(object):
-    """
-    Used by surface validate methods to report non-fatal failed validations
-    """
-    def __init__(self):
-        self.warnings = []
-
-    def add_warning(self, msg, data):
-        self.warnings.append((msg, data))
-        self._log(msg, data)
-
-    def _log(self, msg, data):
-        LOG.warn(msg)
-        if data:
-            LOG.debug(data)
-
-    def merge(self, other):
-        r = ValidationResult()
-        r.warnings = self.warnings + other.warnings
-        return r
-
-    def summary(self):
-        return '  |  '.join(msg for msg, _ in self.warnings)
-
-
 class Surface(MappedType):
     """A base class for other surfaces."""
 
@@ -662,28 +637,24 @@ class Surface(MappedType):
         should be represented by a single closed surface and we typically
         represent the cortex as one closed surface per hemisphere.
 
-        :return: a ValidationResult
         """
-        r = ValidationResult()
+
 
         euler, isolated, pinched_off, holes = self.compute_topological_constants()
 
         # The Euler characteristic for a 2D sphere embedded in a 3D space is 2.
         # This should be 2 or 4 -- meaning one or two closed topologically spherical surfaces
         if euler not in (2, 4):
-            r.add_warning("Topologically not 1 or 2 spheres.", "Euler characteristic: " + str(euler))
+            raise exceptions.ValidationException("Topologically not 1 or 2 spheres. Euler characteristic: " + str(euler))
 
         if len(isolated):
-            r.add_warning("Has isolated vertices.", "Offending indices: \n" + str(isolated))
+            raise exceptions.ValidationException("Has isolated vertices. Offending indices: \n" + str(isolated))
 
         if len(pinched_off):
-            r.add_warning("Surface is pinched off.",
-                          "These are edges with more than 2 triangles: \n" + str(pinched_off))
+            raise exceptions.ValidationException("Surface is pinched off. These are edges with more than 2 triangles: \n" + str(pinched_off))
 
         if len(holes):
-            r.add_warning("Has holes.", "Free boundaries: \n" + str(holes))
-
-        return r
+            raise exceptions.ValidationException("Has holes. Free boundaries: \n" + str(holes))
 
     def laplace_beltrami(self, fv, h=1.0):
         """
@@ -908,7 +879,6 @@ class Surface(MappedType):
             msg = "This surface has too many vertices (max: %d)." % TvbProfile.current.MAX_SURFACE_VERTICES_NUMBER
             msg += " Please upload a new surface or change max number in application settings."
             raise exceptions.ValidationException(msg)
-        return ValidationResult()
 
     def get_urls_for_rendering(self, include_region_map=False, region_mapping=None):
         """

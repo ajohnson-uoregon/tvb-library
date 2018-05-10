@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -65,7 +65,7 @@ class TestSurfaces(BaseTestCase):
         assert dt.triangle_angles.shape == (3, 3)
         assert len(dt.edges) == 9
         assert len(dt.edge_triangles) == 9
-        assert [] != dt.validate_topology_for_simulations().warnings
+        # dt.validate_topology_for_simulations() #-- the surface is broken by definition
         assert dt.get_data_shape('vertices') == (10, 3)
         assert dt.get_data_shape('vertex_normals') == (10, 3)
         assert dt.get_data_shape('triangles') == (3, 3)
@@ -91,7 +91,7 @@ class TestSurfaces(BaseTestCase):
         assert abs(dt.edge_length_min - 0.6638) < 0.0001
         assert abs(dt.edge_length_max - 7.7567) < 0.0001
         assert len(dt.edge_triangles) == 49140
-        assert [] == dt.validate_topology_for_simulations().warnings
+        dt.validate_topology_for_simulations()
         assert dt.get_data_shape('vertices') == (16384, 3)
         assert dt.get_data_shape('vertex_normals') == (16384, 3)
         assert dt.get_data_shape('triangles') == (32760, 3)
