@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -40,9 +40,6 @@ from tvb.datatypes import equations
 
 
 class TestNoise(BaseTestCase):
-    def test_stream(self):
-        noise_stream = noise.RandomStream()
-        assert noise_stream.init_seed == 42
 
     def test_additive(self):
         noise_additive = noise.Additive()

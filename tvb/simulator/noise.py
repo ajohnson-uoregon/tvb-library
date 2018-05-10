@@ -50,50 +50,6 @@ from .common import get_logger, simple_gen_astr
 LOG = get_logger(__name__)
 
 
-class RandomStream(core.Type):
-    """
-    This class provides the ability to create multiple random streams which can
-    be independently seeded or set to an explicit state.
-
-    """
-    _ui_name = "Random state"
-    wraps = numpy.random.RandomState
-    defaults = ((42,), {})  # for init wrapped value: wraps(*def[0], **def[1])
-
-    init_seed = 42 # A random seed used to initialise the state of an instance of numpy's RandomState.
-    #TODO: call into the random library???
-
-    def configure(self):
-        """
-        Run base classes configure to setup traited attributes, then initialise
-        the stream's state using ``init_seed``.
-        """
-        super(RandomStream, self).configure()
-        self.reset()
-
-    def __str__(self):
-        return simple_gen_astr(self, 'init_seed')
-
-    # TODO how does this method work?
-    def set_state(self, value):
-        """
-        Set the state of the random number stream based on a previously stored
-        state. This is to enable consistent noise state on continuation from a
-        previous simulation.
-
-        """
-        try:
-            numpy.random.RandomState.set_state(self, state=value)
-        except TypeError:
-            msg = "%s: bad state, see numpy.random.set_state"
-            LOG.error(msg % str(self))
-            raise msg
-
-    def reset(self):
-        """Reset the random stream to its initial state, using initial seed."""
-        numpy.random.RandomState.__init__(self.value, seed=self.init_seed)
-
-
 class Noise(core.Type):
     """
     Defines a base class for noise. Specific noises are derived from this class
@@ -133,11 +89,7 @@ class Noise(core.Type):
 
     ntau = 0.0 # The noise correlation time - numpy.arange(0,20,1)
 
-    random_stream = RandomStream(
-        label="Random Stream",
-        required=True,
-        doc="""An instance of numpy's RandomState associated with this
-        specific Noise object.""")
+    random_stream = numpy.random.RandomState()
 
     dt = None
     # For use if coloured
@@ -153,7 +105,6 @@ class Noise(core.Type):
 
         """
         super(Noise, self).configure()
-        self.random_stream.configure()
 
     def __str__(self):
         return simple_gen_astr(self, 'dt ntau')
