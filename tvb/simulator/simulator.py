@@ -470,10 +470,11 @@ class Simulator(core.Type):
             history = region_history
         # create history query implementation
         self.history = SparseHistory(
-            self.connectivity.weights,
-            self.connectivity.idelays,
-            self.model.cvar,
-            self.model.number_of_modes
+            self.model.number_of_modes,
+            weights=self.connectivity.weights,
+            delays=self.connectivity.idelays,
+            cvars=self.model.cvar,
+
         )
         # initialize its buffer
         self.history.initialize(history)

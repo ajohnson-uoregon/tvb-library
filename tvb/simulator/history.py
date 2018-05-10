@@ -39,30 +39,35 @@ Simulator history implementations.
 
 import numpy
 from tvb.simulator.common import get_logger
-from .descriptors import StaticAttr, Dim, NDArray
 
 LOG = get_logger(__name__)
 
 
-class BaseHistory(StaticAttr):
+class BaseHistory(object):
     "Abstract base class for history implementations."
-
-    n_time, n_node, n_cvar, n_mode = Dim(), Dim(), Dim(), Dim()
-
-    weights = NDArray((n_node, n_node), 'f') # type: numpy.ndarray
-    delays = NDArray((n_node, n_node), 'f') # type: numpy.ndarray
-    cvars = NDArray((n_cvar, ), 'i') # type: numpy.ndarray
 
     @property
     def nbytes(self):
         arrays = 'weights delays cvars'.split()
         return sum([getattr(self, ary).nbytes for ary in arrays])
 
-    def __init__(self, weights, delays, cvars, n_mode):
-        self.n_time, self.n_cvar, self.n_node, self.n_mode = delays.max() + 1, len(cvars), delays.shape[0], n_mode
+    def __init__(self, n_mode, weights=None, delays=None, cvars=None, ):
+        self.n_mode = n_mode
+
+        if weights is None:
+            weights = numpy.array([])
         self.weights = weights
+
+        if delays is None:
+            delays = numpy.array([])
         self.delays = delays
+        self.n_time = delays.max() + 1
+        self.n_node = delays.shape[0]
+
+        if cvars is None:
+            cvars = numpy.array([])
         self.cvars = cvars
+        self.n_cvar = len(cvars)
 
     def initialize(self, init):
         raise NotImplemented
@@ -79,13 +84,9 @@ class DenseHistory(BaseHistory):
 
     # extended shape arrays for indexing
     _es = 'n_node', 'n_cvar', 'n_node'
-    es_icvar = NDArray(_es, 'i')
-    es_idelays = NDArray(_es, 'i')
-    es_weights = NDArray(_es + ('n_mode', ), 'f')
-    es_node_ids = NDArray(_es, 'i')
-    buffer = NDArray(('n_time', 'n_cvar', 'n_node', 'n_mode'), 'f', read_only=False)
-    current_state = NDArray(('n_cvar', 'n_node', 'n_mode'), 'f', read_only=False)
-    delayed_state = NDArray(('n_node', 'n_cvar', 'n_node', 'n_mode'), 'f', read_only=False)
+    # buffer = NDArray(('n_time', 'n_cvar', 'n_node', 'n_mode'), 'f', read_only=False)
+    # current_state = NDArray(('n_cvar', 'n_node', 'n_mode'), 'f', read_only=False)
+    # delayed_state = NDArray(('n_node', 'n_cvar', 'n_node', 'n_mode'), 'f', read_only=False)
 
     @property
     def nbytes(self):
@@ -95,8 +96,8 @@ class DenseHistory(BaseHistory):
         nbytes += BaseHistory.nbytes.fget(self)
         return nbytes
 
-    def __init__(self, weights, delays, cvars, n_mode):
-        super(DenseHistory, self).__init__(weights, delays, cvars, n_mode)
+    def __init__(self, n_mode, weights=None, delays=None, cvars=None, es_icvar=None):
+        super(DenseHistory, self).__init__(n_mode, weights=weights, delays=delays, cvars=cvars)
 
         # initialize indexing arrays
         na = numpy.newaxis
@@ -104,6 +105,10 @@ class DenseHistory(BaseHistory):
         self.es_idelays = self.delays[:, na, :].astype('i')
         self.es_weights = self.weights[:, na, :, na]
         self.es_node_ids = numpy.r_[:self.n_node][na, na, :]
+
+        self.buffer = numpy.ndarray((self.n_time, self.n_cvar, self.n_node, self.n_mode), dtype=numpy.float64)
+        self.current_state = numpy.ndarray((self.n_cvar, self.n_node, self.n_mode), dtype=numpy.float64)
+        self.delayed_state = numpy.ndarray((self.n_node, self.n_cvar, self.n_node, self.n_mode), dtype=numpy.float64)
 
     def initialize(self, init):
         if init.shape[1] > len(self.cvars):
@@ -123,19 +128,8 @@ class DenseHistory(BaseHistory):
 class SparseHistory(DenseHistory):
     "History implementation which stores data only for non-zero weights."
 
-    n_nnzw = Dim()
-    n_nnzr = Dim()
-    time_stride = Dim()
-    nnz_mask = NDArray(('n_node', 'n_node'), numpy.bool)
-    const_indices = NDArray(('n_cvar', n_nnzw, 'n_mode'), 'i')
-    nnz_idelays = NDArray((n_nnzw,), 'i')
-    nnz_row_el_idx = NDArray((n_nnzw, ), 'i')
-    nnz_col_el_idx = NDArray((n_nnzw, ), 'i')
-    nnz_weights = NDArray((n_nnzw, ), 'f')
-    nnz_row_idx = NDArray((n_nnzr, ), 'i')
-
-    def __init__(self, weights, delays, cvars, n_mode):
-        super(SparseHistory, self).__init__(weights, delays, cvars, n_mode)
+    def __init__(self, n_mode, weights=None, delays=None, cvars=None):
+        super(SparseHistory, self).__init__( n_mode, weights=weights, delays=delays, cvars=cvars )
         self.time_stride = self.n_cvar * self.n_node * self.n_mode
         self.nnz_mask = weights_nonzero = weights != 0.0 # type: numpy.ndarray
         self.n_nnzw = nnz = weights_nonzero.sum()

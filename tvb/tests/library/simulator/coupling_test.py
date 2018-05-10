@@ -48,15 +48,15 @@ class TestCoupling(BaseTestCase):
     Define test cases for coupling:
         - initialise each class
         - check functionality
-        
+
     """
     weights = numpy.array([[0, 1], [1, 0]])
 
     state_1sv = numpy.array([[[1], [2]]])  # (state_variables, nodes, modes)
     state_2sv = numpy.array([[[1], [2]], [[1], [2]]])
 
-    history_1sv = SparseHistory(weights, weights * 0, numpy.r_[0], 1)
-    history_2sv = SparseHistory(weights, weights * 0, numpy.r_[0, 1], 1)
+    history_1sv = SparseHistory(1, weights=weights, delays=weights * 0, cvars=numpy.r_[0])
+    history_2sv = SparseHistory(1, weights=weights, delays=weights * 0, cvars=numpy.r_[0, 1])
 
     history_1sv.update(0, state_1sv)
     history_2sv.update(0, state_2sv)
