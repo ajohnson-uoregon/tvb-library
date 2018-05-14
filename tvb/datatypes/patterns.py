@@ -47,45 +47,6 @@ from tvb.basic.logger.builder import get_logger
 LOG = get_logger(__name__)
 
 
-class SpatioTemporalCall(object):
-    """
-    A call method to be added to all Spatio- Temporal classes
-    """
-
-    def __call__(self, temporal_indices=None, spatial_indices=None):
-        """
-        The temporal pattern vector, set by the configure_time method, is
-        combined with the spatial pattern vector, set by the configure_space
-        method, to form a spatiotemporal pattern.
-
-        Called with a single time index as an argument, the spatial pattern at
-        that point in time is returned. This is the standard usage within a
-        simulation where the current simulation time point is retrieved.
-
-        Called without any arguments, by default a big array representing the
-        entire spatio-temporal pattern is returned. While this may be useful for
-        visualisation, say of region level spatio-temporal patterns, care should
-        be taken as when surfaces are considered the returned array can be
-        potentially quite large.
-        """
-        pattern = None
-        if (temporal_indices is not None) and (spatial_indices is None):
-            pattern = (self.spatial_pattern * self.temporal_pattern[0, temporal_indices])
-
-        elif (temporal_indices is None) and (spatial_indices is None):
-            pattern = self.spatial_pattern * self.temporal_pattern
-
-        elif (temporal_indices is not None) and (spatial_indices is not None):
-            pattern = (self.spatial_pattern[spatial_indices, 0] * self.temporal_pattern[0, temporal_indices])
-
-        elif (temporal_indices is None) and (spatial_indices is not None):
-            pattern = (self.spatial_pattern[spatial_indices, 0] * self.temporal_pattern)
-
-        else:
-            LOG.error("%s: Well, that shouldn't be possible..." % repr(self))
-        return pattern
-
-
 class SpatialPattern(types_mapped.MappedType):
     """
     Equation for space variation.
@@ -133,7 +94,7 @@ class SpatialPattern(types_mapped.MappedType):
         self.spatial_pattern = self.space
 
 
-class SpatioTemporalPattern(SpatialPattern, SpatioTemporalCall):
+class SpatioTemporalPattern(SpatialPattern):
     """
     Combine space and time equations.
     """
