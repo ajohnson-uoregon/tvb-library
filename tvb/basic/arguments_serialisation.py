@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-# TheVirtualBrain-Framework Package. This package holds all Data Management, and 
+# TheVirtualBrain-Framework Package. This package holds all Data Management, and
 # Web-UI helpful to run brain-simulations. To use it, you also need do download
 # TheVirtualBrain-Scientific Package (for simulators). See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -73,33 +73,6 @@ def parse_slice(slice_string):
         return tuple(ret)
     else:
         return ret[0]
-
-
-
-def slice_str(slice_or_tuple):
-    """
-    >>> slice_str(slice(1, None, 2))
-    '1::2'
-    >>> slice_str((slice(None, None, 2), slice(None), 4))
-    '::2, :, 4'
-    Does not handle ... yet
-    """
-    def sl_str(s):
-        if isinstance(s, slice):
-            if s.start is s.step is None:
-                return '%s' % (s.stop if s.stop is not None else ':')
-            r = '%s:%s' % (s.start or '', s.stop or '')
-            if s.step is not None:
-                r += ':%d' % s.step
-            return r
-        else:
-            return str(int(s))
-
-    if isinstance(slice_or_tuple, tuple):
-        return '[' + ', '.join(sl_str(s) for s in slice_or_tuple) + ']'
-    else:
-        return '[' + sl_str(slice_or_tuple) + ']'
-
 
 
 def preprocess_space_parameters(x, y, z, max_x, max_y, max_z):
