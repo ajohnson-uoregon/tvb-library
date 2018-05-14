@@ -4,3 +4,6 @@ omit =
     */_numba/*
     */_opencl/*
     */plot/*
+    */analyzers/*
+    */lab.py
+    */sensors_bst_to_tvb.py
