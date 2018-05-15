@@ -182,11 +182,6 @@ class TestSurfaces(BaseTestCase):
         assert dt.get_data_shape('vertex_normals') == (0,)
         assert dt.get_data_shape('triangles') == (17224, 3)
 
-    def test_regionmapping(self):
-        dt = RegionMapping(load_default=True)
-        assert isinstance(dt, RegionMapping)
-        assert dt.shape == (16384,)
-
     def test_localconnectivity_empty(self):
         dt = LocalConnectivity()
         assert dt.surface is None

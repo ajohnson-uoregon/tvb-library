@@ -51,13 +51,13 @@ from tvb.basic.arguments_serialisation import parse_slice, preprocess_space_para
 LOG = get_logger(__name__)
 
 
-class RegionMapping(arrays.MappedArray):
+class RegionMapping(Connectivity):
     """
     An array (of length Surface.vertices). Each value is representing the index in Connectivity regions
     to which the current vertex is mapped.
     """
 
-    array_data = numpy.array([])
+    mapping = numpy.array([])
 
     connectivity = Connectivity
 
@@ -76,7 +76,7 @@ class RegionMapping(arrays.MappedArray):
         source_full_path = try_get_absolute_path("tvb_data.regionMapping", source_file)
         reader = FileReader(source_full_path)
 
-        result.array_data = reader.read_array(dtype=numpy.int32)
+        result.mapping = reader.read_array(dtype=numpy.int32)
         return result
 
     def get_region_mapping_slice(self, start_idx, end_idx):
@@ -93,7 +93,7 @@ class RegionMapping(arrays.MappedArray):
         if isinstance(end_idx, (str, unicode)):
             end_idx = int(end_idx)
 
-        return self.array_data[start_idx: end_idx].T
+        return self.mapping[start_idx: end_idx].T
 
 
     def get_triangles_mapping(self):
@@ -103,7 +103,7 @@ class RegionMapping(arrays.MappedArray):
         triangles_no = self.surface.number_of_triangles
         result = []
         for i in range(triangles_no):
-            result.append(self.array_data[self.surface.triangles[i][0]])
+            result.append(self.mapping[self.surface.triangles[i][0]])
         return numpy.array(result)
 
 
@@ -116,7 +116,7 @@ class RegionMapping(arrays.MappedArray):
         new_region_map.storage_path = storage_path
         new_region_map._connectivity = connectivity_gid
         new_region_map._surface = self._surface
-        new_region_map.array_data = self.array_data
+        new_region_map.mapping = self.mapping
         return new_region_map
 
     def _find_summary_info(self):

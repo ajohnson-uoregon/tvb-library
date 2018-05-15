@@ -483,9 +483,9 @@ class Projection(Monitor):
             self.gain = self.analytic(**sources)
 
         # reduce to region lead field if region sim
-        if not using_cortical_surface and self.gain.shape[1] == self.rmap.size:
+        if not using_cortical_surface and self.gain.shape[1] == self.rmap.mapping.size:
             gain = numpy.zeros((self.gain.shape[0], conn.number_of_regions))
-            numpy_add_at(gain.T, self.rmap, self.gain.T)
+            numpy_add_at(gain.T, self.rmap.mapping, self.gain.T)
             LOG.debug('Region mapping gain shape %s to %s', self.gain.shape, gain.shape)
             self.gain = gain
 

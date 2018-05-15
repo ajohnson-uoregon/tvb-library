@@ -111,7 +111,7 @@ class Cortex(surfaces.CorticalSurface):
         """
         if self.region_mapping_data is None:
             return None
-        return self.region_mapping_data.array_data
+        return self.region_mapping_data.mapping
 
 
     def configure(self):
