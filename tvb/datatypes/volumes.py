@@ -51,10 +51,24 @@ class Volume(types_mapped.MappedType):
     Data defined on a regular grid in three dimensions.
 
     """
-    # Volume origin coordinates
-    origin = numpy.array([], dtype=numpy.float64)
-    voxel_size = numpy.array([], dtype=numpy.float64) # need a triplet, xyz
-    voxel_unit = "mm"
+
+    def __init__(self, origin=None, voxel_size=None, voxel_unit="mm",
+                 array_data=None, *args, **kwargs):
+        if origin is None:
+            origin = numpy.array([], dtype=numpy.float64)
+        self.origin = origin
+
+        if voxel_size is None:
+            voxel_size = numpy.array([], dtype=numpy.float64) # need a triplet, xyz
+        self.voxel_size = voxel_size
+
+        self.voxel_unit = voxel_unit
+
+        if array_data is None:
+            array_data = numpy.array([], dtype=numpy.float64)
+        self.array_data = array_data
+
+        super(Volume, self).__init__(*args, **kwargs)
 
     def _find_summary_info(self):
         summary = {"Volume type": self.__class__.__name__,
@@ -100,5 +114,18 @@ class Volume(types_mapped.MappedType):
         Retrieve the minimum and maximum values from the metadata.
         :returns: (minimum_value, maximum_value)
         """
-        metadata = self.get_metadata('array_data')
-        return metadata[self.METADATA_ARRAY_MIN], metadata[self.METADATA_ARRAY_MAX]
+        return numpy.amin(self.array_data), numpy.amax(self.array_data)
+
+class StructuralMRI(Volume):
+    """
+    Quantitative volumetric data recorded by means of Magnetic Resonance Imaging.
+
+    """
+
+    # not sure what else should be here, but the main data should be part
+    # of Volume; can put other supplemental data here?
+
+    weighting = ""  # eg, "T1", "T2", "T2*", "PD", ...
+
+    def __init__(self, *args, **kwargs):
+        super(StructuralMRI, self).__init__(*args, **kwargs)

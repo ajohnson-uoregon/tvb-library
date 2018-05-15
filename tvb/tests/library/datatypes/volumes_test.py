@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -33,8 +33,9 @@ Created on Mar 20, 2013
 .. moduleauthor:: Bogdan Neacsa <bogdan.neacsa@codemart.ro>
 """
 
+import numpy
 from tvb.tests.library.base_testcase import BaseTestCase
-from tvb.datatypes import volumes
+from tvb.datatypes.volumes import Volume, StructuralMRI
 
 
 class TestVolumes(BaseTestCase):
@@ -43,7 +44,7 @@ class TestVolumes(BaseTestCase):
     """
 
     def test_volume(self):
-        dt = volumes.Volume()
+        dt = Volume()
         summary_info = dt.summary_info
         assert summary_info['Origin'].shape == (0,)
         assert summary_info['Voxel size'].shape == (0,)
@@ -52,3 +53,22 @@ class TestVolumes(BaseTestCase):
         assert dt.origin.shape == (0,)
         assert dt.voxel_size.shape == (0,)
         assert dt.voxel_unit == 'mm'
+
+    def test_get_min_max(self):
+        dt = Volume(array_data=numpy.array(range(30)))
+        assert dt.get_min_max_values() == (0, 29)
+
+    def test_structural_MRI(self):
+        dt = StructuralMRI()
+
+        # check that inheritace happens
+        summary_info = dt.summary_info
+        assert summary_info['Origin'].shape == (0,)
+        assert summary_info['Voxel size'].shape == (0,)
+        assert summary_info['Volume type'] == 'StructuralMRI'
+        assert summary_info['Units'] == 'mm'
+        assert dt.origin.shape == (0,)
+        assert dt.voxel_size.shape == (0,)
+        assert dt.voxel_unit == 'mm'
+
+        assert dt.weighting == ""
