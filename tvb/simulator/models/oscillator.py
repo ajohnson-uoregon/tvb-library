@@ -31,7 +31,7 @@ Oscillator models.
 
 """
 
-from .base import Model, ModelNumbaDfun, LOG, numpy, arrays
+from .base import Model, ModelNumbaDfun, LOG, numpy
 import numexpr
 from numba import guvectorize, float64
 from enum import Enum, unique

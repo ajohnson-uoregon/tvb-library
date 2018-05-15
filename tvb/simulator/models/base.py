@@ -35,7 +35,6 @@ import numpy
 from scipy.integrate import trapz as scipy_integrate_trapz
 from scipy.stats import norm as scipy_stats_norm
 from tvb.simulator.common import get_logger
-import tvb.datatypes.arrays as arrays
 import tvb.basic.traits.core as core
 import tvb.simulator.noise as noise_module
 

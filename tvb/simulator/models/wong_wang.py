@@ -31,7 +31,7 @@ Models based on Wong-Wang's work.
 
 """
 
-from .base import ModelNumbaDfun, LOG, numpy, arrays
+from .base import ModelNumbaDfun, LOG, numpy
 from numba import guvectorize, float64
 from enum import Enum, unique
 

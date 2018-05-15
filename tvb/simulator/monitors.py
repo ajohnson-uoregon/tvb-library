@@ -60,7 +60,6 @@ from tvb.datatypes.time_series import (TimeSeries, TimeSeriesRegion,
 from tvb.simulator.common import get_logger, simple_gen_astr
 import tvb.datatypes.sensors as sensors_module
 from tvb.datatypes.sensors import SensorsMEG, SensorsInternal, SensorsEEG, Sensors
-import tvb.datatypes.arrays as arrays
 from tvb.datatypes.cortex import Cortex
 from tvb.datatypes.region_mapping import RegionMapping
 from tvb.datatypes.connectivity import Connectivity

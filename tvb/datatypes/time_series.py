@@ -39,7 +39,7 @@ methods that are associated with the time-series data.
 import json
 import numpy
 from tvb.basic.traits import core, exceptions, types_mapped
-from tvb.datatypes import sensors, surfaces, volumes, region_mapping, connectivity, arrays
+from tvb.datatypes import sensors, surfaces, volumes, region_mapping, connectivity
 from tvb.basic.arguments_serialisation import (preprocess_space_parameters, preprocess_time_parameters,
     postprocess_voxel_ts)
 from tvb.basic.logger.builder import get_logger

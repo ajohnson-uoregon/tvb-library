@@ -36,7 +36,6 @@ import json
 from copy import deepcopy
 from tvb.tests.library.base_testcase import BaseTestCase
 import tvb.datatypes.equations as equations
-import tvb.datatypes.arrays as arrays
 import tvb.datatypes.time_series as time_series
 from tvb.basic.traits.types_mapped import MappedType
 from tvb.simulator.models import WilsonCowan, ReducedSetHindmarshRose
@@ -88,16 +87,6 @@ class TestTraits(BaseTestCase):
         model2.number_of_modes = 15
         assert model1.number_of_modes != model2.number_of_modes
         assert model1.a[0] != model2.a[0]
-
-    def test_array_populated(self):
-        """
-        simple Array test
-        """
-        arr = arrays.MappedArray(array_data=numpy.array(range(10)))
-        arr.configure()
-        assert 10 == arr.array_data.shape[0]
-        assert 1 == arr.nr_dimensions
-        assert 10 == arr.length_1d
 
     def test_linked_attributes(self):
         """

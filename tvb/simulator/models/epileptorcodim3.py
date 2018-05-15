@@ -34,7 +34,7 @@ Saggio codimension 3 Epileptor model
 
 """
 
-from .base import numpy, arrays, ModelNumbaDfun
+from .base import numpy, ModelNumbaDfun
 from numba import guvectorize, float64, int_
 from enum import Enum, unique
 

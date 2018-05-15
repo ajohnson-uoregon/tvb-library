@@ -36,7 +36,7 @@ from tvb.basic.traits import util
 from tvb.basic.readers import try_get_absolute_path, FileReader
 from tvb.basic.traits import core
 from tvb.basic.logger.builder import get_logger
-from . import arrays, local_connectivity, region_mapping, surfaces
+from . import local_connectivity, region_mapping, surfaces
 
 LOG = get_logger(__name__)
 

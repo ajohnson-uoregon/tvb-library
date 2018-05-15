@@ -49,7 +49,6 @@ import functools
 import numpy
 import scipy.integrate
 from tvb.basic.traits import core
-from tvb.datatypes import arrays
 from . import noise
 from .common import get_logger, simple_gen_astr
 

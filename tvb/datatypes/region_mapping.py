@@ -40,7 +40,6 @@ In FreeSurfer terms, a RegionMapping is a parcellation and a VolumeMapping is a 
 import numpy
 from tvb.basic.traits import exceptions
 from tvb.basic.readers import try_get_absolute_path, FileReader
-import tvb.datatypes.arrays as arrays
 from tvb.datatypes.connectivity import Connectivity
 from tvb.datatypes.surfaces import Surface
 from tvb.datatypes.volumes import Volume

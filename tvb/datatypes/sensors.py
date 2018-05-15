@@ -39,7 +39,6 @@ methods that are associated with the sensor dataTypes.
 """
 
 import numpy
-from tvb.datatypes import arrays
 from tvb.basic.logger.builder import get_logger
 from tvb.basic.traits.types_mapped import MappedType
 from tvb.basic.readers import FileReader, try_get_absolute_path

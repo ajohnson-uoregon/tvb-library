@@ -31,7 +31,7 @@ Generic linear model.
 
 """
 
-from .base import Model, LOG, numpy, arrays
+from .base import Model, LOG, numpy
 from enum import Enum, unique
 
 class Linear(Model):

@@ -31,7 +31,7 @@ Larter-Breakspear model based on the Morris-Lecar equations.
 
 """
 
-from .base import Model, LOG, numpy, arrays
+from .base import Model, LOG, numpy
 from enum import Enum, unique
 
 class LarterBreakspear(Model):

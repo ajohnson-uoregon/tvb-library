@@ -43,7 +43,7 @@ methods that are associated with the surfaces data.
 import warnings
 import json
 import numpy
-import tvb.datatypes.arrays as arrays
+
 from tvb.basic.traits import util, exceptions
 from tvb.basic.logger.builder import get_logger
 from tvb.basic.traits.types_mapped import MappedType #, SparseMatrix

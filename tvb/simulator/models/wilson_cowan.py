@@ -31,7 +31,7 @@ Wilson-Cowan equations based model definition.
 
 """
 
-from .base import Model, LOG, numpy, arrays
+from .base import Model, LOG, numpy
 from enum import Enum, unique
 
 class WilsonCowan(Model):

@@ -40,7 +40,7 @@ methods that are associated with the pattern datatypes.
 
 import numpy
 from tvb.basic.traits import types_mapped
-from tvb.datatypes import arrays, surfaces, volumes, connectivity, equations
+from tvb.datatypes import surfaces, volumes, connectivity, equations
 from tvb.basic.logger.builder import get_logger
 
 

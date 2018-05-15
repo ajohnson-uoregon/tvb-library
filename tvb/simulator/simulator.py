@@ -47,7 +47,7 @@ from tvb.basic.profile import TvbProfile
 import tvb.basic.traits.core as core
 from tvb.basic.filters.chain import UIFilter, FilterChain
 
-from tvb.datatypes import cortex, connectivity, arrays, patterns
+from tvb.datatypes import cortex, connectivity, patterns
 from tvb.simulator import models, integrators, monitors, coupling
 
 from .common import psutil, get_logger, numpy_add_at
