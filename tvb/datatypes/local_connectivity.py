@@ -40,24 +40,18 @@ from tvb.datatypes import equations, surfaces
 LOG = get_logger(__name__)
 
 
-class LocalConnectivity(types_mapped.MappedType):
+class LocalConnectivity(object):
     """
     A sparse matrix for representing the local connectivity within the Cortex.
     """
     _ui_name = "Local connectivity"
 
-    surface = surfaces.CorticalSurface(label="Surface", order=1)
 
-    # matrix = types_mapped.SparseMatrix(order=-1)
-    matrix = None
-    equation = equations.FiniteSupportEquation(
-        label="Spatial",
-        required=False,
-        default=equations.Gaussian,
-        order=2)
-
-    def __init__(self, cutoff=40.0):
+    def __init__(self, cutoff=40.0, surface=None, matrix=None, equation=equations.Gaussian):
         self.cutoff = cutoff # Distance at which to truncate the evaluation in mm.
+        self.surface = surface
+        self.matrix = matrix
+        self.equation = equation
 
     def compute(self):
         """

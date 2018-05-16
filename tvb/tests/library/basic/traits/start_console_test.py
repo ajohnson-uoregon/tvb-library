@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -54,6 +54,6 @@ class TestConsoleTraited(BaseTestCase):
         # default_cortex.compute_local_connectivity()
         # self.assertTrue(default_cortex.local_connectivity is not None)
 
-        default_lc = LocalConnectivity(load_default=True, cutoff=2)
+        default_lc = LocalConnectivity(cutoff=2).from_file()
         other_cortex = Cortex(local_connectivity=default_lc)
         assert other_cortex.local_connectivity is not None

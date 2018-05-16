@@ -192,7 +192,7 @@ class TestSurfaces(BaseTestCase):
         assert isinstance(dt, Cortex)
         assert dt.region_mapping is not None
         ## Initialize Local Connectivity, to avoid long computation time.
-        dt.local_connectivity = LocalConnectivity(load_default=True)
+        dt.local_connectivity = LocalConnectivity().from_file()
 
         dt.configure()
         summary_info = dt.summary_info

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -30,7 +30,7 @@
 
 """
 
-Tests all the possible combinations of (available) models and integration 
+Tests all the possible combinations of (available) models and integration
 schemes (region and surface based simulations).
 
 .. moduleauthor:: Paula Sanz Leon <sanzleon.paula@gmail.com@>
@@ -64,13 +64,13 @@ METHOD_NAMES.append('RungeKutta4thOrderDeterministic')
 class Simulator(object):
     """
     Simulator test class
-    
+
     """
 
     def __init__(self):
         """
         Initialise the structural information, coupling function, and monitors.
-        
+
         """
 
         # Initialise some Monitors with period in physical time
@@ -107,9 +107,9 @@ class Simulator(object):
                   default_connectivity=True):
         """
         Create an instance of the Simulator class, by default use the
-        generic plane oscillator local dynamic model and the deterministic 
+        generic plane oscillator local dynamic model and the deterministic
         version of Heun's method for the numerical integration.
-        
+
         """
         self.method = method
 
@@ -135,8 +135,7 @@ class Simulator(object):
             local_coupling_strength = numpy.array([2 ** -10])
             default_cortex = Cortex(load_default=True, region_mapping_data=region_mapping)
             default_cortex.coupling_strength = local_coupling_strength
-            default_cortex.local_connectivity = LocalConnectivity(load_default=default_connectivity,
-                                                                  surface=default_cortex)
+            default_cortex.local_connectivity = LocalConnectivity().from_file() 
         else:
             default_cortex = None
 

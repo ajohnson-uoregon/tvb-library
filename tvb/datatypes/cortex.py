@@ -50,14 +50,6 @@ class Cortex(surfaces.CorticalSurface):
 
     _ui_name = "A cortex..."
 
-    local_connectivity = local_connectivity.LocalConnectivity(
-        label="Local Connectivity",
-        required=False,
-        doc="Define the interaction between neighboring network nodes. This is implicitly integrated in"
-            " the definition of a given surface as an excitatory mean coupling of directly adjacent neighbors to"
-            " the first state variable of each population model (since these typically represent the mean-neural"
-            " membrane voltage). This coupling is instantaneous (no time delays).")
-
     region_mapping_data = region_mapping.RegionMapping(
         label="region mapping",
         doc="""An index vector of length equal to the number_of_vertices + the
@@ -85,6 +77,15 @@ class Cortex(surfaces.CorticalSurface):
     # cortical surface to a set of embeded sensors.
     internal_projection = numpy.array([], dtype=numpy.float64)
     #  requires linked SensorsInternal
+
+    def __init__(self, local_connectivity=None, *args, **kwargs):
+        # "Define the interaction between neighboring network nodes. This is implicitly integrated in"
+        #     " the definition of a given surface as an excitatory mean coupling of directly adjacent neighbors to"
+        #     " the first state variable of each population model (since these typically represent the mean-neural"
+        #     " membrane voltage). This coupling is instantaneous (no time delays)."
+        self.local_connectivity = local_connectivity
+        super(Cortex, self).__init__(*args, **kwargs)
+
 
     def populate_cortex(self, cortex_surface, cortex_parameters=None):
         """
@@ -128,7 +129,7 @@ class Cortex(surfaces.CorticalSurface):
             self.compute_region_areas()
 
         if self.local_connectivity is None:
-            self.local_connectivity = local_connectivity.LocalConnectivity(cutoff=40.0, use_storage=False, surface=self)
+            self.local_connectivity = local_connectivity.LocalConnectivity(cutoff=40.0, surface=self)
 
         if self.local_connectivity.matrix is None:
             self.compute_local_connectivity()
@@ -171,7 +172,6 @@ class Cortex(surfaces.CorticalSurface):
         #HACK FOR DEBUGGING CAUSE TRAITS REPORTS self.local_connectivity.trait["matrix"] AS BEING EMPTY...
         lcmat = self.local_connectivity.matrix
         sts = str(lcmat.__class__)
-        name = ".".join((self.__class__.__name__ + ".local_connectivity", self.local_connectivity.trait.name))
         shape = str(lcmat.shape)
         sparse_format = str(lcmat.format)
         nnz = str(lcmat.nnz)
@@ -181,12 +181,6 @@ class Cortex(surfaces.CorticalSurface):
             array_min = lcmat.data.min()
         else:
             array_max = array_min = 0.0
-        LOG.debug("%s: %s shape: %s" % (sts, name, shape))
-        LOG.debug("%s: %s format: %s" % (sts, name, sparse_format))
-        LOG.debug("%s: %s number of non-zeros: %s" % (sts, name, nnz))
-        LOG.debug("%s: %s dtype: %s" % (sts, name, dtype))
-        LOG.debug("%s: %s maximum: %s" % (sts, name, array_max))
-        LOG.debug("%s: %s minimum: %s" % (sts, name, array_min))
 
     def compute_region_areas(self):
         """Update the region_area attribute."""
