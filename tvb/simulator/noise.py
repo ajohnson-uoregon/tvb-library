@@ -43,14 +43,13 @@ RandomState.
 
 import numpy
 from tvb.datatypes import equations
-from tvb.basic.traits import core
 from .common import get_logger, simple_gen_astr
 
 
 LOG = get_logger(__name__)
 
 
-class Noise(core.Type):
+class Noise(object):
     """
     Defines a base class for noise. Specific noises are derived from this class
     for use in stochastic integrations.
@@ -87,16 +86,20 @@ class Noise(core.Type):
     #      inital conditions noise source, and in that use the job of nsig is
     #      filled by the state_variable_range attribute of the Model.
 
-    ntau = 0.0 # The noise correlation time - numpy.arange(0,20,1)
 
-    random_stream = numpy.random.RandomState()
+    def __init__(self, ntau=0.0, dt=None, _E=None, _sqrt_1_E2=None, _eta=None,
+                 _h=None, random_stream=None):
+        self.ntau = ntau
+        self.dt = dt
+        # for use with colored noise
+        self._E = _E
+        self._sqrt_1_E2 = _sqrt_1_E2
+        self._eta = _eta
+        self._h = _h
 
-    dt = None
-    # For use if coloured
-    _E = None
-    _sqrt_1_E2 = None
-    _eta = None
-    _h = None
+        if random_stream is None:
+            random_stream = numpy.random.RandomState()
+        self.random_stream = random_stream
 
     def configure(self):
         """
@@ -225,16 +228,21 @@ class Multiplicative(Noise):
 
     """
 
-    # The noise dispersion, it is the standard deviation of the
-    # distribution from which the Gaussian random variates are drawn. NOTE:
-    # Sensible values are typically ~<< 1% of the dynamic range of a Model's
-    # state variables.
-    nsig = numpy.array([1.0], dtype=numpy.float64)
 
-    b = equations.TemporalApplicableEquation(
-        label=":math:`b`",
-        default=equations.Linear(parameters={"a": 1.0, "b": 0.0}),
-        doc="""A function evaluated on the state-variables, the result of which enters as the diffusion coefficient.""")
+    def __init__(self, nsig=None, b=None, *args, **kwargs):
+        if nsig is None:
+            # The noise dispersion, it is the standard deviation of the
+            # distribution from which the Gaussian random variates are drawn. NOTE:
+            # Sensible values are typically ~<< 1% of the dynamic range of a Model's
+            # state variables.
+            nsig = numpy.array([1.0], dtype=numpy.float64)
+        self.nsig = nsig
+
+        if b is None:
+            b = equations.Linear(parameters={"a": 1.0, "b": 0.0})
+        self.b = b
+
+        super(Multiplicative, self).__init__(*args, **kwargs)
 
     def gfun(self, state_variables):
         """

@@ -49,7 +49,7 @@ import functools
 import numpy
 import scipy.integrate
 from tvb.basic.traits import core
-from . import noise
+from .noise import Additive
 from .common import get_logger, simple_gen_astr
 
 
@@ -134,12 +134,12 @@ class IntegratorStochastic(Integrator):
 
     """
 
-    noise = noise.Noise(
-        label = "Integration Noise",
-        default = noise.Additive,
-        required = True,
-        doc = """The stochastic integrator's noise source. It incorporates its
-        own instance of Numpy's RandomState.""")
+    def __init__(self, noise=None, *args, **kwargs):
+        if noise is None:
+            noise = Additive()
+        self.noise = noise
+
+        super(IntegratorStochastic, self).__init__(*args, **kwargs)
 
     def __str__(self):
         return simple_gen_astr(self, 'dt noise')
