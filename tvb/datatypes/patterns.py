@@ -213,7 +213,7 @@ class StimuliSurface(SpatioTemporalPattern):
 class SpatialPatternVolume(SpatialPattern):
     """ A spatio-temporal pattern defined in a volume. """
 
-    volume = volumes.Volume(label="Volume")
+    volume = None
 
     # indexes into volume
     focal_points_volume = numpy.array([])

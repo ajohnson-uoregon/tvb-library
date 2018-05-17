@@ -37,7 +37,6 @@ methods that are associated with the volume datatypes.
 """
 
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits import types_mapped
 
 import numpy
 
@@ -45,7 +44,7 @@ import numpy
 LOG = get_logger(__name__)
 
 
-class Volume(types_mapped.MappedType):
+class Volume(object):
     """
     Data defined on a regular grid in three dimensions.
 
@@ -67,7 +66,7 @@ class Volume(types_mapped.MappedType):
             array_data = numpy.array([], dtype=numpy.float64)
         self.array_data = array_data
 
-        super(Volume, self).__init__(*args, **kwargs)
+        #super(Volume, self).__init__(*args, **kwargs)
 
     def _find_summary_info(self):
         summary = {"Volume type": self.__class__.__name__,

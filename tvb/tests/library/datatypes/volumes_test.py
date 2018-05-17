@@ -45,7 +45,7 @@ class TestVolumes(BaseTestCase):
 
     def test_volume(self):
         dt = Volume()
-        summary_info = dt.summary_info
+        summary_info = dt._find_summary_info()
         assert summary_info['Origin'].shape == (0,)
         assert summary_info['Voxel size'].shape == (0,)
         assert summary_info['Volume type'] == 'Volume'
@@ -62,7 +62,7 @@ class TestVolumes(BaseTestCase):
         dt = StructuralMRI()
 
         # check that inheritace happens
-        summary_info = dt.summary_info
+        summary_info = dt._find_summary_info()
         assert summary_info['Origin'].shape == (0,)
         assert summary_info['Voxel size'].shape == (0,)
         assert summary_info['Volume type'] == 'StructuralMRI'
