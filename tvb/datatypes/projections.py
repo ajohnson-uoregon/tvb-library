@@ -45,7 +45,7 @@ MEG_POLYMORPHIC_IDENTITY = "projMEG"
 SEEG_POLYMORPHIC_IDENTITY = "projSEEG"
 
 
-class ProjectionMatrix(MappedType):
+class ProjectionMatrix(object):
     """
     Base DataType for representing a ProjectionMatrix.
     The projection is between a source of type CorticalSurface and a set of Sensors.
@@ -53,25 +53,41 @@ class ProjectionMatrix(MappedType):
 
     projection_type = ""
 
-    __mapper_args__ = {'polymorphic_on': 'projection_type'}
+    # __mapper_args__ = {'polymorphic_on': 'projection_type'}
+    #
+    # brain_skull = surfaces.BrainSkull(label="Brain Skull", default=None, required=False,
+    #                                   doc="""Boundary between skull and cortex domains.""")
+    #
+    # skull_skin = surfaces.SkullSkin(label="Skull Skin", default=None, required=False,
+    #                                 doc="""Boundary between skull and skin domains.""")
+    #
+    # skin_air = surfaces.SkinAir(label="Skin Air", default=None, required=False,
+    #                             doc="""Boundary between skin and air domains.""")
+    #
+    #
+    #
+    # sources = surfaces.CorticalSurface(label="surface or region", default=None, required=True)
+    #
+    # sensors = sensors.Sensors(label="Sensors", default=None, required=False,
+    #                           doc=""" A set of sensors to compute projection matrix for them. """)
+    #
+    # projection_data = None
 
-    brain_skull = surfaces.BrainSkull(label="Brain Skull", default=None, required=False,
-                                      doc="""Boundary between skull and cortex domains.""")
 
-    skull_skin = surfaces.SkullSkin(label="Skull Skin", default=None, required=False,
-                                    doc="""Boundary between skull and skin domains.""")
+    def __init__(self, brain_skull=None, skull_skin=None, skin_air=None,
+                 conductances=None, sources=None, sensors=None,
+                 projection_data=None, *args, **kwargs):
+        self.brain_skull = brain_skull
+        self.skull_skin = skull_skin
+        self.skin_air = skin_air
 
-    skin_air = surfaces.SkinAir(label="Skin Air", default=None, required=False,
-                                doc="""Boundary between skin and air domains.""")
+        if conductances is None:
+            conductances = {'air': 0.0, 'skin': 1.0, 'skull': 0.01, 'brain': 1.0}
+        self.conductances = conductances
 
-    conductances = {'air': 0.0, 'skin': 1.0, 'skull': 0.01, 'brain': 1.0}
-
-    sources = surfaces.CorticalSurface(label="surface or region", default=None, required=True)
-
-    sensors = sensors.Sensors(label="Sensors", default=None, required=False,
-                              doc=""" A set of sensors to compute projection matrix for them. """)
-
-    projection_data = None
+        self.sources = sources
+        self.sensors = sensors
+        self.projection_data = projection_data
 
 
     @property
@@ -105,9 +121,11 @@ class ProjectionSurfaceEEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': EEG_POLYMORPHIC_IDENTITY}
 
-    projection_type = EEG_POLYMORPHIC_IDENTITY
+    def __init__(self, *args, **kwargs):
+        self.projection_type = EEG_POLYMORPHIC_IDENTITY
+        self.sensors = sensors.SensorsEEG
 
-    sensors = sensors.SensorsEEG
+        super(ProjectionSurfaceEEG, self).__init__(*args, **kwargs)
 
     @classmethod
     def from_file(cls, source_file='projection_eeg_65_surface_16k.npy', matlab_data_name="ProjectionMatrix",
@@ -125,9 +143,11 @@ class ProjectionSurfaceMEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': MEG_POLYMORPHIC_IDENTITY}
 
-    projection_type = MEG_POLYMORPHIC_IDENTITY
+    def __init__(self, *args, **kwargs):
+        self.projection_type = MEG_POLYMORPHIC_IDENTITY
+        self.sensors = sensors.SensorsMEG
 
-    sensors = sensors.SensorsMEG
+        super(ProjectionSurfaceMEG, self).__init__(*args, **kwargs)
 
     @classmethod
     def from_file(cls, source_file='projection_meg_276_surface_16k.npy', matlab_data_name=None, is_brainstorm=False,
@@ -145,9 +165,11 @@ class ProjectionSurfaceSEEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': SEEG_POLYMORPHIC_IDENTITY}
 
-    projection_type = SEEG_POLYMORPHIC_IDENTITY
+    def __init__(self, *args, **kwargs):
+        self.projection_type = SEEG_POLYMORPHIC_IDENTITY
+        self.sensors = sensors.SensorsInternal
 
-    sensors = sensors.SensorsInternal
+        super(ProjectionSurfaceSEEG, self).__init__(*args, **kwargs)
 
     @classmethod
     def from_file(cls, source_file='projection_seeg_588_surface_16k.npy', matlab_data_name=None, is_brainstorm=False,

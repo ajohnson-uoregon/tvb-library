@@ -566,9 +566,9 @@ class EEG(Projection):
     """
     _ui_name = "EEG"
 
-    projection = ProjectionSurfaceEEG(
-        default=None, label='Projection matrix', order=2,
-        doc='Projection matrix to apply to sources.')
+    # projection = ProjectionSurfaceEEG(
+    #     default=None, label='Projection matrix', order=2,
+    #     doc='Projection matrix to apply to sources.')
 
     # 'EEG Electrode to be used as reference, or "average" to '
     # 'apply an average reference. If none is provided, the '
@@ -578,11 +578,12 @@ class EEG(Projection):
     sensors = SensorsEEG(required=True, label="EEG Sensors", order=1,
                          doc='Sensors to use for this EEG monitor')
 
-    def __init__(self, sigma=1.0, *args, **kwargs):
+    def __init__(self, sigma=1.0, projection=None, *args, **kwargs):
         self.sigma = sigma # Conductivity (w/o projection)
         # When a projection matrix is not used, this provides
         # the value of conductivity in the formula for the single
         # sphere approximation of the head (Sarvas 1987).
+        self.projection = projection
         super(EEG, self).__init__(*args, **kwargs)
 
 
@@ -653,6 +654,11 @@ class MEG(Projection):
         calculated.""")
 
 
+    def __init__(self, projection=None, *args, **kwargs):
+        self.projection = projection
+
+        super(MEG, self).__init__(*args, **kwargs)
+
     @classmethod
     def from_file(cls, sensors_fname='meg_brainstorm_276.txt',
                    projection_fname='projection_meg_276_surface_16k.npy', **kwargs):
@@ -706,16 +712,17 @@ class iEEG(Projection):
 
     _ui_name = "Intracerebral / Stereo EEG"
 
-    projection = ProjectionSurfaceSEEG(
-        default=None, label='Projection matrix', order=2,
-        doc='Projection matrix to apply to sources.')
+    # projection = ProjectionSurfaceSEEG(
+    #     default=None, label='Projection matrix', order=2,
+    #     doc='Projection matrix to apply to sources.')
 
     sensors = sensors_module.SensorsInternal(
         label="Internal brain sensors", default=None, required=True, order=1,
         doc="The set of SEEG sensors for which the forward solution will be calculated.")
 
-    def __init__(self, sigma=1.0, *args, **kwargs):
+    def __init__(self, sigma=1.0, projection=None, *args, **kwargs):
         self.sigma = sigma
+        self.projection = projection
         super(iEEG, self).__init__(*args, **kwargs)
 
     @classmethod
