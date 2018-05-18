@@ -120,20 +120,6 @@ class Simulator(core.Type):
         surface-based simulation, the option to configure the spatial spread of
         the ``Local Connectivity`` is available.""")
 
-    stimulus = patterns.SpatioTemporalPattern(
-        label="Spatiotemporal stimulus",
-        default=None,
-        order=4,
-        required=False,
-        doc="""A ``Spatiotemporal stimulus`` can be defined at the region or surface level.
-        It's composed of spatial and temporal components. For region defined stimuli
-        the spatial component is just the strength with which the temporal
-        component is applied to each region. For surface defined stimuli,  a
-        (spatial) function, with finite-support, is used to define the strength
-        of the stimuli on the surface centred around one or more focal points.
-        In the current version of TVB, stimuli are applied to the first state
-        variable of the ``Local dynamic model``.""")
-
     model = models.Model(
         label="Local dynamic model",
         default=models.Generic2dOscillator,
@@ -181,7 +167,7 @@ class Simulator(core.Type):
     history = None # type: SparseHistory
 
     def __init__(self, conduction_speed=3.0, simulation_length=1000.0,
-                 initial_conditions=None, *args, **kwargs):
+                 initial_conditions=None, stimulus=None, *args, **kwargs):
         self.conduction_speed = conduction_speed
         # Conduction speed for ``Long-range connectivity`` (mm/ms)
         # numpy.arange(0.01,100.0,1.0)
@@ -189,6 +175,17 @@ class Simulator(core.Type):
         # The length of a simulation (default in milliseconds)
 
         self.initial_conditions = initial_conditions
+
+        self.stimulus = stimulus
+        # """A ``Spatiotemporal stimulus`` can be defined at the region or surface level.
+        # It's composed of spatial and temporal components. For region defined stimuli
+        # the spatial component is just the strength with which the temporal
+        # component is applied to each region. For surface defined stimuli,  a
+        # (spatial) function, with finite-support, is used to define the strength
+        # of the stimuli on the surface centred around one or more focal points.
+        # In the current version of TVB, stimuli are applied to the first state
+        # variable of the ``Local dynamic model``."""
+
 
         super(Simulator, self).__init__(*args, **kwargs)
 

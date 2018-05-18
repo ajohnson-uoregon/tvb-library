@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -47,7 +47,7 @@ class TestPatterns(BaseTestCase):
         dt.spatial_pattern = numpy.arange(100).reshape((10, 10))
         dt.configure_space(numpy.arange(100).reshape((10, 10)))
         dt.configure()
-        summary = dt.summary_info
+        summary = dt._find_summary_info()
         assert summary['Type'] == 'SpatialPattern'
         assert dt.space.shape == (10, 10)
         assert isinstance(dt.spatial, equations.DoubleGaussian)
@@ -60,7 +60,7 @@ class TestPatterns(BaseTestCase):
         dt.spatial_pattern = numpy.arange(100).reshape((10, 10))
         dt.configure_space(numpy.arange(100).reshape((10, 10)))
         dt.configure()
-        summary = dt.summary_info
+        summary = dt._find_summary_info()
         assert summary['Type'] == 'SpatioTemporalPattern'
         assert dt.space.shape == (10, 10)
         assert isinstance(dt.spatial, equations.DoubleGaussian)
@@ -78,7 +78,7 @@ class TestPatterns(BaseTestCase):
         dt.temporal = equations.Gaussian()
         dt.weight = [0 for _ in range(conn.number_of_regions)]
         dt.configure_space()
-        assert dt.summary_info['Type'] == 'StimuliRegion'
+        assert dt._find_summary_info()['Type'] == 'StimuliRegion'
         assert dt.connectivity is not None
         assert dt.space.shape == (76, 1)
         assert dt.spatial_pattern.shape == (76, 1)
@@ -97,7 +97,7 @@ class TestPatterns(BaseTestCase):
         dt.focal_points_triangles = [0, 1, 2]
         dt.configure()
         dt.configure_space()
-        summary = dt.summary_info
+        summary = dt._find_summary_info()
         assert summary['Type'] == "StimuliSurface"
         assert dt.space.shape == (16384, 3)
         assert isinstance(dt.spatial, equations.DiscreteEquation)

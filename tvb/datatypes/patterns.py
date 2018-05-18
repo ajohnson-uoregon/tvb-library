@@ -39,22 +39,23 @@ methods that are associated with the pattern datatypes.
 
 
 import numpy
-from tvb.basic.traits import types_mapped
-from tvb.datatypes import surfaces, volumes, connectivity, equations
+from tvb.datatypes import surfaces, volumes, connectivity as conn, equations
 from tvb.basic.logger.builder import get_logger
 
 
 LOG = get_logger(__name__)
 
 
-class SpatialPattern(types_mapped.MappedType):
+class SpatialPattern(object):
     """
     Equation for space variation.
     """
 
-    spatial = equations.FiniteSupportEquation(label="Spatial Equation", order=2)
-    space = None
-    _spatial_pattern = None
+    def __init__(self, spatial=None, space=None, _spatial_pattern=None, *args, **kwargs):
+        self.spatial = spatial
+
+        self.space = space
+        self._spatial_pattern = _spatial_pattern
 
     def _find_summary_info(self):
         """
@@ -93,16 +94,26 @@ class SpatialPattern(types_mapped.MappedType):
         self.space = distance
         self.spatial_pattern = self.space
 
+    #TODO: hack because I don't want to find everywhere this is called right now
+    def configure(self):
+        pass
+
+
 
 class SpatioTemporalPattern(SpatialPattern):
     """
     Combine space and time equations.
     """
 
-    temporal = equations.TemporalApplicableEquation(label="Temporal Equation", order=3)
-    #space must be shape (x, 1); time must be shape (1, t)
-    time = None
-    _temporal_pattern = None
+    def __init__(self, temporal=None, time=None, _temporal_pattern=None, *args, **kwargs):
+        if temporal is None:
+            temporal = equations.TemporalApplicableEquation()
+        self.temporal = temporal
+
+        self.time = time
+        self._temporal_pattern = _temporal_pattern
+
+        super(SpatioTemporalPattern, self).__init__(*args, **kwargs)
 
     def _find_summary_info(self):
         """ Extend the base class's summary dictionary. """
@@ -143,12 +154,20 @@ class StimuliRegion(SpatioTemporalPattern):
     list of scaling weights of the regions where it will applied.
     """
 
-    connectivity = connectivity.Connectivity(label="Connectivity", order=1)
+    def __init__(self, connectivity=None, spatial=None, weight=None, *args, **kwargs):
+        if connectivity is None:
+            connectivity = conn.Connectivity()
+        self.connectivity = connectivity
 
-    spatial = equations.DiscreteEquation(label="Spatial Equation", default=equations.DiscreteEquation,
-                                         fixed_type=True, order=-1)
+        # lives in base class
+        if spatial is None:
+            spatial = equations.DiscreteEquation()
 
-    weight = []
+        if weight is None:
+            weight = []
+        self.weight = weight
+
+        super(StimuliRegion, self).__init__(*args, spatial=spatial, **kwargs)
 
     @staticmethod
     def get_default_weights(number_of_regions):
@@ -185,11 +204,21 @@ class StimuliSurface(SpatioTemporalPattern):
     It includes the list of focal points.
     """
 
-    surface = surfaces.CorticalSurface(label="Surface", order=1)
+    def __init__(self, surface=None, focal_points_surface=None,
+                 focal_points_triangles=None, *args, **kwargs):
+        if surface is None:
+            surface = surfaces.CorticalSurface()
+        self.surface = surface
 
-    focal_points_surface = []
+        if focal_points_surface is None:
+            focal_points_surface = []
+        self.focal_points_surface = focal_points_surface
 
-    focal_points_triangles = []
+        if focal_points_triangles is None:
+            focal_points_triangles = []
+        self.focal_points_triangles = focal_points_triangles
+
+        super(StimuliSurface, self).__init__(*args, **kwargs)
 
     def configure_space(self, region_mapping=None):
         """
@@ -213,7 +242,15 @@ class StimuliSurface(SpatioTemporalPattern):
 class SpatialPatternVolume(SpatialPattern):
     """ A spatio-temporal pattern defined in a volume. """
 
-    volume = None
+
+    def __init__(self, volume=None, focal_points_volume=None, *args, **kwargs):
+        self.volume = volume
+
+        if focal_points_volume is None:
+            focal_points_volume = numpy.array([])
+        self.focal_points_volume = focal_points_volume
+
+        super(SpatialPatternVolume, self).__init__(*args, **kwargs)
+
 
     # indexes into volume
-    focal_points_volume = numpy.array([])
