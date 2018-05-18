@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -46,10 +46,10 @@ class TestSensors(BaseTestCase):
 
     def test_sensors(self):
 
-        dt = sensors.Sensors(load_default=True)
+        dt = sensors.Sensors().from_file()
         dt.configure()
 
-        summary_info = dt.summary_info
+        summary_info = dt._find_summary_info()
         assert summary_info['Sensor type'] == ''
         assert summary_info['Number of Sensors'] == 65
         assert not dt.has_orientation
@@ -77,7 +77,7 @@ class TestSensors(BaseTestCase):
             pass
 
     def test_sensorseeg(self):
-        dt = sensors.SensorsEEG(load_default=True)
+        dt = sensors.SensorsEEG().from_file()
         dt.configure()
         assert isinstance(dt, sensors.SensorsEEG)
         assert not dt.has_orientation
@@ -88,7 +88,7 @@ class TestSensors(BaseTestCase):
         assert dt.sensors_type == EEG_POLYMORPHIC_IDENTITY
 
     def test_sensorsmeg(self):
-        dt = sensors.SensorsMEG(load_default=True)
+        dt = sensors.SensorsMEG().from_file()
         dt.configure()
         assert isinstance(dt, sensors.SensorsMEG)
         assert dt.has_orientation
@@ -99,7 +99,7 @@ class TestSensors(BaseTestCase):
         assert dt.sensors_type == MEG_POLYMORPHIC_IDENTITY
 
     def test_sensorsinternal(self):
-        dt = sensors.SensorsInternal(load_default=True)
+        dt = sensors.SensorsInternal().from_file()
         dt.configure()
         assert isinstance(dt, sensors.SensorsInternal)
         assert not dt.has_orientation

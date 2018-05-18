@@ -63,21 +63,35 @@ class Sensors(MappedType):
 
     __mapper_args__ = {'polymorphic_on': 'sensors_type'}
 
-    labels = []
-
-    locations = numpy.array([], dtype=numpy.float64)
-
-    has_orientation = False
-
-    orientations = numpy.array([], dtype=numpy.float64)
-
-    number_of_sensors = 0 # The number of sensors described by these Sensors.
 
     # introduced to accommodate real sensors sets which have sensors
     # that should be zero during simulation i.e. ECG (heart), EOG,
     # reference gradiometers, etc.
     # The sensors in set which are used for signal data.
-    usable = numpy.array([], dtype=numpy.bool)
+
+
+    def __init__(self, labels=None, locations=None, sensors_type="", has_orientation=False,
+                 number_of_sensors=0, usable=None, orientations=None, *args, **kwargs):
+        if labels is None:
+            labels = []
+        self.labels = labels
+
+        if locations is None:
+            locations = numpy.array([], dtype=numpy.float64)
+        self.locations = locations
+
+        self.sensors_type = sensors_type
+        self.has_orientation = has_orientation
+        self.number_of_sensors = number_of_sensors
+
+        if usable is None:
+            usable = numpy.array([], dtype=numpy.bool)
+        self.usable = usable
+
+        if orientations is None:
+            orientations = numpy.array([], dtype=numpy.float64)
+        self.orientations = orientations
+
 
     @classmethod
     def from_file(cls, source_file="eeg_brainstorm_65.txt", instance=None):
@@ -210,10 +224,15 @@ class SensorsEEG(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': EEG_POLYMORPHIC_IDENTITY}
 
-    sensors_type = EEG_POLYMORPHIC_IDENTITY
+    def __init__(self, orientations=None, has_orientation=False, *args, **kwargs):
+        sensors_type = EEG_POLYMORPHIC_IDENTITY
 
-    has_orientation = False
+        if orientations is None:
+            orientations = numpy.array([], dtype=numpy.float64)
+        self.orientations = orientations
 
+        super(SensorsEEG, self).__init__(*args, sensors_type=sensors_type,
+            has_orientation=has_orientation, **kwargs)
 
 class SensorsMEG(Sensors):
     """
@@ -234,13 +253,15 @@ class SensorsMEG(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': MEG_POLYMORPHIC_IDENTITY}
 
-    sensors_type = MEG_POLYMORPHIC_IDENTITY
+    def __init__(self, orientations=None, has_orientation=True, *args, **kwargs):
+        sensors_type = MEG_POLYMORPHIC_IDENTITY
 
-    # An array representing the orientation of the MEG SQUIDs
-    orientations = numpy.array([], dtype=numpy.float64)
+        if orientations is None:
+            orientations = numpy.array([], dtype=numpy.float64)
+        self.orientations = orientations
 
-    has_orientation = True
-
+        super(SensorsMEG, self).__init__(*args, sensors_type=sensors_type,
+            has_orientation=has_orientation, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="meg_151.txt.bz2", instance=None):
@@ -263,8 +284,10 @@ class SensorsInternal(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': INTERNAL_POLYMORPHIC_IDENTITY}
 
-    sensors_type = INTERNAL_POLYMORPHIC_IDENTITY
+    def __init__(self, *args, **kwargs):
+        sensors_type = INTERNAL_POLYMORPHIC_IDENTITY
 
+        super(SensorsInternal, self).__init__(*args, sensors_type=sensors_type, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="seeg_39.txt.bz2", instance=None):
