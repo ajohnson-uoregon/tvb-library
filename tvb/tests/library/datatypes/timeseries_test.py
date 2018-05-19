@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -45,7 +45,7 @@ class TestTimeseries(BaseTestCase):
     def test_timeseries(self):
         data = numpy.random.random((10, 10))
         dt = time_series.TimeSeries(data=data)
-        summary_info = dt.summary_info
+        summary_info = dt._find_summary_info()
         assert summary_info['Dimensions'] == ['Time', 'State Variable', 'Space', 'Mode']
         assert summary_info['Length'] == 10.0
         assert summary_info['Sample period'] == 1.0

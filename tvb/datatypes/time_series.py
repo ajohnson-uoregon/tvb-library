@@ -38,8 +38,8 @@ methods that are associated with the time-series data.
 
 import json
 import numpy
-from tvb.basic.traits import core, exceptions, types_mapped
-from tvb.datatypes import sensors, surfaces, volumes, region_mapping, connectivity
+from tvb.basic.traits import core, exceptions
+from tvb.datatypes import sensors, surfaces, volumes, region_mapping as region_map, connectivity as conn
 from tvb.basic.arguments_serialisation import (preprocess_space_parameters, preprocess_time_parameters,
     postprocess_voxel_ts)
 from tvb.basic.logger.builder import get_logger
@@ -64,43 +64,46 @@ def prepare_time_slice(total_time_length, max_length=10 ** 4):
     return slice(total_time_length - max_length, total_time_length)
 
 
-class TimeSeries(types_mapped.MappedType):
+class TimeSeries(object):
     """
     Base time-series dataType.
     """
-
-
     # An array of time-series data, with a shape of [tpts, :], where ':' represents 1 or more dimensions
 
-
-    nr_dimensions = 4 # Number of dimension in timeseries; default is 4
-
-    length_1d, length_2d, length_3d, length_4d = [0] * 4
-
     # list of strings representing names of each data dimension
-    labels_ordering = ["Time", "State Variable", "Space", "Mode"]
+
 
     # A dictionary containing mappings of the form {'dimension_name' : [labels for this dimension] }
-    labels_dimensions = {}
+
 
     # An array of time values for the time-series, with a shape of [tpts,].
     # This is 'time' as returned by the simulator's monitors.
 
-
-    start_time = 0.0
-
-    sample_period = 1.0
-
     # Specify the measure unit for sample period (e.g sec, msec, usec, ...)
-    sample_period_unit = "ms"
 
-    sample_rate = 0.0
-
-    has_surface_mapping = True
-    has_volume_mapping = False
-
-    def __init__(self, title = "", data=None, time=None, *args, **kwargs):
+    def __init__(self, title = "", nr_dimensions=4, start_time=0.0,
+                 sample_period=1.0, sample_period_unit="ms", sample_rate=0.0,
+                 has_surface_mapping=True, has_volume_mapping=False,
+                 labels_ordering=None, labels_dimensions=None,
+                 data=None, time=None, *args, **kwargs):
         self.title = title
+        self.nr_dimensions = nr_dimensions
+        self.start_time = start_time
+        self.sample_period = sample_period
+        self.sample_period_unit = sample_period_unit
+        self.sample_rate = sample_rate
+        self.has_surface_mapping = has_surface_mapping
+        self.has_volume_mapping = has_volume_mapping
+
+        self.length_1d, self.length_2d, self.length_3d, self.length_4d = [0] * 4
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "State Variable", "Space", "Mode"]
+        self.labels_ordering = labels_ordering
+
+        if labels_dimensions is None:
+            labels_dimensions = {}
+        self.labels_dimensions = labels_dimensions
 
         if data is None:
             data = numpy.array([], dtype=numpy.float64)
@@ -109,7 +112,6 @@ class TimeSeries(types_mapped.MappedType):
         if time is None:
             time = numpy.array([], dtype=numpy.float64)
         self.time = time
-        super(TimeSeries, self).__init__(*args, **kwargs)
 
     def configure(self):
         """
@@ -233,7 +235,6 @@ class TimeSeries(types_mapped.MappedType):
         """
         return self.read_data_page(from_idx, to_idx, step, specific_slices)
 
-
     def write_time_slice(self, partial_result):
         """
         Append a new value to the ``time`` attribute.
@@ -308,8 +309,8 @@ class TimeSeries(types_mapped.MappedType):
                    "Dimensions": self.labels_ordering,
                    "Time units": self.sample_period_unit,
                    "Sample period": self.sample_period,
-                   "Length": self.sample_period * self.get_data_shape('data')[0]}
-        summary.update(self.get_info_about_array('data'))
+                   "Length": self.sample_period * self.data.shape[0]}
+        #summary.update(self.get_info_about_array('data'))
         return summary
 
 
@@ -320,6 +321,8 @@ class SensorsTSBase(TimeSeries):
     """
     __tablename__ = None
 
+    def __init__(self, *args, **kwargs):
+        super(SensorsTSBase, self).__init__(*args, **kwargs)
 
     def get_space_labels(self):
         """
@@ -354,8 +357,13 @@ class TimeSeriesEEG(SensorsTSBase):
     _ui_name = "EEG time-series"
     __generate_table__ = True
 
-    sensors = sensors.SensorsEEG
-    labels_ordering = ["Time", "1", "EEG Sensor", "1"]
+    def __init__(self, labels_ordering=None, *args, **kwargs):
+        self.sensors = None
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "1", "EEG Sensor", "1"]
+
+        super(TimeSeriesEEG, self).__init__(*args, labels_ordering=labels_ordering, **kwargs)
 
 
 class TimeSeriesMEG(SensorsTSBase):
@@ -363,8 +371,13 @@ class TimeSeriesMEG(SensorsTSBase):
     _ui_name = "MEG time-series"
     __generate_table__ = True
 
-    sensors = sensors.SensorsMEG
-    labels_ordering = ["Time", "1", "MEG Sensor", "1"]
+    def __init__(self, labels_ordering=None, *args, **kwargs):
+        self.sensors = None
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "1", "MEG Sensor", "1"]
+
+        super(TimeSeriesMEG, self).__init__(*args, labels_ordering=labels_ordering, **kwargs)
 
 
 class TimeSeriesSEEG(SensorsTSBase):
@@ -372,17 +385,35 @@ class TimeSeriesSEEG(SensorsTSBase):
     _ui_name = "Stereo-EEG time-series"
     __generate_table__ = True
 
-    sensors = sensors.SensorsInternal
-    labels_ordering = ["Time", "1", "sEEG Sensor", "1"]
+    def __init__(self, labels_ordering=None, *args, **kwargs):
+        self.sensors = sensors.SensorsInternal
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "1", "sEEG Sensor", "1"]
+
+        super(TimeSeriesSEEG, self).__init__(*args, labels_ordering=labels_ordering, **kwargs)
 
 
 class TimeSeriesRegion(TimeSeries):
     """ A time-series associated with the regions of a connectivity. """
     _ui_name = "Region time-series"
-    connectivity = connectivity.Connectivity
-    region_mapping_volume = region_mapping.RegionVolumeMapping(required=False)
-    region_mapping = region_mapping.RegionMapping(required=False)
-    labels_ordering = ["Time", "State Variable", "Region", "Mode"]
+
+    def __init__(self, connectivity=None, region_mapping_volume=None,
+                 region_mapping=None, labels_ordering=None, *args, **kwargs):
+        self.connectivity = connectivity
+
+        if region_mapping_volume is None:
+            region_mapping_volume = region_map.RegionVolumeMapping()
+        self.region_mapping_volume = region_mapping_volume
+
+        if region_mapping is None:
+            region_mapping = region_map.RegionMapping()
+        self.region_mapping = region_mapping
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "State Variable", "Region", "Mode"]
+
+        super(TimeSeriesRegion, self).__init__(*args, labels_ordering=labels_ordering, **kwargs)
 
     def configure(self):
         """
@@ -525,9 +556,19 @@ class TimeSeriesRegion(TimeSeries):
 class TimeSeriesSurface(TimeSeries):
     """ A time-series associated with a Surface. """
     _ui_name = "Surface time-series"
-    surface = surfaces.CorticalSurface
-    labels_ordering = ["Time", "State Variable", "Vertex", "Mode"]
-    SELECTION_LIMIT = 100
+
+    def __init__(self, surface=None, SELECTION_LIMIT=100, labels_ordering=None,
+                 *args, **kwargs):
+        if surface is None:
+            surface = surfaces.CorticalSurface
+        self.surface = surface
+
+        self.SELECTION_LIMIT = SELECTION_LIMIT
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "State Variable", "Vertex", "Mode"]
+
+        super(TimeSeriesSurface, self).__init__(*args, labels_ordering=labels_ordering, **kwargs)
 
     def get_space_labels(self):
         """
@@ -560,8 +601,16 @@ class TimeSeriesSurface(TimeSeries):
 class TimeSeriesVolume(TimeSeries):
     """ A time-series associated with a Volume. """
     _ui_name = "Volume time-series"
-    volume = volumes.Volume
-    labels_ordering = ["Time", "X", "Y", "Z"]
+
+    def __init__(self, volume=None, labels_ordering=None, *args, **kwargs):
+        if volume is None:
+            volume = volumes.Volume
+        self.volume = volume
+
+        if labels_ordering is None:
+            labels_ordering = ["Time", "X", "Y", "Z"]
+
+        super(TimeSeriesVolume, self).__init__(*args, labels_ordering=labels_ordering, **kwargs)
 
     def _find_summary_info(self):
         """
