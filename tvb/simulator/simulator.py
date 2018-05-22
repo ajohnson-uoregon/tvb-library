@@ -62,33 +62,6 @@ LOG = get_logger(__name__)
 class Simulator(core.Type):
     "A Simulator assembles components required to perform simulations."
 
-    connectivity = connectivity.Connectivity(
-        label="Long-range connectivity",
-        default=None,
-        order=1,
-        required=True,
-        filters_ui=[UIFilter(linked_elem_name="region_mapping_data",
-                             linked_elem_field=FilterChain.datatype + "._connectivity",
-                             linked_elem_parent_name="surface",
-                             linked_elem_parent_option=None),
-                    UIFilter(linked_elem_name="region_mapping",
-                             linked_elem_field=FilterChain.datatype + "._connectivity",
-                             linked_elem_parent_name="monitors",
-                             linked_elem_parent_option="EEG"),
-                    UIFilter(linked_elem_name="region_mapping",
-                             linked_elem_field=FilterChain.datatype + "._connectivity",
-                             linked_elem_parent_name="monitors",
-                             linked_elem_parent_option="MEG"),
-                    UIFilter(linked_elem_name="region_mapping",
-                             linked_elem_field=FilterChain.datatype + "._connectivity",
-                             linked_elem_parent_name="monitors",
-                             linked_elem_parent_option="iEEG")],
-        doc="""A tvb.datatypes.Connectivity object which contains the
-        structural long-range connectivity data (i.e., white-matter tracts). In
-        combination with the ``Long-range coupling function`` it defines the inter-regional
-        connections. These couplings undergo a time delay via signal propagation
-        with a propagation speed of ``Conduction Speed``""")
-
     coupling = coupling.Coupling(
         label="Long-range coupling function",
         default=coupling.Linear(),
@@ -98,27 +71,6 @@ class Simulator(core.Type):
         between regions by the ``Long-range connectivity`` before it enters the local
         dynamic equations of the Model. Its primary purpose is to 'rescale' the
         incoming activity to a level appropriate to Model.""")
-
-    surface = cortex.Cortex(
-        label="Cortical surface",
-        default=None,
-        order=3,
-        required=False,
-        filters_backend=FilterChain(fields=[FilterChain.datatype + '._valid_for_simulations'],
-                                    operations=["=="], values=[True]),
-        filters_ui=[UIFilter(linked_elem_name="projection_matrix_data",
-                             linked_elem_field=FilterChain.datatype + "._sources",
-                             linked_elem_parent_name="monitors",
-                             linked_elem_parent_option="EEG"),
-                    UIFilter(linked_elem_name="local_connectivity",
-                             linked_elem_field=FilterChain.datatype + "._surface",
-                             linked_elem_parent_name="surface",
-                             linked_elem_parent_option=None)],
-        doc="""By default, a Cortex object which represents the
-        cortical surface defined by points in the 3D physical space and their
-        neighborhood relationship. In the current TVB version, when setting up a
-        surface-based simulation, the option to configure the spatial spread of
-        the ``Local Connectivity`` is available.""")
 
     model = models.Model(
         label="Local dynamic model",
@@ -167,7 +119,8 @@ class Simulator(core.Type):
     history = None # type: SparseHistory
 
     def __init__(self, conduction_speed=3.0, simulation_length=1000.0,
-                 initial_conditions=None, stimulus=None, *args, **kwargs):
+                 initial_conditions=None, stimulus=None, connectivity=None,
+                 surface=None, *args, **kwargs):
         self.conduction_speed = conduction_speed
         # Conduction speed for ``Long-range connectivity`` (mm/ms)
         # numpy.arange(0.01,100.0,1.0)
@@ -186,6 +139,19 @@ class Simulator(core.Type):
         # In the current version of TVB, stimuli are applied to the first state
         # variable of the ``Local dynamic model``."""
 
+        self.connectivity = connectivity
+        # """A tvb.datatypes.Connectivity object which contains the
+        # structural long-range connectivity data (i.e., white-matter tracts). In
+        # combination with the ``Long-range coupling function`` it defines the inter-regional
+        # connections. These couplings undergo a time delay via signal propagation
+        # with a propagation speed of ``Conduction Speed``"""
+
+        self.surface = surface
+        # By default, a Cortex object which represents the
+        # cortical surface defined by points in the 3D physical space and their
+        # neighborhood relationship. In the current TVB version, when setting up a
+        # surface-based simulation, the option to configure the spatial spread of
+        # the ``Local Connectivity`` is available.
 
         super(Simulator, self).__init__(*args, **kwargs)
 

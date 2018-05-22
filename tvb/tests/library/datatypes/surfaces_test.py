@@ -71,7 +71,7 @@ class TestSurfaces(BaseTestCase):
         assert dt.get_data_shape('triangles') == (3, 3)
 
     def test_cortical_surface(self):
-        dt = surfaces.CorticalSurface(load_default=True)
+        dt = surfaces.CorticalSurface(load_file="cortex_16384.zip")
         assert isinstance(dt, surfaces.CorticalSurface)
         dt.configure()
         summary_info = dt.summary_info
@@ -148,35 +148,35 @@ class TestSurfaces(BaseTestCase):
         assert 3 == holes.size
 
     def test_skinair(self):
-        dt = surfaces.SkinAir(load_default=True)
+        dt = surfaces.SkinAir(load_file="outer_skin_4096.zip")
         assert isinstance(dt, surfaces.SkinAir)
         assert dt.get_data_shape('vertices') == (4096, 3)
         assert dt.get_data_shape('vertex_normals') == (4096, 3)
         assert dt.get_data_shape('triangles') == (8188, 3)
 
     def test_brainskull(self):
-        dt = surfaces.BrainSkull(load_default=True)
+        dt = surfaces.BrainSkull(load_file="inner_skull_4096.zip")
         assert isinstance(dt, surfaces.BrainSkull)
         assert dt.get_data_shape('vertices') == (4096, 3)
         assert dt.get_data_shape('vertex_normals') == (4096, 3)
         assert dt.get_data_shape('triangles') == (8188, 3)
 
     def test_skullskin(self):
-        dt = surfaces.SkullSkin(load_default=True)
+        dt = surfaces.SkullSkin(load_file="outer_skull_4096.zip")
         assert isinstance(dt, surfaces.SkullSkin)
         assert dt.get_data_shape('vertices') == (4096, 3)
         assert dt.get_data_shape('vertex_normals') == (4096, 3)
         assert dt.get_data_shape('triangles') == (8188, 3)
 
     def test_eegcap(self):
-        dt = surfaces.EEGCap(load_default=True)
+        dt = surfaces.EEGCap(load_file="scalp_1082.zip")
         assert isinstance(dt, surfaces.EEGCap)
         assert dt.get_data_shape('vertices') == (1082, 3)
         assert dt.get_data_shape('vertex_normals') == (1082, 3)
         assert dt.get_data_shape('triangles') == (2160, 3)
 
     def test_facesurface(self):
-        dt = surfaces.FaceSurface(load_default=True)
+        dt = surfaces.FaceSurface(load_file="face_8614.zip")
         assert isinstance(dt, surfaces.FaceSurface)
         assert dt.get_data_shape('vertices') == (8614, 3)
         assert dt.get_data_shape('vertex_normals') == (0,)
@@ -188,11 +188,11 @@ class TestSurfaces(BaseTestCase):
 
     @pytest.mark.skipif(sys.maxsize <= 2147483647, reason="Cannot deal with local connectivity on a 32-bit machine.")
     def test_cortexdata(self):
-        dt = Cortex(load_default=True)
+        dt = Cortex(load_file="cortex_16384.zip", region_mapping_data=RegionMapping(load_file="regionMapping_16k_76.txt"))
         assert isinstance(dt, Cortex)
-        assert dt.region_mapping is not None
+        assert dt.region_mapping_data is not None
         ## Initialize Local Connectivity, to avoid long computation time.
-        dt.local_connectivity = LocalConnectivity().from_file()
+        dt.local_connectivity = LocalConnectivity(load_file="local_connectivity_16384.mat")
 
         dt.configure()
         summary_info = dt.summary_info

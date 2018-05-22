@@ -39,7 +39,7 @@ import copy
 import numpy
 from tvb.tests.library.base_testcase import BaseTestCase
 from tvb.simulator import coupling, models, simulator
-from tvb.datatypes import cortex, connectivity
+from tvb.datatypes import cortex, connectivity, region_mapping
 from tvb.simulator.history import SparseHistory
 
 
@@ -161,10 +161,10 @@ class TestCouplingShape(BaseTestCase):
                     )
                     return state
 
-        surf = cortex.Cortex(load_default=True)
+        surf = cortex.Cortex(region_mapping_data=region_mapping.RegionMapping(load_file="regionMapping_16k_76.txt"), load_file="cortex_16384.zip")
         sim = simulator.Simulator(
             model=CouplingShapeTestModel(self, surf.vertices.shape[0]),
-            connectivity=connectivity.Connectivity(load_default=True),
+            connectivity=connectivity.Connectivity(load_file="connectivity_76.zip"),
             surface=surf)
 
         sim.configure()

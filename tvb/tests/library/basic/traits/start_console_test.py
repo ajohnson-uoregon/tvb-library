@@ -46,7 +46,7 @@ class TestConsoleTraited(BaseTestCase):
         """
         Test scientific methods are executed
         """
-        default_cortex = Cortex.from_file()
+        default_cortex = Cortex(load_file="cortex_16384.zip")
         default_cortex.coupling_strength = 0.0121
         assert default_cortex.local_connectivity is None
 
@@ -54,6 +54,6 @@ class TestConsoleTraited(BaseTestCase):
         # default_cortex.compute_local_connectivity()
         # self.assertTrue(default_cortex.local_connectivity is not None)
 
-        default_lc = LocalConnectivity(cutoff=2).from_file()
+        default_lc = LocalConnectivity(cutoff=2, load_file="local_connectivity_16384.mat")
         other_cortex = Cortex(local_connectivity=default_lc)
         assert other_cortex.local_connectivity is not None

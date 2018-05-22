@@ -50,12 +50,6 @@ class Cortex(surfaces.CorticalSurface):
 
     _ui_name = "A cortex..."
 
-    region_mapping_data = region_mapping.RegionMapping(
-        label="region mapping",
-        doc="""An index vector of length equal to the number_of_vertices + the
-            number of non-cortical regions, with values that index into an
-            associated connectivity matrix.""")  # 'CS'
-
     region_areas = None
     region_orientation = None
 
@@ -78,12 +72,13 @@ class Cortex(surfaces.CorticalSurface):
     internal_projection = numpy.array([], dtype=numpy.float64)
     #  requires linked SensorsInternal
 
-    def __init__(self, local_connectivity=None, *args, **kwargs):
+    def __init__(self, local_connectivity=None, region_mapping_data=None, *args, **kwargs):
         # "Define the interaction between neighboring network nodes. This is implicitly integrated in"
         #     " the definition of a given surface as an excitatory mean coupling of directly adjacent neighbors to"
         #     " the first state variable of each population model (since these typically represent the mean-neural"
         #     " membrane voltage). This coupling is instantaneous (no time delays)."
         self.local_connectivity = local_connectivity
+        self.region_mapping_data = region_mapping_data
         super(Cortex, self).__init__(*args, **kwargs)
 
 
@@ -247,30 +242,10 @@ class Cortex(surfaces.CorticalSurface):
 
     @classmethod
     def from_file(cls, source_file="cortex_16384.zip",
-                  region_mapping_file=os.path.join("regionMapping_16k_76.txt"),
+                  region_mapping_file=None,
                   local_connectivity_file=None, eeg_projection_file=None, instance=None):
 
         result = super(Cortex, cls).from_file(source_file, instance)
-
-        if instance is not None:
-            # Called through constructor directly
-            if result.region_mapping is None:
-                result.region_mapping_data = region_mapping.RegionMapping.from_file()
-
-            if not result.eeg_projection:
-                result.eeg_projection = Cortex.from_file_projection_array()
-
-            if result.local_connectivity is None:
-                result.local_connectivity = local_connectivity.LocalConnectivity.from_file()
-
-        if region_mapping_file is not None:
-            result.region_mapping_data = region_mapping.RegionMapping.from_file(region_mapping_file)
-
-        if local_connectivity_file is not None:
-            result.local_connectivity = local_connectivity.LocalConnectivity.from_file(local_connectivity_file)
-
-        if eeg_projection_file is not None:
-            result.eeg_projection = Cortex.from_file_projection_array(eeg_projection_file)
 
         return result
 

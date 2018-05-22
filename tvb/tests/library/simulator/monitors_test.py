@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -45,7 +45,8 @@ from tvb.basic.logger.builder import get_logger
 from tvb.datatypes import connectivity
 from tvb.datatypes.cortex import Cortex
 from tvb.datatypes.region_mapping import RegionMapping
-from tvb.datatypes.sensors import SensorsInternal
+from tvb.datatypes.sensors import SensorsInternal, SensorsEEG, SensorsMEG
+from tvb.datatypes.projections import ProjectionMatrix
 
 LOG = get_logger(__name__)
 
@@ -92,7 +93,7 @@ class TestMonitors(BaseTestCase):
         This has to be verified.
         """
         monitor = monitors.iEEG()
-        monitor.sensors = sensors.SensorsInternal(load_default=True)
+        monitor.sensors = sensors.SensorsInternal(load_file="seeg_39.txt.bz2")
         assert monitor.period == self.default_period
 
     def test_monitor_bold(self):
@@ -133,7 +134,7 @@ class TestSubcorticalProjection(BaseTestCase):
 
     def setup_method(self):
         oscillator = models.Generic2dOscillator()
-        white_matter = connectivity.Connectivity.from_file('connectivity_%d.zip' % (self.n_regions,))
+        white_matter = connectivity.Connectivity(load_file='connectivity_' + str(self.n_regions) + '.zip')
         white_matter.speed = numpy.array([self.speed])
         white_matter_coupling = coupling.Difference(a=self.coupling_a)
         heunint = integrators.HeunStochastic(
@@ -141,13 +142,19 @@ class TestSubcorticalProjection(BaseTestCase):
             noise=noise.Additive(nsig=numpy.array([2 ** -10, ]))
         )
         mons = (
-            monitors.EEG.from_file(period=self.period),
-            monitors.MEG.from_file(period=self.period),
-            monitors.iEEG.from_file(period=self.period),
+            monitors.EEG(projection=ProjectionMatrix(load_file='projection_eeg_65_surface_16k.npy'),
+                         sensors=SensorsEEG(load_file="eeg_brainstorm_65.txt"),
+                         period=self.period),
+            monitors.MEG(projection=ProjectionMatrix(load_file='projection_meg_276_surface_16k.npy'),
+                         sensors=SensorsMEG(load_file='meg_brainstorm_276.txt'),
+                         period=self.period),
+            monitors.iEEG(projection=ProjectionMatrix(load_file='projection_seeg_588_surface_16k.npy'),
+                          sensors=SensorsInternal(load_file='seeg_588.txt'),
+                          period=self.period),
         )
         local_coupling_strength = numpy.array([2 ** -10])
-        region_mapping = RegionMapping.from_file('regionMapping_16k_%d.txt' % (self.n_regions,))
-        default_cortex = Cortex(region_mapping_data=region_mapping, load_default=True)
+        region_mapping = RegionMapping(load_file='regionMapping_16k_' + str(self.n_regions) + '.txt')
+        default_cortex = Cortex(region_mapping_data=region_mapping, load_file="cortex_16384.zip")#region_mapping_file="regionMapping_16k_192.txt")
         default_cortex.coupling_strength = local_coupling_strength
         self.sim = simulator.Simulator(model=oscillator, connectivity=white_matter, coupling=white_matter_coupling,
                                        integrator=heunint, monitors=mons, surface=default_cortex)
@@ -191,10 +198,10 @@ class TestAllAnalyticWithSubcortical(BaseTestCase):
 
     def setup_method(self):
         self.sim = simulator.Simulator(
-            connectivity=connectivity.Connectivity.from_file('connectivity_192.zip'),
+            connectivity=connectivity.Connectivity(load_file='connectivity_192.zip'),
             monitors=(monitors.iEEG(
-                sensors=SensorsInternal(load_default=True),
-                region_mapping=RegionMapping.from_file('regionMapping_16k_192.txt')
+                sensors=SensorsInternal(load_file="seeg_39.txt.bz2"),
+                region_mapping=RegionMapping(load_file='regionMapping_16k_192.txt')
             ))
         ).configure()
 

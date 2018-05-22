@@ -51,6 +51,8 @@ from tvb.datatypes.cortex import Cortex
 from tvb.datatypes.local_connectivity import LocalConnectivity
 from tvb.datatypes.region_mapping import RegionMapping
 from tvb.basic.traits.parameters_factory import get_traited_subclasses
+from tvb.datatypes.projections import ProjectionMatrix
+from tvb.datatypes.sensors import SensorsEEG, SensorsMEG
 
 LOG = get_logger(__name__)
 
@@ -78,9 +80,15 @@ class Simulator(object):
         gavg = monitors.GlobalAverage(period=2 ** -2)
         subsamp = monitors.SubSample(period=2 ** -2)
         tavg = monitors.TemporalAverage(period=2 ** -2)
-        eeg = monitors.EEG(load_default=True, period=2 ** -2)
-        eeg2 = monitors.EEG(load_default=True, period=2 ** -2, reference='Fp2')  # EEG with a reference electrode
-        meg = monitors.MEG(load_default=True, period=2 ** -2)
+        # DON'T load a projection because it'll make this behave like it
+        # has a surface and do very, very bad things
+        eeg = monitors.EEG(sensors=SensorsEEG(load_file="eeg_brainstorm_65.txt"),
+                           period=2 ** -2)
+        eeg2 = monitors.EEG(sensors=SensorsEEG(load_file="eeg_brainstorm_65.txt"),
+                            period=2 ** -2,
+                            reference='Fp2')  # EEG with a reference electrode
+        meg = monitors.MEG(sensors=SensorsMEG(load_file='meg_brainstorm_276.txt'),
+                           period=2 ** -2)
 
         self.monitors = (raw, gavg, subsamp, tavg, eeg, eeg2, meg)
 
@@ -114,11 +122,11 @@ class Simulator(object):
         self.method = method
 
         if default_connectivity:
-            white_matter = Connectivity(load_default=True)
-            region_mapping = RegionMapping.from_file(source_file="regionMapping_16k_76.txt")
+            white_matter = Connectivity(load_file="connectivity_76.zip")
+            region_mapping = RegionMapping(load_file="regionMapping_16k_76.txt")
         else:
-            white_matter = Connectivity.from_file(source_file="connectivity_192.zip")
-            region_mapping = RegionMapping.from_file(source_file="regionMapping_16k_192.txt")
+            white_matter = Connectivity(load_file="connectivity_192.zip")
+            region_mapping = RegionMapping(load_file="regionMapping_16k_192.txt")
 
         white_matter_coupling = coupling.Linear(a=coupling_strength)
         white_matter.speed = speed
@@ -133,9 +141,9 @@ class Simulator(object):
 
         if surface_sim:
             local_coupling_strength = numpy.array([2 ** -10])
-            default_cortex = Cortex(load_default=True, region_mapping_data=region_mapping)
+            default_cortex = Cortex(region_mapping_data=region_mapping, load_file="cortex_16384.zip")
             default_cortex.coupling_strength = local_coupling_strength
-            default_cortex.local_connectivity = LocalConnectivity().from_file() 
+            default_cortex.local_connectivity = LocalConnectivity(load_file="local_connectivity_16384.mat")
         else:
             default_cortex = None
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -82,7 +82,7 @@ class TestConnectivity(BaseTestCase):
         """
         Create a default connectivity and check that everything gets loaded
         """
-        conn = connectivity.Connectivity(load_default=True)
+        conn = connectivity.Connectivity(load_file="connectivity_76.zip")
         conn.configure()
         n = 76
         # Check for value from tvb_data/connectivity/o52r00_irp2008
@@ -105,8 +105,8 @@ class TestConnectivity(BaseTestCase):
         assert conn.number_of_regions == n
         assert conn.number_of_connections == 1560
         assert conn.saved_selection is None
-        assert conn.parent_connectivity == ''
-        summary = conn.summary_info
+        assert conn.parent_connectivity is None
+        summary = conn._find_summary_info()
         assert summary['Number of regions'] == n
         ## Call connectivity methods and make sure no compilation or runtime erros
         conn.compute_tract_lengths()
@@ -127,7 +127,7 @@ class TestConnectivity(BaseTestCase):
         """
         Reload a connectivity and check that defaults changes accordingly.
         """
-        conn = connectivity.Connectivity.from_file("connectivity_192.zip")
+        conn = connectivity.Connectivity(load_file="connectivity_192.zip")
         n = 192
         assert conn.weights.shape == (n, n)
         assert conn.weights.max() == 3.0
@@ -146,7 +146,7 @@ class TestConnectivity(BaseTestCase):
         assert conn.delays.shape == (0,)
         assert conn.number_of_regions == 0
         assert conn.saved_selection is None
-        assert conn.parent_connectivity == ''
+        assert conn.parent_connectivity is None
 
     @pytest.mark.skipif(not H5PY_SUPPORT, reason="HDF5 and H5PY not found on this system")
     def test_connectivity_h5py_reload(self):
@@ -154,7 +154,7 @@ class TestConnectivity(BaseTestCase):
         Reload a connectivity and check that defaults changes accordingly.
         """
         h5_full_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Edited_Connectivity.h5")
-        conn = connectivity.Connectivity.from_file(h5_full_path)
+        conn = connectivity.Connectivity(load_file=h5_full_path)
         assert conn.weights.shape == (74, 74)
         assert conn.weights[0][0] == 9.0  # Edit set first weight to 9
         assert conn.weights.max() == 9.0  # Edit has a weight of value 9
@@ -166,10 +166,10 @@ class TestConnectivity(BaseTestCase):
         assert conn.delays.shape == (0,)
         assert conn.number_of_regions == 0
         assert conn.saved_selection is None
-        assert conn.parent_connectivity == ''
+        assert conn.parent_connectivity is None
 
     def test_connectivity_bzip_in_zip(self):
-        conn = connectivity.Connectivity.from_file("connectivity_68.zip")
+        conn = connectivity.Connectivity(load_file="connectivity_68.zip")
         conn.configure()
         assert conn.weights.shape == (68, 68)
         assert conn.weights.max() == 0.12053822

@@ -70,7 +70,7 @@ class TestPatterns(BaseTestCase):
         assert dt.time is None
 
     def test_stimuliregion(self):
-        conn = connectivity.Connectivity(load_default=True)
+        conn = connectivity.Connectivity(load_file="connectivity_76.zip")
         conn.configure()
         dt = patterns.StimuliRegion()
         dt.connectivity = conn
@@ -87,7 +87,7 @@ class TestPatterns(BaseTestCase):
         assert dt.time is None
 
     def test_stimulisurface(self):
-        srf = surfaces.CorticalSurface(load_default=True)
+        srf = surfaces.CorticalSurface(load_file="cortex_16384.zip")
         srf.configure()
         dt = patterns.StimuliSurface()
         dt.surface = srf

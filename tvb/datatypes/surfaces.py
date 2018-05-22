@@ -116,16 +116,6 @@ HEMISPHERE_UNKNOWN = "NONE"
 
 class Surface(MappedType):
     """A base class for other surfaces."""
-
-    # An array specifying coordinates for the surface vertices.
-    vertices = numpy.array([], dtype=numpy.float64)
-
-    # Array of indices into the vertices, specifying the triangles which define the surface.
-    triangles = numpy.array([])
-
-    # An array of unit normal vectors for the surfaces vertices.
-    vertex_normals = numpy.array([], dtype=numpy.float64)
-
     # An array of unit normal vectors for the surfaces triangles.
     triangle_normals = numpy.array([], dtype=numpy.float64)
 
@@ -167,23 +157,39 @@ class Surface(MappedType):
 
     __mapper_args__ = {'polymorphic_on': 'surface_type'}
 
+    def __init__(self, vertices=None, vertex_normals=None, triangles=None,
+                 load_file=None, *args, **kwargs):
+        if load_file is not None:
+            vertices, vertex_normals, triangles = Surface.from_file(source_file=load_file)
+        else:
+            if vertices is None:
+                # An array specifying coordinates for the vertices in R^3
+                vertices = numpy.array([], dtype=numpy.float64)
+            if vertex_normals is None:
+                # An array of unit normal vectors for the surface's vertices.
+                vertex_normals = numpy.array([], dtype=numpy.float64)
+            if triangles is None:
+                # Array of indices into the vertices, specifying which vertices
+                # make up each triangle in the surface
+                triangles = numpy.array([])
+        self.vertices = vertices
+        self.vertex_normals = vertex_normals
+        self.triangles = triangles
+
+        super(Surface, self).__init__(*args, **kwargs)
+
     @classmethod
     def from_file(cls, source_file="cortex_16384.zip", instance=None):
         """Construct a Surface from source_file."""
 
-        if instance is None:
-            result = cls()
-        else:
-            result = instance
-
         source_full_path = try_get_absolute_path("tvb_data.surfaceData", source_file)
         reader = ZipReader(source_full_path)
 
-        result.vertices = reader.read_array_from_file("vertices.txt")
-        result.vertex_normals = reader.read_array_from_file("normals.txt")
-        result.triangles = reader.read_array_from_file("triangles.txt", dtype=numpy.int32)
+        vertices = reader.read_array_from_file("vertices.txt")
+        vertex_normals = reader.read_array_from_file("normals.txt")
+        triangles = reader.read_array_from_file("triangles.txt", dtype=numpy.int32)
 
-        return result
+        return vertices, vertex_normals, triangles
 
 
     def configure(self):

@@ -47,11 +47,15 @@ class LocalConnectivity(object):
     _ui_name = "Local connectivity"
 
 
-    def __init__(self, cutoff=40.0, surface=None, matrix=None, equation=equations.Gaussian):
+    def __init__(self, cutoff=40.0, surface=None, matrix=None, equation=equations.Gaussian,
+                 load_file=None):
         self.cutoff = cutoff # Distance at which to truncate the evaluation in mm.
         self.surface = surface
-        self.matrix = matrix
         self.equation = equation
+
+        if load_file is not None:
+            matrix = self.from_file(source_file=load_file)
+        self.matrix = matrix
 
     def compute(self):
         """
@@ -119,16 +123,11 @@ class LocalConnectivity(object):
     @staticmethod
     def from_file(source_file="local_connectivity_16384.mat", instance=None):
 
-        if instance is None:
-            result = LocalConnectivity()
-        else:
-            result = instance
-
         source_full_path = try_get_absolute_path("tvb_data.local_connectivity", source_file)
         reader = FileReader(source_full_path)
 
-        result.matrix = reader.read_array(matlab_data_name="LocalCoupling")
-        return result
+        matrix = reader.read_array(matlab_data_name="LocalCoupling")
+        return matrix
 
     def get_min_max_values(self):
         """

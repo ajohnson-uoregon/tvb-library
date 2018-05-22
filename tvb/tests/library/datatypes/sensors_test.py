@@ -46,7 +46,7 @@ class TestSensors(BaseTestCase):
 
     def test_sensors(self):
 
-        dt = sensors.Sensors().from_file()
+        dt = sensors.Sensors(load_file="eeg_brainstorm_65.txt")
         dt.configure()
 
         summary_info = dt._find_summary_info()
@@ -60,7 +60,7 @@ class TestSensors(BaseTestCase):
         assert dt.sensors_type == ''
 
         ## Mapping 62 sensors on a Skin surface should work
-        surf = SkinAir(load_default=True)
+        surf = SkinAir(load_file="outer_skin_4096.zip")
         surf.configure()
         mapping = dt.sensors_to_surface(surf)
         assert mapping.shape == (65, 3)
@@ -77,7 +77,7 @@ class TestSensors(BaseTestCase):
             pass
 
     def test_sensorseeg(self):
-        dt = sensors.SensorsEEG().from_file()
+        dt = sensors.SensorsEEG(load_file="eeg_brainstorm_65.txt")
         dt.configure()
         assert isinstance(dt, sensors.SensorsEEG)
         assert not dt.has_orientation
@@ -88,7 +88,7 @@ class TestSensors(BaseTestCase):
         assert dt.sensors_type == EEG_POLYMORPHIC_IDENTITY
 
     def test_sensorsmeg(self):
-        dt = sensors.SensorsMEG().from_file()
+        dt = sensors.SensorsMEG(load_file="meg_151.txt.bz2")
         dt.configure()
         assert isinstance(dt, sensors.SensorsMEG)
         assert dt.has_orientation
@@ -99,7 +99,7 @@ class TestSensors(BaseTestCase):
         assert dt.sensors_type == MEG_POLYMORPHIC_IDENTITY
 
     def test_sensorsinternal(self):
-        dt = sensors.SensorsInternal().from_file()
+        dt = sensors.SensorsInternal(load_file="seeg_39.txt.bz2")
         dt.configure()
         assert isinstance(dt, sensors.SensorsInternal)
         assert not dt.has_orientation

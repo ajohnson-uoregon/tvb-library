@@ -43,77 +43,65 @@ import scipy.stats
 from tvb.basic.logger.builder import get_logger
 from tvb.basic.readers import ZipReader, H5Reader, try_get_absolute_path
 from tvb.basic.traits import core
-from tvb.basic.traits.types_mapped import MappedType
 
 
 LOG = get_logger(__name__)
 
 
-class Connectivity(MappedType):
-
-    # data
-    # Short strings, 'labels', for the regions represented by the connectivity matrix.
-    region_labels = ""
-
-    undirected = 0 # 1, when the weights matrix is square and symmetric over the main diagonal, 0 when directed graph.
-
-    number_of_regions = 0 #The number of regions represented in this Connectivity
-
-    number_of_connections = 0 # The number of non-zero entries represented in this Connectivity
-
-    # Original Connectivity, from which current connectivity was edited.
-    parent_connectivity = ""
-
-    # In case of edited Connectivity, this are the nodes left in interest area,
-    # the rest were part of a lesion, so they were removed.
-    saved_selection = None
+class Connectivity(object):
 
     def __init__(self, centres=None, weights=None, tract_lengths=None,
                  speed=None, cortical=None, hemispheres=None,
                  orientations=None, areas=None, idelays=None, delays=None,
+                 region_labels=None, undirected=0, number_of_regions=0,
+                 number_of_connections=0, parent_connectivity=None,
+                 saved_selection=None, load_file=None,
                  *args, **kwargs):
+
+        if load_file is not None:
+            weights, centres, region_labels, orientations, cortical, hemispheres, areas, tract_lengths = Connectivity.from_file(source_file=load_file)
+        else:
+            if weights is None:
+                # Matrix of values representing the strength of connections between regions, arbitrary units.
+                weights = numpy.array([], dtype=numpy.float64)
+            if centres is None:
+                centres = numpy.array([], dtype=numpy.float64)
+            if region_labels is None:
+                # Short strings, 'labels', for the regions represented by the connectivity matrix.
+                region_labels = ""
+            if orientations is None:
+                # Unit vectors of the average orientation of the regions represented in the connectivity matrix.
+                # NOTE: Unknown data should be zeros.
+                orientations = numpy.array([], dtype=numpy.float64)
+            if cortical is None:
+                # A boolean vector specifying whether or not a region is part of the cortex.
+                cortical = numpy.array([], dtype=numpy.bool)
+            if hemispheres is None:
+                # A boolean vector specifying whether or not a region is part of the right hemisphere
+                hemispheres = numpy.array([], dtype=numpy.bool)
+            if areas is None:
+                # Estimated area represented by the regions in the connectivity matrix.
+                # NOTE: Unknown data should be zeros.
+                areas = numpy.array([], dtype=numpy.float64)
+            if tract_lengths is None:
+                # The length of myelinated fibre tracts between regions.
+                # If not provided Euclidean distance between region centres is used.
+                tract_lengths = numpy.array([], dtype=numpy.float64)
         # An array specifying the location of the centre of each region.
-        if centres is None:
-            centres = numpy.array([], dtype=numpy.float64)
+
         self.centres = centres
-
-        if weights is None:
-            # Matrix of values representing the strength of connections between regions, arbitrary units.
-            weights = numpy.array([], dtype=numpy.float64)
         self.weights = weights
-
-        if tract_lengths is None:
-            # The length of myelinated fibre tracts between regions.
-            # If not provided Euclidean distance between region centres is used.
-            tract_lengths = numpy.array([], dtype=numpy.float64)
         self.tract_lengths = tract_lengths
+        self.cortical = cortical
+        self.hemispheres = hemispheres
+        self.orientations = orientations
+        self.areas = areas
+        self.region_labels = region_labels
 
         if speed is None:
             # A single number or matrix of conduction speeds for the myelinated fibre tracts between regions.
             speed = numpy.array([3.0], dtype=numpy.float64)
         self.speed = speed
-
-        if cortical is None:
-            # A boolean vector specifying whether or not a region is part of the cortex.
-            cortical = numpy.array([], dtype=numpy.bool)
-        self.cortical = cortical
-
-        if hemispheres is None:
-            # A boolean vector specifying whether or not a region is part of the right hemisphere
-            hemispheres = numpy.array([], dtype=numpy.bool)
-        self.hemispheres = hemispheres
-
-        if orientations is None:
-            # Unit vectors of the average orientation of the regions represented in the connectivity matrix.
-            # NOTE: Unknown data should be zeros.
-            orientations = numpy.array([], dtype=numpy.float64)
-        self.orientations = orientations
-
-        if areas is None:
-            # Estimated area represented by the regions in the connectivity matrix.
-            # NOTE: Unknown data should be zeros.
-            areas = numpy.array([], dtype=numpy.float64)
-        self.areas = areas
 
         if idelays is None:
             # An array of time delays between regions in integration steps.
@@ -126,7 +114,17 @@ class Connectivity(MappedType):
             delays = numpy.array([], dtype=numpy.float64)
         self.delays = delays
 
-        super(Connectivity, self).__init__(*args, **kwargs)
+        # 1, when the weights matrix is square and symmetric over the main diagonal, 0 when directed graph.
+        self.undirected = undirected
+        #The number of regions represented in this Connectivity
+        self.number_of_regions = number_of_regions
+        # The number of non-zero entries represented in this Connectivity
+        self.number_of_connections = number_of_connections
+        # Original Connectivity, from which current connectivity was edited.
+        self.parent_connectivity = parent_connectivity
+        # In case of edited Connectivity, this are the nodes left in interest area,
+        # the rest were part of a lesion, so they were removed.
+        self.saved_selection = saved_selection
 
     # framework
     @property
@@ -367,7 +365,6 @@ class Connectivity(MappedType):
         Invoke the compute methods for computable attributes that haven't been
         set during initialization.
         """
-        super(Connectivity, self).configure()
 
         self.number_of_regions = self.weights.shape[0]
         # NOTE: In numpy 1.8 there is a function called count_zeros
@@ -409,33 +406,33 @@ class Connectivity(MappedType):
                    "Number of connections": self.number_of_connections,
                    "Undirected": self.undirected}
 
-        summary.update(self.get_info_about_array('areas',
-                                                 [self.METADATA_ARRAY_MAX,
-                                                  self.METADATA_ARRAY_MIN,
-                                                  self.METADATA_ARRAY_MEAN]))
-
-        summary.update(self.get_info_about_array('weights',
-                                                 [self.METADATA_ARRAY_MAX,
-                                                  self.METADATA_ARRAY_MEAN,
-                                                  self.METADATA_ARRAY_VAR,
-                                                  self.METADATA_ARRAY_MIN_NON_ZERO,
-                                                  self.METADATA_ARRAY_MEAN_NON_ZERO,
-                                                  self.METADATA_ARRAY_VAR_NON_ZERO]))
-
-        summary.update(self.get_info_about_array('tract_lengths',
-                                                 [self.METADATA_ARRAY_MAX,
-                                                  self.METADATA_ARRAY_MEAN,
-                                                  self.METADATA_ARRAY_VAR,
-                                                  self.METADATA_ARRAY_MIN_NON_ZERO,
-                                                  self.METADATA_ARRAY_MEAN_NON_ZERO,
-                                                  self.METADATA_ARRAY_VAR_NON_ZERO]))
-
-        summary.update(self.get_info_about_array('tract_lengths',
-                                                 [self.METADATA_ARRAY_MAX_NON_ZERO,
-                                                  self.METADATA_ARRAY_MIN_NON_ZERO,
-                                                  self.METADATA_ARRAY_MEAN_NON_ZERO,
-                                                  self.METADATA_ARRAY_VAR_NON_ZERO],
-                                                 mask_array_name='weights', key_suffix=" (connections)"))
+        # summary.update(self.get_info_about_array('areas',
+        #                                          [self.METADATA_ARRAY_MAX,
+        #                                           self.METADATA_ARRAY_MIN,
+        #                                           self.METADATA_ARRAY_MEAN]))
+        #
+        # summary.update(self.get_info_about_array('weights',
+        #                                          [self.METADATA_ARRAY_MAX,
+        #                                           self.METADATA_ARRAY_MEAN,
+        #                                           self.METADATA_ARRAY_VAR,
+        #                                           self.METADATA_ARRAY_MIN_NON_ZERO,
+        #                                           self.METADATA_ARRAY_MEAN_NON_ZERO,
+        #                                           self.METADATA_ARRAY_VAR_NON_ZERO]))
+        #
+        # summary.update(self.get_info_about_array('tract_lengths',
+        #                                          [self.METADATA_ARRAY_MAX,
+        #                                           self.METADATA_ARRAY_MEAN,
+        #                                           self.METADATA_ARRAY_VAR,
+        #                                           self.METADATA_ARRAY_MIN_NON_ZERO,
+        #                                           self.METADATA_ARRAY_MEAN_NON_ZERO,
+        #                                           self.METADATA_ARRAY_VAR_NON_ZERO]))
+        #
+        # summary.update(self.get_info_about_array('tract_lengths',
+        #                                          [self.METADATA_ARRAY_MAX_NON_ZERO,
+        #                                           self.METADATA_ARRAY_MIN_NON_ZERO,
+        #                                           self.METADATA_ARRAY_MEAN_NON_ZERO,
+        #                                           self.METADATA_ARRAY_VAR_NON_ZERO],
+        #                                          mask_array_name='weights', key_suffix=" (connections)"))
 
         return summary
 
@@ -899,40 +896,35 @@ class Connectivity(MappedType):
     @staticmethod
     def from_file(source_file="connectivity_76.zip", instance=None):
 
-        if instance is None:
-            result = Connectivity()
-        else:
-            result = instance
-
         source_full_path = try_get_absolute_path("tvb_data.connectivity", source_file)
 
         if source_file.endswith(".h5"):
 
             reader = H5Reader(source_full_path)
 
-            result.weights = reader.read_field("weights")
-            result.centres = reader.read_field("centres")
-            result.region_labels = reader.read_field("region_labels")
-            result.orientations = reader.read_optional_field("orientations")
-            result.cortical = reader.read_optional_field("cortical")
-            result.hemispheres = reader.read_field("hemispheres")
-            result.areas = reader.read_optional_field("areas")
-            result.tract_lengths = reader.read_field("tract_lengths")
+            weights = reader.read_field("weights")
+            centres = reader.read_field("centres")
+            region_labels = reader.read_field("region_labels")
+            orientations = reader.read_optional_field("orientations")
+            cortical = reader.read_optional_field("cortical")
+            hemispheres = reader.read_field("hemispheres")
+            areas = reader.read_optional_field("areas")
+            tract_lengths = reader.read_field("tract_lengths")
 
         else:
             reader = ZipReader(source_full_path)
 
-            result.weights = reader.read_array_from_file("weights")
+            weights = reader.read_array_from_file("weights")
             if reader.has_file_like("centres"):
-                result.centres = reader.read_array_from_file("centres", use_cols=(1, 2, 3))
-                result.region_labels = reader.read_array_from_file("centres", dtype=numpy.str, use_cols=(0,))
+                centres = reader.read_array_from_file("centres", use_cols=(1, 2, 3))
+                region_labels = reader.read_array_from_file("centres", dtype=numpy.str, use_cols=(0,))
             else:
-                result.centres = reader.read_array_from_file("centers", use_cols=(1, 2, 3))
-                result.region_labels = reader.read_array_from_file("centers", dtype=numpy.str, use_cols=(0,))
-            result.orientations = reader.read_optional_array_from_file("average_orientations")
-            result.cortical = reader.read_optional_array_from_file("cortical", dtype=numpy.bool)
-            result.hemispheres = reader.read_optional_array_from_file("hemispheres", dtype=numpy.bool)
-            result.areas = reader.read_optional_array_from_file("areas")
-            result.tract_lengths = reader.read_array_from_file("tract_lengths")
+                centres = reader.read_array_from_file("centers", use_cols=(1, 2, 3))
+                region_labels = reader.read_array_from_file("centers", dtype=numpy.str, use_cols=(0,))
+            orientations = reader.read_optional_array_from_file("average_orientations")
+            cortical = reader.read_optional_array_from_file("cortical", dtype=numpy.bool)
+            hemispheres = reader.read_optional_array_from_file("hemispheres", dtype=numpy.bool)
+            areas = reader.read_optional_array_from_file("areas")
+            tract_lengths = reader.read_array_from_file("tract_lengths")
 
-        return result
+        return weights, centres, region_labels, orientations, cortical, hemispheres, areas, tract_lengths

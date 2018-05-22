@@ -71,13 +71,16 @@ class Sensors(MappedType):
 
 
     def __init__(self, labels=None, locations=None, sensors_type="", has_orientation=False,
-                 number_of_sensors=0, usable=None, orientations=None, *args, **kwargs):
-        if labels is None:
-            labels = []
-        self.labels = labels
+                 number_of_sensors=0, usable=None, orientations=None, load_file=None, *args, **kwargs):
+        if load_file is not None:
+            labels, locations = Sensors.from_file(source_file=load_file)
+        else:
+            if labels is None:
+                labels = []
+            if locations is None:
+                locations = numpy.array([], dtype=numpy.float64)
 
-        if locations is None:
-            locations = numpy.array([], dtype=numpy.float64)
+        self.labels = labels
         self.locations = locations
 
         self.sensors_type = sensors_type
@@ -96,18 +99,13 @@ class Sensors(MappedType):
     @classmethod
     def from_file(cls, source_file="eeg_brainstorm_65.txt", instance=None):
 
-        if instance is None:
-            result = cls()
-        else:
-            result = instance
-
         source_full_path = try_get_absolute_path("tvb_data.sensors", source_file)
         reader = FileReader(source_full_path)
 
-        result.labels = reader.read_array(dtype="string", use_cols=(0,))
-        result.locations = reader.read_array(use_cols=(1, 2, 3))
+        labels = reader.read_array(dtype="string", use_cols=(0,))
+        locations = reader.read_array(use_cols=(1, 2, 3))
 
-        return result
+        return labels, locations
 
 
     def configure(self):
@@ -253,25 +251,27 @@ class SensorsMEG(Sensors):
 
     __mapper_args__ = {'polymorphic_identity': MEG_POLYMORPHIC_IDENTITY}
 
-    def __init__(self, orientations=None, has_orientation=True, *args, **kwargs):
+    def __init__(self, orientations=None, has_orientation=True, load_file=None, *args, **kwargs):
         sensors_type = MEG_POLYMORPHIC_IDENTITY
 
-        if orientations is None:
-            orientations = numpy.array([], dtype=numpy.float64)
-        self.orientations = orientations
+        if load_file is not None:
+            orientations = SensorsMEG.from_file(source_file=load_file)
+        else:
+            if orientations is None:
+                orientations = numpy.array([], dtype=numpy.float64)
 
         super(SensorsMEG, self).__init__(*args, sensors_type=sensors_type,
-            has_orientation=has_orientation, **kwargs)
+            has_orientation=has_orientation, orientations=orientations, load_file=load_file, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="meg_151.txt.bz2", instance=None):
-        result = super(SensorsMEG, cls).from_file(source_file, instance)
+        #labels, locations = super(SensorsMEG, cls).from_file(source_file=source_file)
 
         source_full_path = try_get_absolute_path("tvb_data.sensors", source_file)
         reader = FileReader(source_full_path)
-        result.orientations = reader.read_array(use_cols=(4, 5, 6))
+        orientations = reader.read_array(use_cols=(4, 5, 6))
 
-        return result
+        return orientations
 
 
 class SensorsInternal(Sensors):

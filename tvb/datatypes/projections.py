@@ -53,30 +53,10 @@ class ProjectionMatrix(object):
 
     projection_type = ""
 
-    # __mapper_args__ = {'polymorphic_on': 'projection_type'}
-    #
-    # brain_skull = surfaces.BrainSkull(label="Brain Skull", default=None, required=False,
-    #                                   doc="""Boundary between skull and cortex domains.""")
-    #
-    # skull_skin = surfaces.SkullSkin(label="Skull Skin", default=None, required=False,
-    #                                 doc="""Boundary between skull and skin domains.""")
-    #
-    # skin_air = surfaces.SkinAir(label="Skin Air", default=None, required=False,
-    #                             doc="""Boundary between skin and air domains.""")
-    #
-    #
-    #
-    # sources = surfaces.CorticalSurface(label="surface or region", default=None, required=True)
-    #
-    # sensors = sensors.Sensors(label="Sensors", default=None, required=False,
-    #                           doc=""" A set of sensors to compute projection matrix for them. """)
-    #
-    # projection_data = None
-
 
     def __init__(self, brain_skull=None, skull_skin=None, skin_air=None,
                  conductances=None, sources=None, sensors=None,
-                 projection_data=None, *args, **kwargs):
+                 projection_data=None, load_file=None, *args, **kwargs):
         self.brain_skull = brain_skull
         self.skull_skin = skull_skin
         self.skin_air = skin_air
@@ -87,6 +67,10 @@ class ProjectionMatrix(object):
 
         self.sources = sources
         self.sensors = sensors
+
+        if load_file is not None:
+            projection_data = ProjectionMatrix.from_file(load_file)
+
         self.projection_data = projection_data
 
 
@@ -98,18 +82,13 @@ class ProjectionMatrix(object):
     @classmethod
     def from_file(cls, source_file, matlab_data_name=None, is_brainstorm=False, instance=None):
 
-        if instance is None:
-            proj = cls()
-        else:
-            proj = instance
-
         source_full_path = try_get_absolute_path("tvb_data.projectionMatrix", source_file)
         reader = FileReader(source_full_path)
         if is_brainstorm:
-            proj.projection_data = reader.read_gain_from_brainstorm()
+            projection_data = reader.read_gain_from_brainstorm()
         else:
-            proj.projection_data = reader.read_array(matlab_data_name=matlab_data_name)
-        return proj
+            projection_data = reader.read_array(matlab_data_name=matlab_data_name)
+        return projection_data
 
 
 class ProjectionSurfaceEEG(ProjectionMatrix):

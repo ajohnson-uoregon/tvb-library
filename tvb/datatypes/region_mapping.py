@@ -56,25 +56,29 @@ class RegionMapping(Connectivity):
     to which the current vertex is mapped.
     """
 
-    mapping = numpy.array([])
-
-    surface = Surface
-
     __generate_table__ = True
+
+    def __init__(self, mapping=None, surface=None, load_file=None, *args, **kwargs):
+        if load_file is not None:
+            mapping = self.from_file(source_file=load_file)
+        else:
+            if mapping is None:
+                mapping = numpy.array([])
+
+        self.mapping = mapping
+
+        self.surface = surface
+
+        super(RegionMapping, self).__init__(*args, **kwargs)
 
     @staticmethod
     def from_file(source_file="regionMapping_16k_76.txt", instance=None):
 
-        if instance is None:
-            result = RegionMapping()
-        else:
-            result = instance
-
         source_full_path = try_get_absolute_path("tvb_data.regionMapping", source_file)
         reader = FileReader(source_full_path)
 
-        result.mapping = reader.read_array(dtype=numpy.int32)
-        return result
+        mapping = reader.read_array(dtype=numpy.int32)
+        return mapping
 
     def get_region_mapping_slice(self, start_idx, end_idx):
         """
@@ -133,14 +137,15 @@ class RegionVolumeMapping(Connectivity):
     Each value is representing the index in Connectivity regions to which the current voxel is mapped.
     """
 
-    mapping = numpy.array([])
+    def __init__(self, mapping=None, volume=None, apply_corrections=True,
+                 mappings_file=None, *args, **kwargs):
+        if mapping is None:
+            mapping = numpy.array([])
+        self.mapping = mapping
 
-    volume = Volume
-
-    __generate_table__ = True
-
-    apply_corrections = True
-    mappings_file = None
+        self.volume = volume
+        self.apply_corrections = apply_corrections
+        self.mappings_file = mappings_file
 
     def write_data_slice(self, data):
         """

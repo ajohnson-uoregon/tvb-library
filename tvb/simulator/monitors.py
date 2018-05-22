@@ -118,10 +118,7 @@ class Monitor(core.Type):
         self.dt = simulator.integrator.dt
         self.istep = iround(self.period / self.dt)
         self.voi = self.variables_of_interest
-        #print(self.voi)
         if self.voi is None or self.voi.size == 0:
-            # print(self.voi)
-            # print(simulator.model.variables_of_interest)
             self.voi = numpy.r_[:len(simulator.model.variables_of_interest)]
 
     def record(self, step, observed):
@@ -196,7 +193,6 @@ class Raw(Monitor):
         super(Raw, self).__init__(*args, **kwargs)
 
     def config_for_sim(self, simulator):
-        #print("raw monitor config for sim")
         if self.period != simulator.integrator.dt:
             LOG.debug('Raw period not equal to integration time step, overriding')
         self.period = simulator.integrator.dt
@@ -378,9 +374,6 @@ class TemporalAverage(Monitor):
         period, the ``_stock`` is averaged over time for return.
 
         """
-        # print("sample")
-        # print(self.voi)
-        # print(state.shape)
         self._stock[((step % self.istep) - 1), :] = state[self.voi]
         if step % self.istep == 0:
             avg_stock = numpy.mean(self._stock, axis=0)
@@ -392,24 +385,24 @@ class Projection(Monitor):
     "Base class monitor providing lead field suppport."
     _ui_name = "Projection matrix"
 
-    region_mapping = RegionMapping(
-        required=False,
-        label="region mapping", order=3,
-        doc="A region mapping specifies how vertices of a surface correspond to given regions in the"
-            " connectivity. For iEEG/EEG/MEG monitors, this must be specified when performing a region"
-            " simulation but is optional for a surface simulation.")
+    def __init__(self, region_mapping=None, sensors=None, projection=None,
+                 *args, **kwargs):
+        if region_mapping is None:
+            region_mapping = RegionMapping()
+        self.region_mapping = region_mapping
+
+        if sensors is None:
+            sensors = SensorsEEG()
+        self.sensors = sensors
+
+        self.projection = projection
+
+        super(Projection, self).__init__(*args, **kwargs)
 
     @staticmethod
     def oriented_gain(gain, orient):
         "Apply orientations to gain matrix."
         return (gain.reshape((gain.shape[0], -1, 3)) * orient).sum(axis=-1)
-
-    @classmethod
-    def _projection_class(cls):
-        if hasattr(cls, 'projection'):
-            return type(cls.projection)
-        else:
-            return ProjectionMatrix
 
     @classmethod
     def from_file(cls, sensors_fname, projection_fname, rm_f_name="regionMapping_16k_76.txt",
@@ -424,9 +417,9 @@ class Projection(Monitor):
         else:
             result = instance
 
-        result.sensors = type(cls.sensors).from_file(sensors_fname)
-        result.projection = cls._projection_class().from_file(projection_fname)
-        result.region_mapping = RegionMapping.from_file(rm_f_name)
+        result.sensors = type(cls.sensors)(load_file=sensors_fname)
+        result.projection = ProjectionMatrix(load_file=projection_fname)
+        result.region_mapping = RegionMapping(load_file=rm_f_name)
 
         return result
 
@@ -575,21 +568,18 @@ class EEG(Projection):
     # 'produced time-series are the idealized or reference-free.'
     reference = ""
 
-    sensors = SensorsEEG(required=True, label="EEG Sensors", order=1,
-                         doc='Sensors to use for this EEG monitor')
-
-    def __init__(self, sigma=1.0, projection=None, *args, **kwargs):
+    def __init__(self, sigma=1.0, projection=None, sensors=None, *args, **kwargs):
         self.sigma = sigma # Conductivity (w/o projection)
         # When a projection matrix is not used, this provides
         # the value of conductivity in the formula for the single
         # sphere approximation of the head (Sarvas 1987).
-        self.projection = projection
-        super(EEG, self).__init__(*args, **kwargs)
+
+        super(EEG, self).__init__(*args, projection=projection, sensors=sensors, **kwargs)
 
 
     @classmethod
     def from_file(cls, sensors_fname='eeg_brainstorm_65.txt', projection_fname='projection_eeg_65_surface_16k.npy', **kwargs):
-        return Projection.from_file.im_func(cls, sensors_fname, projection_fname, **kwargs)
+        return super(EEG, cls).from_file(cls, sensors_fname, projection_fname, **kwargs)
 
     def config_for_sim(self, simulator):
         super(EEG, self).config_for_sim(simulator)
@@ -642,22 +632,9 @@ class MEG(Projection):
     "Forward solution monitor for magnetoencephalography (MEG)."
     _ui_name = "MEG"
 
-    projection = ProjectionSurfaceMEG(
-        default=None, label='Projection matrix', order=2,
-        doc='Projection matrix to apply to sources.')
+    def __init__(self, projection=None, sensors=None, *args, **kwargs):
 
-    sensors = sensors_module.SensorsMEG(
-        label = "MEG Sensors",
-        default = None,
-        required = True, order=1,
-        doc = """The set of MEG sensors for which the forward solution will be
-        calculated.""")
-
-
-    def __init__(self, projection=None, *args, **kwargs):
-        self.projection = projection
-
-        super(MEG, self).__init__(*args, **kwargs)
+        super(MEG, self).__init__(*args, projection=projection, sensors=sensors, **kwargs)
 
     @classmethod
     def from_file(cls, sensors_fname='meg_brainstorm_276.txt',
@@ -712,18 +689,10 @@ class iEEG(Projection):
 
     _ui_name = "Intracerebral / Stereo EEG"
 
-    # projection = ProjectionSurfaceSEEG(
-    #     default=None, label='Projection matrix', order=2,
-    #     doc='Projection matrix to apply to sources.')
-
-    sensors = sensors_module.SensorsInternal(
-        label="Internal brain sensors", default=None, required=True, order=1,
-        doc="The set of SEEG sensors for which the forward solution will be calculated.")
-
-    def __init__(self, sigma=1.0, projection=None, *args, **kwargs):
+    def __init__(self, sigma=1.0, projection=None,sensors=None, *args, **kwargs):
         self.sigma = sigma
-        self.projection = projection
-        super(iEEG, self).__init__(*args, **kwargs)
+
+        super(iEEG, self).__init__(*args, projection=projection, sensors=sensors, **kwargs)
 
     @classmethod
     def from_file(cls, sensors_fname='seeg_588.txt',
