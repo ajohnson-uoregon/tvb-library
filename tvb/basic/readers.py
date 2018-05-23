@@ -132,7 +132,7 @@ class FileReader(object):
             return scipy_io.mmread(file_stream)
 
         if self.file_path.endswith(".mat"):
-            matlab_data = scipy_io.matlab.loadmat(file_stream)
+            matlab_data = scipy_io.loadmat(file_stream)
             return matlab_data[matlab_data_name]
 
 
