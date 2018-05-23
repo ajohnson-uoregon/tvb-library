@@ -50,7 +50,7 @@ from tvb.basic.arguments_serialisation import parse_slice, preprocess_space_para
 LOG = get_logger(__name__)
 
 
-class RegionMapping(Connectivity):
+class RegionMapping(object):
     """
     An array (of length Surface.vertices). Each value is representing the index in Connectivity regions
     to which the current vertex is mapped.
@@ -69,7 +69,7 @@ class RegionMapping(Connectivity):
 
         self.surface = surface
 
-        super(RegionMapping, self).__init__(*args, **kwargs)
+        #super(RegionMapping, self).__init__(*args, **kwargs)
 
     @staticmethod
     def from_file(source_file="regionMapping_16k_76.txt", instance=None):
@@ -132,20 +132,19 @@ class RegionMapping(Connectivity):
         return summary
 
 
-class RegionVolumeMapping(Connectivity):
+class RegionVolumeMapping(RegionMapping):
     """
     Each value is representing the index in Connectivity regions to which the current voxel is mapped.
     """
 
-    def __init__(self, mapping=None, volume=None, apply_corrections=True,
+    def __init__(self, volume=None, apply_corrections=True,
                  mappings_file=None, *args, **kwargs):
-        if mapping is None:
-            mapping = numpy.array([])
-        self.mapping = mapping
 
         self.volume = volume
         self.apply_corrections = apply_corrections
         self.mappings_file = mappings_file
+
+        super(RegionVolumeMapping, self).__init__(*args, **kwargs)
 
     def write_data_slice(self, data):
         """
