@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#  TheVirtualBrain-Scientific Package. This package holds all simulators, and 
+#  TheVirtualBrain-Scientific Package. This package holds all simulators, and
 # analysers necessary to run brain-simulations. You can use it stand alone or
 # in conjunction with TheVirtualBrain-Framework Package. See content of the
 # documentation-folder for more details. See also http://www.thevirtualbrain.org
@@ -48,7 +48,7 @@ class TestPatterns(BaseTestCase):
         assert dt.projection_data is None
 
     def test_projection_surface_eeg(self):
-        dt = projections.ProjectionSurfaceEEG()
+        dt = projections.ProjectionSurfaceEEG()#load_file='projection_eeg_65_surface_16k.npy')
         assert dt.sources is None
         assert dt.skin_air is None
         assert dt.skull_skin is None
@@ -56,7 +56,7 @@ class TestPatterns(BaseTestCase):
         assert dt.projection_data is None
 
     def test_projection_surface_meg(self):
-        dt = projections.ProjectionSurfaceMEG()
+        dt = projections.ProjectionSurfaceMEG()#load_file='projection_meg_276_surface_16k.npy')
         assert dt.sources is None
         assert dt.skin_air is None
         assert dt.skull_skin is None

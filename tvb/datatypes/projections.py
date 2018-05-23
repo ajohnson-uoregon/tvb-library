@@ -106,6 +106,8 @@ class ProjectionSurfaceEEG(ProjectionMatrix):
 
         if load_file is not None:
             projection_data = ProjectionSurfaceEEG.from_file(source_file=load_file)
+        else:
+            projection_data = None
 
         super(ProjectionSurfaceEEG, self).__init__(*args, projection_data=projection_data, **kwargs)
 
@@ -131,17 +133,27 @@ class ProjectionSurfaceMEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': MEG_POLYMORPHIC_IDENTITY}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, load_file=None, *args, **kwargs):
         self.projection_type = MEG_POLYMORPHIC_IDENTITY
         self.sensors = sensors.SensorsMEG
 
-        super(ProjectionSurfaceMEG, self).__init__(*args, **kwargs)
+        if load_file is not None:
+            projection_data = ProjectionSurfaceMEG.from_file(source_file=load_file)
+        else:
+            projection_data = None
+
+        super(ProjectionSurfaceMEG, self).__init__(*args, projection_data=projection_data, **kwargs)
 
     @classmethod
     def from_file(cls, source_file='projection_meg_276_surface_16k.npy', matlab_data_name=None, is_brainstorm=False,
                   instance=None):
-        return ProjectionMatrix.from_file.im_func(cls, source_file, matlab_data_name, is_brainstorm,
-                                                  instance)
+        source_full_path = try_get_absolute_path("tvb_data.projectionMatrix", source_file)
+        reader = FileReader(source_full_path)
+        if is_brainstorm:
+            projection_data = reader.read_gain_from_brainstorm()
+        else:
+            projection_data = reader.read_array(matlab_data_name=matlab_data_name)
+        return projection_data
 
 
 class ProjectionSurfaceSEEG(ProjectionMatrix):
@@ -153,14 +165,24 @@ class ProjectionSurfaceSEEG(ProjectionMatrix):
 
     __mapper_args__ = {'polymorphic_identity': SEEG_POLYMORPHIC_IDENTITY}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, load_file=None, *args, **kwargs):
         self.projection_type = SEEG_POLYMORPHIC_IDENTITY
         self.sensors = sensors.SensorsInternal
 
-        super(ProjectionSurfaceSEEG, self).__init__(*args, **kwargs)
+        if load_file is not None:
+            projection_data = ProjectionSurfaceSEEG.from_file(source_file=load_file)
+        else:
+            projection_data = None
+
+        super(ProjectionSurfaceSEEG, self).__init__(*args, projection_data=projection_data **kwargs)
 
     @classmethod
     def from_file(cls, source_file='projection_seeg_588_surface_16k.npy', matlab_data_name=None, is_brainstorm=False,
                   instance=None):
-        return ProjectionMatrix.from_file.im_func(cls, source_file, matlab_data_name, is_brainstorm,
-                                                  instance)
+        source_full_path = try_get_absolute_path("tvb_data.projectionMatrix", source_file)
+        reader = FileReader(source_full_path)
+        if is_brainstorm:
+            projection_data = reader.read_gain_from_brainstorm()
+        else:
+            projection_data = reader.read_array(matlab_data_name=matlab_data_name)
+        return projection_data

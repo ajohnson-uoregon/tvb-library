@@ -46,7 +46,6 @@ import numpy
 
 from tvb.basic.traits import util, exceptions
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits.types_mapped import MappedType #, SparseMatrix
 from tvb.basic.traits.core import FILE_STORAGE_NONE
 from tvb.basic.profile import TvbProfile
 from tvb.basic.readers import ZipReader, try_get_absolute_path
@@ -114,50 +113,17 @@ HEMISPHERE_RIGHT = "RIGHT"
 HEMISPHERE_UNKNOWN = "NONE"
 
 
-class Surface(MappedType):
+class Surface(object):
     """A base class for other surfaces."""
-    # An array of unit normal vectors for the surfaces triangles.
-    triangle_normals = numpy.array([], dtype=numpy.float64)
-
-    # geodesic_distance_matrix = SparseMatrix(
-    #     label="Geodesic distance matrix",
-    #     order=-1,
-    #     required=False,
-    #     file_storage=FILE_STORAGE_NONE,
-    #     doc="""A sparse matrix of truncated geodesic distances""")  # 'CS'
-
-    number_of_vertices = 0 #The number of vertices making up this surface.
-
-    number_of_triangles = 0 #The number of triangles making up this surface.
-
-    edge_mean_length = 0.0
-
-    edge_min_length = 0.0
-
-    edge_max_length = 0.0
-
-    ##--------------------- FRAMEWORK ATTRIBUTES -----------------------------##
-
-    # An array specifying if a vertex belongs to the right hemisphere
-    hemisphere_mask = numpy.array([], dtype=numpy.bool)
-
-    zero_based_triangles = False
-
-    split_triangles = numpy.array([])
-
-    number_of_split_slices = 0
-
-    split_slices = {}
-
-    bi_hemispheric = False
-
-    surface_type = ""
-
-    valid_for_simulations = False
 
     __mapper_args__ = {'polymorphic_on': 'surface_type'}
 
     def __init__(self, vertices=None, vertex_normals=None, triangles=None,
+                 triangle_normals=None, number_of_vertices=0, number_of_triangles=0,
+                 edge_mean_length=0.0, edge_min_length=0.0, edge_max_length=0.0,
+                 hemisphere_mask=None, zero_based_triangles=False,
+                 split_triangles=None, number_of_split_slices=0, split_slices=None,
+                 bi_hemispheric=False, valid_for_simulations=False, surface_type=None,
                  load_file=None, *args, **kwargs):
         if load_file is not None:
             vertices, vertex_normals, triangles = Surface.from_file(source_file=load_file)
@@ -175,6 +141,38 @@ class Surface(MappedType):
         self.vertices = vertices
         self.vertex_normals = vertex_normals
         self.triangles = triangles
+
+        if triangle_normals is None:
+            # An array of unit normal vectors for the surfaces triangles.
+            triangle_normals = numpy.array([], dtype=numpy.float64)
+        self.triangle_normals = triangle_normals
+
+        if hemisphere_mask is None:
+            # An array specifying if a vertex belongs to the right hemisphere
+            hemisphere_mask = numpy.array([], dtype=numpy.bool)
+        self.hemisphere_mask = hemisphere_mask
+
+        if split_triangles is None:
+            split_triangles = numpy.array([])
+        self.split_triangles = split_triangles
+
+        if split_slices is None:
+            split_slices = {}
+        self.split_slices = split_slices
+
+        if surface_type is None:
+            surface_type = ""
+        self.surface_type = surface_type
+
+        self.number_of_vertices = number_of_vertices
+        self.number_of_triangles = number_of_triangles
+        self.edge_mean_length = edge_mean_length
+        self.edge_min_length = edge_min_length
+        self.edge_max_length = edge_max_length
+        self.zero_based_triangles = zero_based_triangles
+        self.number_of_split_slices = number_of_split_slices
+        self.bi_hemispheric = bi_hemispheric
+        self.valid_for_simulations = valid_for_simulations
 
         super(Surface, self).__init__(*args, **kwargs)
 
@@ -1156,15 +1154,22 @@ class WhiteMatterSurface(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': WHITE_MATTER}
     _ui_name = "A white matter - gray  surface"
-    surface_type = WHITE_MATTER
 
+    def __init__(self, *args, **kwargs):
+        surface_type = WHITE_MATTER
+
+        super(WhiteMatterSurface, self).__init__(*args, surface_type=surface_type, **kwargs)
 
 class CorticalSurface(Surface):
     """Cortical or pial surface."""
     _ui_name = "A cortical surface"
-    surface_type = CORTICAL
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': CORTICAL}
+
+    def __init__(self, *args, **kwargs):
+        surface_type = CORTICAL
+
+        super(CorticalSurface, self).__init__(*args, surface_type=surface_type, **kwargs)
 
 
 class SkinAir(Surface):
@@ -1172,7 +1177,11 @@ class SkinAir(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': OUTER_SKIN}
     _ui_name = "Skin"
-    surface_type = OUTER_SKIN
+
+    def __init__(self, *args, **kwargs):
+        surface_type = OUTER_SKIN
+
+        super(SkinAir, self).__init__(*args, surface_type=surface_type, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="outer_skin_4096.zip", instance=None):
@@ -1184,7 +1193,11 @@ class BrainSkull(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': INNER_SKULL}
     _ui_name = "Brain - inner skull interface surface."
-    surface_type = INNER_SKULL
+
+    def __init__(self, *args, **kwargs):
+        surface_type = INNER_SKULL
+
+        super(BrainSkull, self).__init__(*args, surface_type=surface_type, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="inner_skull_4096.zip", instance=None):
@@ -1197,7 +1210,11 @@ class SkullSkin(Surface):
     __tablename__ = None
     __mapper_args__ = {'polymorphic_identity': OUTER_SKULL}
     _ui_name = "Outer-skull - scalp interface surface"
-    surface_type = OUTER_SKULL
+
+    def __init__(self, *args, **kwargs):
+        surface_type = OUTER_SKULL
+
+        super(SkullSkin, self).__init__(*args, surface_type=surface_type, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="outer_skull_4096.zip", instance=None):
@@ -1208,12 +1225,20 @@ class OpenSurface(Surface):
     """Base class for open surfaces."""
     __tablename__ = None
 
+    def __init__(self, *args, **kwargs):
+
+        super(OpenSurface, self).__init__(*args, **kwargs)
+
 
 class EEGCap(OpenSurface):
     """EEG cap surface."""
     __mapper_args__ = {'polymorphic_identity': EEG_CAP}
     _ui_name = "EEG Cap"
-    surface_type = EEG_CAP
+
+    def __init__(self, *args, **kwargs):
+        surface_type = EEG_CAP
+
+        super(EEGCap, self).__init__(*args, surface_type=surface_type, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="scalp_1082.zip", instance=None):
@@ -1225,6 +1250,11 @@ class FaceSurface(OpenSurface):
     __mapper_args__ = {'polymorphic_identity': FACE}
     _ui_name = "Face surface"
     surface_type = FACE
+
+    def __init__(self, *args, **kwargs):
+        surface_type = FACE
+
+        super(FaceSurface, self).__init__(*args, surface_type=surface_type, **kwargs)
 
     @classmethod
     def from_file(cls, source_file="face_8614.zip", instance=None):
