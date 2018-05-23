@@ -33,7 +33,7 @@ import numpy
 import scipy.sparse
 from tvb.basic.readers import try_get_absolute_path, FileReader
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits import exceptions, types_mapped
+from tvb.basic.traits import exceptions
 from tvb.datatypes import equations, surfaces
 
 

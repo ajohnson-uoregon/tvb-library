@@ -37,7 +37,6 @@ from copy import deepcopy
 from tvb.tests.library.base_testcase import BaseTestCase
 import tvb.datatypes.equations as equations
 import tvb.datatypes.time_series as time_series
-from tvb.basic.traits.types_mapped import MappedType
 from tvb.simulator.models import WilsonCowan, ReducedSetHindmarshRose
 
 
@@ -93,7 +92,7 @@ class TestTraits(BaseTestCase):
         Test that tvb.core.trait.util produces something.
         """
 
-        class Internal_Class(MappedType):
+        class Internal_Class(object):
             """ Dummy persisted class"""
             x = 5
             z = 0

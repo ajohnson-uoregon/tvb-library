@@ -40,7 +40,6 @@ methods that are associated with the sensor dataTypes.
 
 import numpy
 from tvb.basic.logger.builder import get_logger
-from tvb.basic.traits.types_mapped import MappedType
 from tvb.basic.readers import FileReader, try_get_absolute_path
 
 LOG = get_logger(__name__)
@@ -50,7 +49,7 @@ MEG_POLYMORPHIC_IDENTITY = "MEG"
 INTERNAL_POLYMORPHIC_IDENTITY = "Internal"
 
 
-class Sensors(MappedType):
+class Sensors(object):
     """
     Base Sensors class.
     All sensors have locations.
@@ -113,7 +112,7 @@ class Sensors(MappedType):
         Invoke the compute methods for computable attributes that haven't been
         set during initialization.
         """
-        super(Sensors, self).configure()
+        #super(Sensors, self).configure()
         self.number_of_sensors = self.labels.shape[0]
 
 

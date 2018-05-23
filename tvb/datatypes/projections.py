@@ -36,7 +36,6 @@ methods that are associated with the surfaces data.
 
 from tvb.basic.readers import try_get_absolute_path, FileReader
 from tvb.datatypes import surfaces, sensors
-from tvb.basic.traits.types_mapped import MappedType
 import numpy
 
 
