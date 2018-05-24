@@ -67,7 +67,6 @@ from tvb.datatypes.projections import (ProjectionMatrix,
     ProjectionSurfaceEEG, ProjectionSurfaceMEG, ProjectionSurfaceSEEG)
 import tvb.datatypes.equations as equations
 import tvb.basic.traits.util as util
-import tvb.basic.traits.core as core
 from tvb.simulator.common import iround, numpy_add_at
 from enum import Enum, unique
 
@@ -75,7 +74,7 @@ from enum import Enum, unique
 LOG = get_logger(__name__)
 
 
-class Monitor(core.Type):
+class Monitor(object):
     """
     Abstract base class for monitor implementations.
 
@@ -84,12 +83,8 @@ class Monitor(core.Type):
     # list of class names not shown in UI
     _base_classes = ['Monitor', 'Projection', 'ProgressLogger']
 
-    istep = None
-    dt = None
-    voi = None
-    _stock = numpy.empty([])
-
-    def __init__(self, period=0.9765625, variables_of_interest=None, *args, **kwargs):
+    def __init__(self, period=0.9765625, variables_of_interest=None, istep=None,
+                 dt=None, voi=None, _stock=None, *args, **kwargs):
         self.period = period
         # Sampling period in milliseconds, must be an integral multiple
         # of integration-step size. As a guide: 2048 Hz => 0.48828125 ms ;
@@ -97,6 +92,14 @@ class Monitor(core.Type):
         if variables_of_interest is None:
             self.variables_of_interest = numpy.array([])
         self.variables_of_interest = variables_of_interest
+
+        self.istep = istep
+        self.dt = dt
+        self.voi = voi
+
+        if _stock is None:
+            _stock = numpy.empty([])
+        self._stock = _stock
         # Model variables to watch
 
 
@@ -186,11 +189,10 @@ class Raw(Monitor):
     """
     _ui_name = "Raw recording"
 
-    # Raw Monitor sees all!!! Resistance is futile...
-    variables_of_interest = numpy.array([])
-
-    def __init__(self, *args, **kwargs):
-        super(Raw, self).__init__(*args, **kwargs)
+    def __init__(self, variables_of_interest=None, *args, **kwargs):
+        # Raw Monitor sees all!!! Resistance is futile...
+        variables_of_interest = numpy.array([])
+        super(Raw, self).__init__(*args, variables_of_interest=variables_of_interest, **kwargs)
 
     def config_for_sim(self, simulator):
         if self.period != simulator.integrator.dt:
@@ -211,6 +213,9 @@ class SubSample(Monitor):
 
     """
     _ui_name = "Temporally sub-sample"
+
+    def __init__(self, *args, **kwargs):
+        super(SubSample, self).__init__(*args, **kwargs)
 
     def sample(self, step, state):
         if step % self.istep == 0:
@@ -235,12 +240,17 @@ class SpatialAverage(Monitor):
     """
     _ui_name = "Spatial average with temporal sub-sample"
 
-    # #TODO: Check it's a vector of length Nodes (like region mapping for surface)
-    # A vector of length==nodes that assigns an index to each node
-    # specifying the "region" to which it belongs. The default usage is
-    # for mapping a surface based simulation back to the regions used in
-    # its `Long-range Connectivity.`
-    spatial_mask = numpy.array([])
+    def __init__(self, spatial_mask=None, *args, **kwargs):
+        if spatial_mask is None:
+            # #TODO: Check it's a vector of length Nodes (like region mapping for surface)
+            # A vector of length==nodes that assigns an index to each node
+            # specifying the "region" to which it belongs. The default usage is
+            # for mapping a surface based simulation back to the regions used in
+            # its `Long-range Connectivity.`
+            spatial_mask = numpy.array([])
+        self.spatial_mask = spatial_mask
+
+        super(SpatialAverage, self).__init__(*args, **kwargs)
 
     @unique
     class Masks(Enum):
@@ -335,6 +345,9 @@ class GlobalAverage(Monitor):
     """
     _ui_name = "Global average"
 
+    def __init__(self, *args, **kwargs):
+        super(GlobalAverage, self).__init__(*args, **kwargs)
+
     def sample(self, step, state):
         """Records if integration step corresponds to sampling period."""
         if step % self.istep == 0:
@@ -358,11 +371,15 @@ class TemporalAverage(Monitor):
     """
     _ui_name = "Temporal average"
 
+    def __init__(self, *args, **kwargs):
+        super(TemporalAverage, self).__init__(*args, **kwargs)
+
     def config_for_sim(self, simulator):
         super(TemporalAverage, self).config_for_sim(simulator)
         stock_size = (self.istep, self.voi.shape[0],
                       simulator.number_of_nodes,
                       simulator.model.number_of_modes)
+        print(stock_size)
         LOG.debug("Temporal average stock_size is %s" % (str(stock_size), ))
         self._stock = numpy.zeros(stock_size)
 
@@ -471,8 +488,12 @@ class Projection(Monitor):
 
         # compute analytic if not provided
         if self.projection is None:
+            print("projection is None")
             LOG.debug('Precomputed projection not unavailable using analytic approximation.')
             self.gain = self.analytic(**sources)
+        else:
+            self.gain = self.projection.projection_data
+
 
         # reduce to region lead field if region sim
         if not using_cortical_surface and self.gain.shape[1] == self.rmap.mapping.size:
@@ -514,18 +535,6 @@ class Projection(Monitor):
             self._state[:] = 0.0
             return time, sample.T[..., numpy.newaxis] # for compatibility
 
-    _gain = None
-
-    def _get_gain(self):
-        if self._gain is None:
-            self._gain = self.projection.projection_data
-        return self._gain
-
-    def _set_gain(self, new_gain):
-        self._gain = new_gain
-
-    gain = property(_get_gain, _set_gain)
-
     _rmap = None
 
     def _reg_map_data(self, reg_map):
@@ -559,20 +568,17 @@ class EEG(Projection):
     """
     _ui_name = "EEG"
 
-    # projection = ProjectionSurfaceEEG(
-    #     default=None, label='Projection matrix', order=2,
-    #     doc='Projection matrix to apply to sources.')
-
-    # 'EEG Electrode to be used as reference, or "average" to '
-    # 'apply an average reference. If none is provided, the '
-    # 'produced time-series are the idealized or reference-free.'
-    reference = ""
-
-    def __init__(self, sigma=1.0, projection=None, sensors=None, *args, **kwargs):
+    def __init__(self, sigma=1.0, projection=None, sensors=None, reference=None, *args, **kwargs):
         self.sigma = sigma # Conductivity (w/o projection)
         # When a projection matrix is not used, this provides
         # the value of conductivity in the formula for the single
         # sphere approximation of the head (Sarvas 1987).
+        if reference is None:
+            # 'EEG Electrode to be used as reference, or "average" to '
+            # 'apply an average reference. If none is provided, the '
+            # 'produced time-series are the idealized or reference-free.'
+            reference = ""
+        self.reference = reference
 
         super(EEG, self).__init__(*args, projection=projection, sensors=sensors, **kwargs)
 
@@ -764,24 +770,28 @@ class Bold(Monitor):
     """
     _ui_name = "BOLD"
 
-    hrf_kernel = equations.HRFKernelEquation(
-        label = "Haemodynamic Response Function",
-        default = equations.FirstOrderVolterra,
-        required = True,
-        doc = """A tvb.datatypes.equation object which describe the haemodynamic
-        response function used to compute the BOLD signal.""")
+    # hrf_kernel = equations.HRFKernelEquation(
+    #     label = "Haemodynamic Response Function",
+    #     default = ,
+    #     required = True,
+    #     doc = """A tvb.datatypes.equation object which describe the haemodynamic
+    #     response function used to compute the BOLD signal.""")
 
-    hrf_length = 20000.0 # Duration of the hrf kernel
+    def __init__(self, period=2000.0, hrf_length=20000.0, hrf_kernel=None,
+                 hemodynamic_response_function=None, _stock_sample_rate=2**-2,
+                 *args, **kwargs):
 
-    _interim_period = None
-    _interim_istep = None
-    _interim_stock = None
-    _stock_steps = None
-    _stock_time = None
-    _stock_sample_rate = 2 ** -2
-    hemodynamic_response_function = None
+        if hrf_kernel is None:
+            hrf_kernel = equations.FirstOrderVolterra
+        self.hrf_kernel = hrf_kernel
 
-    def __init__(self, period=2000.0, *args, **kwargs):
+        self.hemodynamic_response_function = hemodynamic_response_function
+        self._stock_sample_rate = _stock_sample_rate
+        self._interim_period = None
+        self._interim_istep = None
+        self._interim_stock = None
+        self._stock_steps = None
+        self._stock_time = None
         super(Bold, self).__init__(period=period, *args, **kwargs)
         # For the BOLD monitor, sampling period in milliseconds must be
         # an integral multiple of 500. Typical measurment interval (repetition
@@ -860,6 +870,9 @@ class BoldRegionROI(Bold):
 
     """
     _ui_name = "BOLD Region ROI (only with surface)"
+
+    def __init__(self, *args, **kwargs):
+        super(BoldRegionROI, self).__init__(*args, **kwargs)
 
     def config_for_sim(self, simulator):
         super(BoldRegionROI, self).config_for_sim(simulator)

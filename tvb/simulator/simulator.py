@@ -48,7 +48,7 @@ import tvb.basic.traits.core as core
 from tvb.basic.filters.chain import UIFilter, FilterChain
 
 from tvb.datatypes import cortex, connectivity, patterns
-from tvb.simulator import models, integrators, monitors, coupling
+from tvb.simulator import models, integrators, monitors as mons, coupling
 
 from .common import psutil, get_logger, numpy_add_at
 from .history import SparseHistory, DenseHistory
@@ -72,16 +72,12 @@ class Simulator(core.Type):
         dynamic equations of the Model. Its primary purpose is to 'rescale' the
         incoming activity to a level appropriate to Model.""")
 
-    model = models.Model(
-        label="Local dynamic model",
-        default=models.Generic2dOscillator,
-        required=True,
-        order=5,
-        doc="""A tvb.simulator.Model object which describe the local dynamic
-        equations, their parameters, and, to some extent, where connectivity
-        (local and long-range) enters and which state-variables the Monitors
-        monitor. By default the 'Generic2dOscillator' model is used. Read the
-        Scientific documentation to learn more about this model.""")
+    # model = models.Model(
+    #     label="Local dynamic model",
+    #     default=,
+    #     required=True,
+    #     order=5,
+    #     doc="""""")
 
     integrator = integrators.Integrator(
         label="Integration scheme",
@@ -94,33 +90,11 @@ class Simulator(core.Type):
             methods. It is used to compute the time courses of the model state
             variables.""")
 
-    """Initial conditions from which the simulation will begin. By
-    default, random initial conditions are provided. Needs to be the same shape
-    as simulator 'history', ie, initial history function which defines the
-    minimal initial state of the network with time delays before time t=0.
-    If the number of time points in the provided array is insufficient the
-    array will be padded with random values based on the 'state_variables_range'
-    attribute."""
-
-    monitors = monitors.Monitor(
-        label="Monitor(s)",
-        default=monitors.TemporalAverage,
-        required=True,
-        order=8,
-        select_multiple=True,
-        doc="""A tvb.simulator.Monitor or a list of tvb.simulator.Monitor
-        objects that 'know' how to record relevant data from the simulation. Two
-        main types exist: 1) simple, spatial and temporal, reductions (subsets
-        or averages); 2) physiological measurements, such as EEG, MEG and fMRI.
-        By default the Model's specified variables_of_interest are returned,
-        temporally downsampled from the raw integration rate to a sample rate of
-        1024Hz.""")
-
     history = None # type: SparseHistory
 
     def __init__(self, conduction_speed=3.0, simulation_length=1000.0,
                  initial_conditions=None, stimulus=None, connectivity=None,
-                 surface=None, *args, **kwargs):
+                 surface=None, monitors=None, model=None, *args, **kwargs):
         self.conduction_speed = conduction_speed
         # Conduction speed for ``Long-range connectivity`` (mm/ms)
         # numpy.arange(0.01,100.0,1.0)
@@ -128,6 +102,13 @@ class Simulator(core.Type):
         # The length of a simulation (default in milliseconds)
 
         self.initial_conditions = initial_conditions
+        # Initial conditions from which the simulation will begin. By
+        # default, random initial conditions are provided. Needs to be the same shape
+        # as simulator 'history', ie, initial history function which defines the
+        # minimal initial state of the network with time delays before time t=0.
+        # If the number of time points in the provided array is insufficient the
+        # array will be padded with random values based on the 'state_variables_range'
+        # attribute.
 
         self.stimulus = stimulus
         # """A ``Spatiotemporal stimulus`` can be defined at the region or surface level.
@@ -152,6 +133,26 @@ class Simulator(core.Type):
         # neighborhood relationship. In the current TVB version, when setting up a
         # surface-based simulation, the option to configure the spatial spread of
         # the ``Local Connectivity`` is available.
+
+        if monitors is None:
+            monitors = mons.TemporalAverage()
+        self.monitors = monitors
+        # A tvb.simulator.Monitor or a list of tvb.simulator.Monitor
+        # objects that 'know' how to record relevant data from the simulation. Two
+        # main types exist: 1) simple, spatial and temporal, reductions (subsets
+        # or averages); 2) physiological measurements, such as EEG, MEG and fMRI.
+        # By default the Model's specified variables_of_interest are returned,
+        # temporally downsampled from the raw integration rate to a sample rate of
+        # 1024Hz.
+
+        if model is None:
+            model = models.Generic2dOscillator()
+        self.model = model
+        # A tvb.simulator.Model object which describe the local dynamic
+        # equations, their parameters, and, to some extent, where connectivity
+        # (local and long-range) enters and which state-variables the Monitors
+        # monitor. By default the 'Generic2dOscillator' model is used. Read the
+        # Scientific documentation to learn more about this model.
 
         super(Simulator, self).__init__(*args, **kwargs)
 
@@ -191,9 +192,6 @@ class Simulator(core.Type):
         # monitors needs to be a list or tuple, even if there is only one...
         if not isinstance(self.monitors, (list, tuple)):
             self.monitors = [self.monitors]
-        # Configure monitors
-        for monitor in self.monitors:
-            monitor.configure()
         # "Nodes" refers to either regions or vertices + non-cortical regions.
         if self.surface is None:
             self.number_of_nodes = self.connectivity.number_of_regions
@@ -205,6 +203,9 @@ class Simulator(core.Type):
             self.number_of_nodes = self._regmap.shape[0]
             LOG.info('Surface simulation with %d vertices + %d non-cortical, %d total nodes',
                      rm.size, unmapped.size, self.number_of_nodes)
+        # Configure monitors
+        for monitor in self.monitors:
+            monitor.config_for_sim(self)
         self._guesstimate_memory_requirement()
 
     def configure(self, full_configure=True):
@@ -583,7 +584,7 @@ class Simulator(core.Type):
             self.monitors = [self.monitors]
 
         for monitor in self.monitors:
-            if not isinstance(monitor, monitors.Bold):
+            if not isinstance(monitor, mons.Bold):
                 stock_shape = (monitor.period / self.integrator.dt,
                                len(self.model.variables_of_interest),
                                number_of_nodes,
@@ -641,7 +642,7 @@ class Simulator(core.Type):
 
         for monitor in self.monitors:
             memreq += monitor._stock.nbytes
-            if isinstance(monitor, monitors.Bold):
+            if isinstance(monitor, mons.Bold):
                 memreq += monitor._interim_stock.nbytes
 
         if psutil and memreq > psutil.virtual_memory().total:
